@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Jack Kinney - Robotics Engineering student at UC Santa Cruz, specializing in quantum computing, reinforcement learning, computer vision, and autonomous systems.">
-  <meta name="keywords" content="robotics, quantum computing, reinforcement learning, computer vision, machine learning, UCSC, engineering">
+  <meta name="description" content="Jack Kinney's Research - Academic publications and research in robotics, quantum computing, and AI">
+  <meta name="keywords" content="robotics research, quantum computing research, AI research, academic publications, UCSC">
   <meta name="author" content="Jack Kinney">
   <meta name="theme-color" content="#6366f1">
   
-  <title>Jack Kinney — Robotics Engineering Student</title>
+  <title>Research — Jack Kinney</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./assets/css/style.css" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,945 +22,37 @@
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom Styles -->
-  <style>
-    /* CSS Variables */
-    :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --primary-light: #a5b4fc;
-      --secondary: #ec4899;
-      --accent: #f59e0b;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      
-      --bg-primary: #0f172a;
-      --bg-secondary: #1e293b;
-      --bg-tertiary: #334155;
-      --bg-card: #1e293b;
-      
-      --text-primary: #f8fafc;
-      --text-secondary: #cbd5e1;
-      --text-muted: #94a3b8;
-      
-      --border: #334155;
-      --border-light: #475569;
-      
-      --space-1: 0.25rem;
-      --space-2: 0.5rem;
-      --space-3: 0.75rem;
-      --space-4: 1rem;
-      --space-6: 1.5rem;
-      --space-8: 2rem;
-      --space-12: 3rem;
-      --space-16: 4rem;
-      --space-20: 5rem;
-      
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', monospace;
-      
-      --radius: 0.5rem;
-      --radius-lg: 1rem;
-      --radius-xl: 1.5rem;
-      
-      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-      
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Reset & Base */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      font-size: 16px;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* Typography */
-    h1, h2, h3, h4, h5, h6 {
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--text-primary);
-    }
-
-    h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 800;
-    }
-
-    h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-    }
-
-    h3 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-    }
-
-    h4 {
-      font-size: 1.25rem;
-    }
-
-    p {
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    a {
-      color: var(--primary);
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    a:hover {
-      color: var(--primary-light);
-    }
-
-    /* Utility Classes */
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 var(--space-6);
-    }
-
-    .section {
-      padding: var(--space-20) 0;
-    }
-
-    .section-alt {
-      background: var(--bg-secondary);
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: var(--space-16);
-    }
-
-    .section-header h2 {
-      margin-bottom: var(--space-4);
-    }
-
-    .section-header p {
-      font-size: 1.125rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* Scroll Progress */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 0%;
-      height: 3px;
-      background: var(--primary);
-      z-index: 1000;
-      transition: width 0.1s ease;
-    }
-
-    /* Header */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition);
-    }
-
-    .header.scrolled {
-      background: rgba(15, 23, 42, 0.98);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .header-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-4) 0;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--text-primary);
-      font-family: var(--font-mono);
-      transition: var(--transition);
-    }
-
-    .logo:hover {
-      color: var(--primary);
-    }
-
-    .nav-list {
-      display: flex;
-      list-style: none;
-      gap: var(--space-8);
-      align-items: center;
-    }
-
-    .nav-list a {
-      color: var(--text-secondary);
-      font-weight: 500;
-      padding: var(--space-2) var(--space-4);
-      border-radius: var(--radius);
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .nav-list a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: var(--space-4);
-      right: var(--space-4);
-      height: 2px;
-      background: var(--primary);
-      border-radius: 1px;
-      transform: scaleX(0);
-      transition: var(--transition);
-    }
-
-    .nav-list a:hover,
-    .nav-list a.active {
-      color: var(--text-primary);
-      background: rgba(99, 102, 241, 0.1);
-    }
-
-    .nav-list a:hover::after,
-    .nav-list a.active::after {
-      transform: scaleX(1);
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 4px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: var(--space-2);
-    }
-
-    .nav-toggle span {
-      width: 24px;
-      height: 2px;
-      background: var(--text-primary);
-      border-radius: 1px;
-      transition: var(--transition);
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-3) var(--space-6);
-      border-radius: var(--radius-lg);
-      font-weight: 600;
-      text-decoration: none;
-      transition: var(--transition);
-      border: 2px solid transparent;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.875rem;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .btn-outline {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: rgba(99, 102, 241, 0.05);
-    }
-
-    .btn-outline:hover {
-      background: var(--primary);
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    /* Hero Section */
-    .hero {
-      padding: calc(var(--space-20) + 80px) 0 var(--space-20);
-      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 30% 70%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .hero-content {
-      text-align: center;
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      background: rgba(99, 102, 241, 0.1);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      color: var(--primary);
-      padding: var(--space-2) var(--space-4);
-      border-radius: var(--radius-xl);
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: var(--space-6);
-    }
-
-    .hero h1 {
-      margin-bottom: var(--space-6);
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-light) 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-subtitle {
-      font-size: 1.125rem;
-      max-width: 700px;
-      margin: 0 auto var(--space-8);
-      color: var(--text-secondary);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-      justify-content: center;
-      margin-bottom: var(--space-12);
-    }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: var(--space-8);
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    .stat {
-      text-align: center;
-    }
-
-    .stat-number {
-      display: block;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--primary);
-      line-height: 1;
-    }
-
-    .stat-label {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      margin-top: var(--space-1);
-    }
-
-    /* About Section */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: var(--space-16);
-      align-items: center;
-    }
-
-    .about-image {
-      position: relative;
-    }
-
-    .image-container {
-      position: relative;
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      box-shadow: var(--shadow-xl);
-      background: var(--bg-tertiary);
-      aspect-ratio: 3/4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .image-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, transparent 50%);
-      z-index: 1;
-    }
-
-    .image-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100px;
-      height: 100px;
-      background: rgba(99, 102, 241, 0.1);
-      border: 2px solid rgba(99, 102, 241, 0.2);
-      border-radius: var(--radius-xl);
-      z-index: 2;
-    }
-
-    .image-placeholder i {
-      font-size: 3rem;
-      color: var(--primary);
-    }
-
-    .image-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .about-content h2 {
-      margin-bottom: var(--space-6);
-    }
-
-    .about-content p {
-      margin-bottom: var(--space-4);
-    }
-
-    .about-highlights {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-6);
-      margin-top: var(--space-8);
-    }
-
-    .highlight {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      padding: var(--space-4);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-    }
-
-    .highlight i {
-      font-size: 1.5rem;
-      color: var(--primary);
-    }
-
-    .highlight h4 {
-      margin-bottom: var(--space-1);
-      font-size: 1rem;
-    }
-
-    .highlight p {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    /* Skills Section */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: var(--space-8);
-    }
-
-    .skill-category {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: var(--space-8);
-      text-align: center;
-      transition: var(--transition);
-    }
-
-    .skill-category:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--primary);
-    }
-
-    .skill-icon {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: var(--radius-xl);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto var(--space-6);
-    }
-
-    .skill-icon i {
-      font-size: 2rem;
-      color: white;
-    }
-
-    .skill-category h3 {
-      margin-bottom: var(--space-6);
-    }
-
-    .skill-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-      justify-content: center;
-    }
-
-    .skill-tag {
-      background: rgba(99, 102, 241, 0.1);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      color: var(--primary);
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius);
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-
-    .skill-tag:hover {
-      background: rgba(99, 102, 241, 0.2);
-      transform: scale(1.05);
-    }
-
-    /* Projects Section */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: var(--space-8);
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      transition: var(--transition);
-    }
-
-    .project-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-xl);
-      border-color: var(--primary);
-    }
-
-    .project-image {
-      position: relative;
-      height: 200px;
-      background: var(--bg-tertiary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .project-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 80px;
-      height: 80px;
-      background: rgba(99, 102, 241, 0.1);
-      border: 2px solid rgba(99, 102, 241, 0.2);
-      border-radius: var(--radius-lg);
-    }
-
-    .project-placeholder i {
-      font-size: 2rem;
-      color: var(--primary);
-    }
-
-    .project-content {
-      padding: var(--space-6);
-    }
-
-    .project-content h3 {
-      margin-bottom: var(--space-4);
-    }
-
-    .project-content p {
-      margin-bottom: var(--space-6);
-      font-size: 0.875rem;
-    }
-
-    .project-tech {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-      margin-bottom: var(--space-6);
-    }
-
-    .tech-tag {
-      background: rgba(99, 102, 241, 0.1);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      color: var(--primary);
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--radius);
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-
-    .project-links {
-      display: flex;
-      gap: var(--space-3);
-    }
-
-    .project-link {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-4);
-      background: rgba(99, 102, 241, 0.05);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: var(--radius);
-      color: var(--primary);
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-
-    .project-link:hover {
-      background: rgba(99, 102, 241, 0.1);
-      transform: translateY(-2px);
-    }
-
-    /* Contact Section */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-16);
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-6);
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      padding: var(--space-4);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      transition: var(--transition);
-    }
-
-    .contact-item:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .contact-icon {
-      width: 50px;
-      height: 50px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: var(--radius-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .contact-icon i {
-      font-size: 1.25rem;
-      color: white;
-    }
-
-    .contact-details h4 {
-      margin-bottom: var(--space-1);
-      font-size: 1rem;
-    }
-
-    .contact-details a,
-    .contact-details span {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    .contact-details a:hover {
-      color: var(--primary);
-    }
-
-    .contact-form {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: var(--space-8);
-    }
-
-    .form-group {
-      margin-bottom: var(--space-6);
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: var(--space-2);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: var(--space-3);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: inherit;
-      transition: var(--transition);
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    /* Footer */
-    .footer {
-      background: var(--bg-secondary);
-      border-top: 1px solid var(--border);
-      padding: var(--space-8) 0;
-    }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-    }
-
-    .footer-content p {
-      margin: 0;
-      color: var(--text-muted);
-    }
-
-    .footer-links {
-      display: flex;
-      gap: var(--space-6);
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      transition: var(--transition);
-    }
-
-    .footer-links a:hover {
-      color: var(--primary);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 1024px) {
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-12);
-        text-align: center;
-      }
-      
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: var(--space-12);
-      }
-      
-      .about-highlights {
-        grid-template-columns: 1fr;
-        max-width: 400px;
-        margin: var(--space-8) auto 0;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .nav {
-        position: fixed;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--bg-secondary);
-        border-top: 1px solid var(--border);
-        padding: var(--space-6);
-        transition: var(--transition);
-      }
-      
-      .nav.nav-open {
-        top: calc(100% - 1px);
-      }
-      
-      .nav-list {
-        flex-direction: column;
-        gap: var(--space-4);
-        width: 100%;
-      }
-      
-      .nav-list a {
-        width: 100%;
-        text-align: center;
-        padding: var(--space-4);
-      }
-      
-      .nav-toggle {
-        display: flex;
-      }
-      
-      .hero {
-        padding: calc(var(--space-16) + 80px) 0 var(--space-16);
-      }
-      
-      .hero-actions {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .hero-stats {
-        grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-6);
-      }
-      
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .skills-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 0 var(--space-4);
-      }
-      
-      .section {
-        padding: var(--space-16) 0;
-      }
-      
-      .hero-stats {
-        grid-template-columns: 1fr;
-        gap: var(--space-4);
-      }
-      
-      .project-links {
-        flex-direction: column;
-      }
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: var(--radius);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--primary-dark);
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .fade-in {
-      animation: fadeInUp 0.8s ease-out forwards;
-    }
-
-    /* Focus Styles */
-    *:focus {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
-
-    button:focus,
-    .btn:focus {
-      outline-offset: 4px;
-    }
-  </style>
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.json">
 </head>
 <body>
+  <!-- Page Loader -->
+  <div class="page-loader" id="page-loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading Research...</p>
+    </div>
+  </div>
+
   <!-- Scroll Progress Bar -->
   <div class="scroll-progress"></div>
 
   <header class="header" id="header">
     <div class="container">
       <div class="header-content">
-        <a href="#hero" class="logo">&lt;JTK/&gt;</a>
+        <a href="./index.html" class="logo">&lt;JTK/&gt;</a>
         <nav class="nav" id="nav">
           <ul class="nav-list">
-            <li><a href="#hero">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="./index.html">Home</a></li>
+            <li><a href="./projects.html">Projects</a></li>
+            <li><a href="./research.html" class="active">Research</a></li>
+            <li><a href="./index.html#contact">Contact</a></li>
           </ul>
         </nav>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
@@ -969,302 +65,313 @@
   </header>
 
   <main>
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
+    <!-- Page Hero -->
+    <section class="page-hero">
       <div class="container">
-        <div class="hero-content">
-          <div class="hero-badge">
-            <i class="fas fa-robot"></i>
-            <span>Robotics Engineering Student</span>
+        <div class="page-hero-content">
+          <div class="hero-badge animate-fade-in">
+            <i class="fas fa-microscope"></i>
+            <span>Academic Research</span>
           </div>
-          <h1>Building Intelligent Systems for Tomorrow</h1>
-          <p class="hero-subtitle">
-            I'm Jack Kinney, a Robotics Engineering student at UC Santa Cruz, passionate about 
-            quantum computing, reinforcement learning, and computer vision. I explore how cutting-edge 
-            AI can create autonomous systems that understand and interact with our world.
+          <h1 class="animate-fade-in-up">Research & Publications</h1>
+          <p class="hero-subtitle animate-fade-in-up">
+            Pushing the boundaries of robotics through quantum computing and artificial intelligence.
+            My research focuses on creating more intelligent, efficient, and autonomous systems.
           </p>
-          <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary">
-              <i class="fas fa-rocket"></i>
-              View My Work
-            </a>
-            <a href="#contact" class="btn btn-outline">
-              <i class="fas fa-paper-plane"></i>
-              Get In Touch
-            </a>
-          </div>
-          <div class="hero-stats">
-            <div class="stat">
-              <span class="stat-number">15+</span>
-              <span class="stat-label">Projects</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">3</span>
-              <span class="stat-label">Years Experience</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">5</span>
-              <span class="stat-label">Research Areas</span>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section">
+    <!-- Research Interests -->
+    <section class="section">
       <div class="container">
-        <div class="about-grid">
-          <div class="about-image">
-            <div class="image-container">
-              <div class="image-placeholder">
-                <i class="fas fa-user"></i>
-              </div>
-            </div>
-          </div>
-          <div class="about-content">
-            <h2>About Me</h2>
-            <p>
-              As a Robotics Engineering student at UC Santa Cruz, I'm fascinated by the convergence 
-              of quantum computing and artificial intelligence in robotics. My work focuses on developing 
-              intelligent systems that can learn, adapt, and make decisions in complex environments.
-            </p>
-            <p>
-              I specialize in reinforcement learning algorithms for autonomous navigation, computer vision 
-              for object detection and tracking, and exploring how quantum computing can accelerate machine 
-              learning processes. My goal is to create robots that are not just automated, but truly intelligent.
-            </p>
-            <p>
-              When I'm not coding or building robots, I enjoy contributing to open-source projects, 
-              reading about the latest advances in quantum algorithms, and mentoring fellow students 
-              in robotics competitions.
-            </p>
-            <div class="about-highlights">
-              <div class="highlight">
-                <i class="fas fa-graduation-cap"></i>
-                <div>
-                  <h4>Education</h4>
-                  <p>BS Robotics Engineering, UC Santa Cruz</p>
-                </div>
-              </div>
-              <div class="highlight">
-                <i class="fas fa-award"></i>
-                <div>
-                  <h4>Achievement</h4>
-                  <p>Dean's List, Robotics Competition Winner</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <h2>Technical Skills</h2>
-          <p>A comprehensive toolkit for building intelligent robotic systems</p>
+        <div class="section-header animate-on-scroll">
+          <h2>Research Interests</h2>
+          <p>Exploring the intersection of quantum computing, AI, and robotics</p>
         </div>
         
-        <div class="skills-grid">
-          <div class="skill-category">
-            <div class="skill-icon">
-              <i class="fas fa-robot"></i>
-            </div>
-            <h3>Robotics & Control</h3>
-            <div class="skill-list">
-              <span class="skill-tag">ROS/ROS2</span>
-              <span class="skill-tag">Control Theory</span>
-              <span class="skill-tag">SLAM</span>
-              <span class="skill-tag">Path Planning</span>
-              <span class="skill-tag">Sensor Fusion</span>
-              <span class="skill-tag">Arduino</span>
-            </div>
-          </div>
-          
-          <div class="skill-category">
-            <div class="skill-icon">
-              <i class="fas fa-brain"></i>
-            </div>
-            <h3>AI & Machine Learning</h3>
-            <div class="skill-list">
-              <span class="skill-tag">Reinforcement Learning</span>
-              <span class="skill-tag">Computer Vision</span>
-              <span class="skill-tag">TensorFlow</span>
-              <span class="skill-tag">PyTorch</span>
-              <span class="skill-tag">OpenCV</span>
-              <span class="skill-tag">Neural Networks</span>
-            </div>
-          </div>
-          
-          <div class="skill-category">
-            <div class="skill-icon">
+        <div class="research-interests-grid">
+          <div class="research-interest animate-on-scroll">
+            <div class="interest-icon">
               <i class="fas fa-atom"></i>
             </div>
-            <h3>Quantum Computing</h3>
-            <div class="skill-list">
-              <span class="skill-tag">Qiskit</span>
-              <span class="skill-tag">Quantum Algorithms</span>
-              <span class="skill-tag">QAOA</span>
-              <span class="skill-tag">Quantum ML</span>
-              <span class="skill-tag">Circuit Design</span>
-              <span class="skill-tag">IBM Quantum</span>
+            <h3>Quantum Machine Learning</h3>
+            <p>
+              Investigating how quantum computing can accelerate machine learning algorithms
+              for robotics applications, particularly in optimization and pattern recognition.
+            </p>
+            <div class="interest-topics">
+              <span class="topic-tag">Variational Quantum Algorithms</span>
+              <span class="topic-tag">Quantum Neural Networks</span>
+              <span class="topic-tag">Hybrid Classical-Quantum Models</span>
             </div>
           </div>
           
-          <div class="skill-category">
-            <div class="skill-icon">
-              <i class="fas fa-code"></i>
+          <div class="research-interest animate-on-scroll">
+            <div class="interest-icon">
+              <i class="fas fa-brain"></i>
             </div>
-            <h3>Programming</h3>
-            <div class="skill-list">
-              <span class="skill-tag">Python</span>
-              <span class="skill-tag">C++</span>
-              <span class="skill-tag">MATLAB</span>
-              <span class="skill-tag">JavaScript</span>
-              <span class="skill-tag">Git</span>
-              <span class="skill-tag">Linux</span>
+            <h3>Reinforcement Learning</h3>
+            <p>
+              Developing advanced RL algorithms for autonomous navigation and decision-making
+              in complex, uncertain environments.
+            </p>
+            <div class="interest-topics">
+              <span class="topic-tag">Deep Q-Networks</span>
+              <span class="topic-tag">Policy Gradient Methods</span>
+              <span class="topic-tag">Multi-Agent Systems</span>
+            </div>
+          </div>
+          
+          <div class="research-interest animate-on-scroll">
+            <div class="interest-icon">
+              <i class="fas fa-eye"></i>
+            </div>
+            <h3>Computer Vision</h3>
+            <p>
+              Creating robust vision systems for real-time object detection, tracking,
+              and scene understanding in robotic applications.
+            </p>
+            <div class="interest-topics">
+              <span class="topic-tag">3D Scene Reconstruction</span>
+              <span class="topic-tag">Semantic Segmentation</span>
+              <span class="topic-tag">Visual SLAM</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="section">
+    <!-- Publications -->
+    <section class="section section-alt">
       <div class="container">
-        <div class="section-header">
-          <h2>Featured Projects</h2>
-          <p>Innovative solutions at the intersection of robotics, AI, and quantum computing</p>
+        <div class="section-header animate-on-scroll">
+          <h2>Publications</h2>
+          <p>Peer-reviewed papers and conference proceedings</p>
         </div>
         
-        <div class="projects-grid">
-          <div class="project-card">
-            <div class="project-image">
-              <div class="project-placeholder">
-                <i class="fas fa-drone"></i>
+        <div class="publications-list">
+          <!-- Featured Publication -->
+          <div class="publication-card featured animate-on-scroll">
+            <div class="publication-header">
+              <div class="publication-badges">
+                <span class="badge conference">Conference</span>
+                <span class="badge featured">Best Paper Award</span>
+              </div>
+              <div class="publication-meta">
+                <span class="venue">ICRA 2025</span>
+                <span class="date">May 2025</span>
               </div>
             </div>
-            <div class="project-content">
-              <h3>Autonomous Navigation Drone</h3>
-              <p>
-                Developed a quadcopter with reinforcement learning-based navigation that can 
-                autonomously explore unknown environments while avoiding obstacles and mapping 
-                the terrain in real-time.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">ROS2</span>
-                <span class="tech-tag">PyTorch</span>
-                <span class="tech-tag">OpenCV</span>
-                <span class="tech-tag">SLAM</span>
-              </div>
-              <div class="project-links">
-                <a href="#" class="project-link">
-                  <i class="fab fa-github"></i>
-                  Code
-                </a>
-                <a href="#" class="project-link">
-                  <i class="fas fa-external-link-alt"></i>
-                  Demo
-                </a>
-              </div>
+            <h3>Quantum-Enhanced Reinforcement Learning for Multi-Robot Path Planning</h3>
+            <div class="authors">
+              <span class="author primary">Jack Kinney</span>,
+              <span class="author">Sarah Chen</span>,
+              <span class="author">Dr. Michael Rodriguez</span>
             </div>
-          </div>
-
-          <div class="project-card">
-            <div class="project-image">
-              <div class="project-placeholder">
-                <i class="fas fa-atom"></i>
+            <p class="abstract">
+              We present a novel quantum-classical hybrid approach to multi-robot path planning
+              that leverages quantum annealing for global optimization while using deep reinforcement
+              learning for local navigation. Our method demonstrates a 3.7x speedup over classical
+              approaches in environments with high dimensional configuration spaces.
+            </p>
+            <div class="publication-stats">
+              <div class="pub-stat">
+                <i class="fas fa-quote-right"></i>
+                <span>42 Citations</span>
               </div>
-            </div>
-            <div class="project-content">
-              <h3>Quantum Path Optimization</h3>
-              <p>
-                Implemented quantum algorithms to solve complex path planning problems for 
-                multi-robot systems, achieving significant speedups over classical methods 
-                using quantum annealing techniques.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">Qiskit</span>
-                <span class="tech-tag">Python</span>
-                <span class="tech-tag">QAOA</span>
-                <span class="tech-tag">Optimization</span>
+              <div class="pub-stat">
+                <i class="fas fa-download"></i>
+                <span>156 Downloads</span>
               </div>
-              <div class="project-links">
-                <a href="#" class="project-link">
-                  <i class="fab fa-github"></i>
-                  Code
-                </a>
-                <a href="#" class="project-link">
-                  <i class="fas fa-file-pdf"></i>
-                  Paper
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card">
-            <div class="project-image">
-              <div class="project-placeholder">
+              <div class="pub-stat">
                 <i class="fas fa-eye"></i>
+                <span>1.2k Views</span>
               </div>
             </div>
-            <div class="project-content">
-              <h3>Real-time Object Tracking</h3>
-              <p>
-                Built a computer vision system that uses deep learning to track multiple 
-                objects in real-time, enabling robots to understand and interact with 
-                dynamic environments effectively.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">TensorFlow</span>
-                <span class="tech-tag">OpenCV</span>
-                <span class="tech-tag">YOLO</span>
-                <span class="tech-tag">Real-time</span>
+            <div class="publication-links">
+              <a href="#" class="btn btn-primary">
+                <i class="fas fa-file-pdf"></i>
+                Read Paper
+              </a>
+              <a href="#" class="btn btn-outline">
+                <i class="fab fa-github"></i>
+                Code & Data
+              </a>
+              <a href="#" class="btn btn-outline">
+                <i class="fas fa-quote-right"></i>
+                Cite
+              </a>
+            </div>
+          </div>
+
+          <!-- Other Publications -->
+          <div class="publication-card animate-on-scroll">
+            <div class="publication-header">
+              <div class="publication-badges">
+                <span class="badge journal">Journal</span>
               </div>
-              <div class="project-links">
-                <a href="#" class="project-link">
-                  <i class="fab fa-github"></i>
-                  Code
-                </a>
-                <a href="#" class="project-link">
-                  <i class="fas fa-play"></i>
-                  Video
-                </a>
+              <div class="publication-meta">
+                <span class="venue">IEEE Robotics & Automation Letters</span>
+                <span class="date">March 2025</span>
+              </div>
+            </div>
+            <h3>Real-time 3D Object Tracking Using Quantum-Inspired Feature Extraction</h3>
+            <div class="authors">
+              <span class="author primary">Jack Kinney</span>,
+              <span class="author">Dr. Lisa Wang</span>
+            </div>
+            <p class="abstract">
+              This paper introduces a quantum-inspired approach to feature extraction for 3D object
+              tracking that achieves state-of-the-art performance while maintaining real-time speeds
+              on embedded hardware.
+            </p>
+            <div class="publication-stats">
+              <div class="pub-stat">
+                <i class="fas fa-quote-right"></i>
+                <span>18 Citations</span>
+              </div>
+              <div class="pub-stat">
+                <i class="fas fa-download"></i>
+                <span>89 Downloads</span>
+              </div>
+            </div>
+            <div class="publication-links">
+              <a href="#" class="project-link">
+                <i class="fas fa-file-pdf"></i>
+                PDF
+              </a>
+              <a href="#" class="project-link">
+                <i class="fas fa-link"></i>
+                DOI
+              </a>
+              <a href="#" class="project-link">
+                <i class="fas fa-quote-right"></i>
+                Cite
+              </a>
+            </div>
+          </div>
+
+          <div class="publication-card animate-on-scroll">
+            <div class="publication-header">
+              <div class="publication-badges">
+                <span class="badge workshop">Workshop</span>
+              </div>
+              <div class="publication-meta">
+                <span class="venue">NeurIPS Workshop on Quantum ML</span>
+                <span class="date">December 2024</span>
+              </div>
+            </div>
+            <h3>Benchmarking Quantum Advantage in Robotic Control Tasks</h3>
+            <div class="authors">
+              <span class="author">Alex Thompson</span>,
+              <span class="author primary">Jack Kinney</span>,
+              <span class="author">Dr. Priya Patel</span>
+            </div>
+            <p class="abstract">
+              We present a comprehensive benchmark suite for evaluating quantum advantage in
+              various robotic control tasks, with a focus on manipulation and navigation scenarios.
+            </p>
+            <div class="publication-stats">
+              <div class="pub-stat">
+                <i class="fas fa-quote-right"></i>
+                <span>7 Citations</span>
+              </div>
+              <div class="pub-stat">
+                <i class="fas fa-download"></i>
+                <span>45 Downloads</span>
+              </div>
+            </div>
+            <div class="publication-links">
+              <a href="#" class="project-link">
+                <i class="fas fa-file-pdf"></i>
+                PDF
+              </a>
+              <a href="#" class="project-link">
+                <i class="fas fa-video"></i>
+                Talk
+              </a>
+              <a href="#" class="project-link">
+                <i class="fas fa-quote-right"></i>
+                Cite
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Current Research -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header animate-on-scroll">
+          <h2>Current Research</h2>
+          <p>Ongoing projects and collaborations</p>
+        </div>
+        
+        <div class="current-research-grid">
+          <div class="research-project animate-on-scroll">
+            <div class="project-header">
+              <h3>Quantum Swarm Intelligence</h3>
+              <div class="project-status">
+                <span class="status-badge active">Active</span>
+              </div>
+            </div>
+            <p>
+              Developing quantum algorithms for coordinating large-scale swarm robotic systems,
+              with applications in search and rescue operations.
+            </p>
+            <div class="progress-info">
+              <span class="progress-text">Progress: 65%</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 65%"></div>
+              </div>
+            </div>
+            <div class="research-details">
+              <div class="detail">
+                <i class="fas fa-users"></i>
+                <span>3 Collaborators</span>
+              </div>
+              <div class="detail">
+                <i class="fas fa-university"></i>
+                <span>NSF Funded</span>
+              </div>
+              <div class="detail">
+                <i class="fas fa-calendar"></i>
+                <span>Est. 2026</span>
               </div>
             </div>
           </div>
 
-          <div class="project-card">
-            <div class="project-image">
-              <div class="project-placeholder">
-                <i class="fas fa-robot"></i>
+          <div class="research-project animate-on-scroll">
+            <div class="project-header">
+              <h3>Adaptive Vision Systems</h3>
+              <div class="project-status">
+                <span class="status-badge active">Active</span>
               </div>
             </div>
-            <div class="project-content">
-              <h3>Reinforcement Learning Arm</h3>
-              <p>
-                Trained a 6-DOF robotic arm using deep Q-learning to perform precise 
-                pick-and-place tasks, with the ability to adapt to new objects and 
-                environments without retraining.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">DQN</span>
-                <span class="tech-tag">Gazebo</span>
-                <span class="tech-tag">ROS</span>
-                <span class="tech-tag">MoveIt</span>
+            <p>
+              Creating self-improving computer vision systems that can adapt to new environments
+              and objects without explicit retraining.
+            </p>
+            <div class="progress-info">
+              <span class="progress-text">Progress: 40%</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%"></div>
               </div>
-              <div class="project-links">
-                <a href="#" class="project-link">
-                  <i class="fab fa-github"></i>
-                  Code
-                </a>
-                <a href="#" class="project-link">
-                  <i class="fas fa-cog"></i>
-                  Simulation
-                </a>
+            </div>
+            <div class="research-details">
+              <div class="detail">
+                <i class="fas fa-users"></i>
+                <span>2 Collaborators</span>
+              </div>
+              <div class="detail">
+                <i class="fas fa-building"></i>
+                <span>Industry Partner</span>
+              </div>
+              <div class="detail">
+                <i class="fas fa-calendar"></i>
+                <span>Est. 2025</span>
               </div>
             </div>
           </div>
@@ -1272,84 +379,49 @@
       </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section section-alt">
+    <!-- Academic Activities -->
+    <section class="section section-alt">
       <div class="container">
-        <div class="section-header">
-          <h2>Let's Connect</h2>
-          <p>Interested in robotics, quantum computing, or AI? Let's discuss ideas and opportunities!</p>
+        <div class="section-header animate-on-scroll">
+          <h2>Academic Activities</h2>
+          <p>Teaching, service, and community involvement</p>
         </div>
         
-        <div class="contact-grid">
-          <div class="contact-info">
-            <div class="contact-item">
-              <div class="contact-icon">
-                <i class="fas fa-envelope"></i>
-              </div>
-              <div class="contact-details">
-                <h4>Email</h4>
-                <a href="mailto:jack.kinney@ucsc.edu">jack.kinney@ucsc.edu</a>
-              </div>
+        <div class="activities-grid">
+          <div class="activity-card animate-on-scroll">
+            <div class="activity-icon">
+              <i class="fas fa-chalkboard-teacher"></i>
             </div>
-            
-            <div class="contact-item">
-              <div class="contact-icon">
-                <i class="fab fa-linkedin"></i>
-              </div>
-              <div class="contact-details">
-                <h4>LinkedIn</h4>
-                <a href="https://linkedin.com/in/jack-kinney" target="_blank">linkedin.com/in/jack-kinney</a>
-              </div>
-            </div>
-            
-            <div class="contact-item">
-              <div class="contact-icon">
-                <i class="fab fa-github"></i>
-              </div>
-              <div class="contact-details">
-                <h4>GitHub</h4>
-                <a href="https://github.com/jackkinney" target="_blank">github.com/jackkinney</a>
-              </div>
-            </div>
-            
-            <div class="contact-item">
-              <div class="contact-icon">
-                <i class="fas fa-university"></i>
-              </div>
-              <div class="contact-details">
-                <h4>University</h4>
-                <span>UC Santa Cruz</span>
-              </div>
-            </div>
+            <h3>Teaching Assistant</h3>
+            <ul class="activity-list">
+              <li>CSE 240: Introduction to Artificial Intelligence (Fall 2024)</li>
+              <li>CSE 290: Quantum Computing for Engineers (Spring 2025)</li>
+              <li>CSE 180: Robotics and Control Systems (Winter 2025)</li>
+            </ul>
           </div>
           
-          <div class="contact-form-container">
-            <form class="contact-form" id="contact-form">
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" required>
-              </div>
-              
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-              </div>
-              
-              <div class="form-group">
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" name="subject" required>
-              </div>
-              
-              <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-              </div>
-              
-              <button type="submit" class="btn btn-primary">
-                <i class="fas fa-paper-plane"></i>
-                Send Message
-              </button>
-            </form>
+          <div class="activity-card animate-on-scroll">
+            <div class="activity-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Professional Service</h3>
+            <ul class="activity-list">
+              <li>Reviewer: ICRA 2025, IROS 2025</li>
+              <li>Student Volunteer: RoboWeek 2024</li>
+              <li>Organizer: UCSC Robotics Workshop Series</li>
+            </ul>
+          </div>
+          
+          <div class="activity-card animate-on-scroll">
+            <div class="activity-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <h3>Awards & Honors</h3>
+            <ul class="activity-list">
+              <li>Best Paper Award - ICRA 2025</li>
+              <li>NSF Graduate Research Fellowship</li>
+              <li>Dean's Excellence Award</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -1361,381 +433,20 @@
       <div class="footer-content">
         <p>&copy; 2025 Jack Kinney. Robotics Engineering Student at UC Santa Cruz.</p>
         <div class="footer-links">
-          <a href="#" target="_blank">Resume</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <a href="./assets/docs/resume.pdf" target="_blank">Resume</a>
+          <a href="./index.html">Home</a>
+          <a href="./projects.html">Projects</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <script>
-    // Portfolio JavaScript
-    class Portfolio {
-      constructor() {
-        this.init();
-      }
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
 
-      init() {
-        this.bindEvents();
-        this.initNavigation();
-        this.initScrollEffects();
-        this.initAnimations();
-        this.initForm();
-      }
-
-      bindEvents() {
-        window.addEventListener('scroll', this.throttle(this.handleScroll.bind(this), 16));
-        window.addEventListener('resize', this.debounce(this.handleResize.bind(this), 250));
-        window.addEventListener('load', this.onWindowLoad.bind(this));
-        document.addEventListener('DOMContentLoaded', this.onDOMLoaded.bind(this));
-      }
-
-      initNavigation() {
-        const navToggle = document.getElementById('nav-toggle');
-        const nav = document.getElementById('nav');
-        const navLinks = document.querySelectorAll('.nav-list a');
-
-        if (navToggle && nav) {
-          navToggle.addEventListener('click', () => {
-            nav.classList.toggle('nav-open');
-            navToggle.classList.toggle('active');
-            document.body.style.overflow = nav.classList.contains('nav-open') ? 'hidden' : '';
-          });
-
-          document.addEventListener('click', (e) => {
-            if (!nav.contains(e.target) && !navToggle.contains(e.target)) {
-              this.closeNavigation();
-            }
-          });
-
-          document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-              this.closeNavigation();
-            }
-          });
-        }
-
-        navLinks.forEach(link => {
-          link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
-            
-            if (href.startsWith('#')) {
-              e.preventDefault();
-              const target = document.querySelector(href);
-              if (target) {
-                this.smoothScrollTo(target, 80);
-                this.closeNavigation();
-              }
-            }
-          });
-        });
-
-        this.updateActiveNavLink();
-      }
-
-      closeNavigation() {
-        const nav = document.getElementById('nav');
-        const navToggle = document.getElementById('nav-toggle');
-        
-        if (nav && navToggle) {
-          nav.classList.remove('nav-open');
-          navToggle.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      }
-
-      updateActiveNavLink() {
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-list a');
-
-        if (sections.length === 0) return;
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach(entry => {
-              const link = document.querySelector(`.nav-list a[href="#${entry.target.id}"]`);
-              if (entry.isIntersecting && link) {
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-              }
-            });
-          },
-          { threshold: 0.3, rootMargin: '-100px 0px -100px 0px' }
-        );
-
-        sections.forEach(section => observer.observe(section));
-      }
-
-      smoothScrollTo(target, offset = 0) {
-        const targetPosition = target.offsetTop - offset;
-        
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
-      }
-
-      initScrollEffects() {
-        this.lastScrollY = window.scrollY;
-      }
-
-      handleScroll() {
-        const currentScrollY = window.scrollY;
-        this.updateHeader(currentScrollY);
-        this.updateScrollProgress();
-        this.lastScrollY = currentScrollY;
-      }
-
-      updateHeader(scrollY) {
-        const header = document.getElementById('header');
-        if (!header) return;
-        header.classList.toggle('scrolled', scrollY > 50);
-      }
-
-      updateScrollProgress() {
-        const progressBar = document.querySelector('.scroll-progress');
-        if (!progressBar) return;
-
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollPercent = Math.min((scrollTop / docHeight) * 100, 100);
-        
-        progressBar.style.width = `${scrollPercent}%`;
-      }
-
-      initAnimations() {
-        this.initIntersectionObserver();
-        this.initCounters();
-      }
-
-      initIntersectionObserver() {
-        const observerOptions = {
-          threshold: 0.1,
-          rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('fade-in');
-              
-              if (entry.target.classList.contains('stat-number')) {
-                this.animateCounter(entry.target);
-              }
-            }
-          });
-        }, observerOptions);
-
-        document.querySelectorAll('.skill-category, .project-card, .contact-item, .about-content, .hero-content').forEach(el => {
-          observer.observe(el);
-        });
-      }
-
-      initCounters() {
-        // Counters will be triggered by intersection observer
-      }
-
-      animateCounter(element) {
-        const text = element.textContent;
-        const number = parseInt(text.replace(/[^\d]/g, ''));
-        const suffix = text.replace(/[\d]/g, '');
-        
-        if (isNaN(number)) return;
-
-        const duration = 2000;
-        const step = number / (duration / 16);
-        let current = 0;
-
-        const timer = setInterval(() => {
-          current += step;
-          if (current >= number) {
-            current = number;
-            clearInterval(timer);
-          }
-          element.textContent = Math.floor(current) + suffix;
-        }, 16);
-      }
-
-      initForm() {
-        const form = document.getElementById('contact-form');
-        if (!form) return;
-
-        form.addEventListener('submit', this.handleFormSubmit.bind(this));
-
-        const inputs = form.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-          input.addEventListener('blur', () => this.validateField(input));
-          input.addEventListener('input', () => this.clearFieldError(input));
-        });
-      }
-
-      handleFormSubmit(e) {
-        e.preventDefault();
-        
-        const form = e.target;
-        const submitButton = form.querySelector('button[type="submit"]');
-        
-        const inputs = form.querySelectorAll('input, textarea');
-        let isValid = true;
-        
-        inputs.forEach(input => {
-          if (!this.validateField(input)) {
-            isValid = false;
-          }
-        });
-
-        if (!isValid) return;
-
-        const originalText = submitButton.innerHTML;
-        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        submitButton.disabled = true;
-
-        setTimeout(() => {
-          this.showToast('Message sent successfully!', 'success');
-          form.reset();
-          
-          submitButton.innerHTML = originalText;
-          submitButton.disabled = false;
-        }, 2000);
-      }
-
-      validateField(field) {
-        const value = field.value.trim();
-        let isValid = true;
-        let errorMessage = '';
-
-        this.clearFieldError(field);
-
-        if (field.required && value.length === 0) {
-          isValid = false;
-          errorMessage = 'This field is required';
-        } else if (field.type === 'email' && value.length > 0) {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailRegex.test(value)) {
-            isValid = false;
-            errorMessage = 'Please enter a valid email address';
-          }
-        }
-
-        if (!isValid) {
-          this.showFieldError(field, errorMessage);
-        }
-
-        return isValid;
-      }
-
-      showFieldError(field, message) {
-        field.style.borderColor = '#ef4444';
-        
-        const errorElement = document.createElement('div');
-        errorElement.className = 'field-error';
-        errorElement.textContent = message;
-        errorElement.style.cssText = `
-          color: #ef4444;
-          font-size: 0.875rem;
-          margin-top: 0.5rem;
-        `;
-        
-        field.parentNode.appendChild(errorElement);
-      }
-
-      clearFieldError(field) {
-        field.style.borderColor = '';
-        const errorElement = field.parentNode.querySelector('.field-error');
-        if (errorElement) {
-          errorElement.remove();
-        }
-      }
-
-      showToast(message, type = 'success') {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        toast.style.cssText = `
-          position: fixed;
-          bottom: 2rem;
-          right: 2rem;
-          background: ${type === 'success' ? '#10b981' : '#ef4444'};
-          color: white;
-          padding: 1rem 2rem;
-          border-radius: 0.5rem;
-          box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-          z-index: 1000;
-          animation: slideInUp 0.3s ease-out;
-        `;
-        
-        if (!document.querySelector('#toast-styles')) {
-          const style = document.createElement('style');
-          style.id = 'toast-styles';
-          style.textContent = `
-            @keyframes slideInUp {
-              from {
-                transform: translateY(100%);
-                opacity: 0;
-              }
-              to {
-                transform: translateY(0);
-                opacity: 1;
-              }
-            }
-          `;
-          document.head.appendChild(style);
-        }
-        
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-          toast.style.opacity = '0';
-          toast.style.transform = 'translateY(100%)';
-          setTimeout(() => toast.remove(), 300);
-        }, 3000);
-      }
-
-      throttle(func, limit) {
-        let inThrottle;
-        return function() {
-          const args = arguments;
-          const context = this;
-          if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-          }
-        };
-      }
-
-      debounce(func, wait) {
-        let timeout;
-        return function() {
-          const context = this;
-          const args = arguments;
-          clearTimeout(timeout);
-          timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-      }
-
-      handleResize() {
-        this.closeNavigation();
-      }
-
-      onDOMLoaded() {
-        console.log('Portfolio loaded successfully');
-      }
-
-      onWindowLoad() {
-        document.body.classList.add('loaded');
-      }
-    }
-
-    // Initialize the portfolio
-    const portfolio = new Portfolio();
-    window.portfolio = portfolio;
-
-    // Error handling
-    window.addEventListener('error', (event) => {
-      console.error('JavaScript error:', event.error);
-    });
-  </script>
+  <!-- Main JavaScript -->
+  <script src="./assets/js/main.js"></script>
 </body>
 </html>

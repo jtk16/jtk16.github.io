@@ -2,7 +2,7 @@
 
 /**
  * Portfolio JavaScript - Jack Kinney
- * Clean, focused functionality for professional portfolio
+ * Enhanced functionality for professional portfolio
  */
 
 class Portfolio {
@@ -20,17 +20,131 @@ class Portfolio {
 
   init() {
     this.bindEvents();
+    this.initPageLoader();
     this.initNavigation();
     this.initScrollEffects();
     this.initAnimations();
     this.initForm();
+    this.initBackToTop();
     
     // Page-specific initializations
-    if (this.currentPage === 'projects') {
+    if (this.currentPage === 'home') {
+      this.initHeroParticles();
+    } else if (this.currentPage === 'projects') {
       this.initProjectsPage();
     } else if (this.currentPage === 'research') {
       this.initResearchPage();
     }
+  }
+
+  // ====================
+  // PAGE LOADER
+  // ====================
+  initPageLoader() {
+    const loader = document.getElementById('page-loader');
+    if (!loader) return;
+
+    // Hide loader when page is fully loaded
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+        document.body.classList.add('loaded');
+        
+        // Trigger initial animations
+        this.triggerInitialAnimations();
+      }, 500);
+    });
+  }
+
+  triggerInitialAnimations() {
+    // Trigger animations for elements visible on load
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    animatedElements.forEach((el, index) => {
+      if (this.isElementInViewport(el)) {
+        setTimeout(() => {
+          el.classList.add('visible');
+        }, index * 100);
+      }
+    });
+  }
+
+  // ====================
+  // HERO PARTICLES
+  // ====================
+  initHeroParticles() {
+    const particlesContainer = document.getElementById('hero-particles');
+    if (!particlesContainer) return;
+
+    // Create floating particles
+    const particleCount = 50;
+    for (let i = 0; i < particleCount; i++) {
+      this.createParticle(particlesContainer);
+    }
+  }
+
+  createParticle(container) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    // Random properties
+    const size = Math.random() * 4 + 1;
+    const duration = Math.random() * 20 + 10;
+    const delay = Math.random() * 5;
+    const x = Math.random() * 100;
+    
+    particle.style.cssText = `
+      position: absolute;
+      width: ${size}px;
+      height: ${size}px;
+      background: ${Math.random() > 0.5 ? 'var(--primary)' : 'var(--secondary)'};
+      border-radius: 50%;
+      left: ${x}%;
+      bottom: -50px;
+      opacity: ${Math.random() * 0.5 + 0.2};
+      animation: floatUp ${duration}s linear ${delay}s infinite;
+    `;
+    
+    container.appendChild(particle);
+    
+    // Add animation if not already defined
+    if (!document.querySelector('#particle-animation')) {
+      const style = document.createElement('style');
+      style.id = 'particle-animation';
+      style.textContent = `
+        @keyframes floatUp {
+          to {
+            transform: translateY(-100vh) rotate(360deg);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
+  // ====================
+  // BACK TO TOP
+  // ====================
+  initBackToTop() {
+    const backToTop = document.getElementById('back-to-top');
+    if (!backToTop) return;
+
+    // Show/hide based on scroll position
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // Scroll to top on click
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
   }
 
   // ====================
@@ -47,7 +161,6 @@ class Portfolio {
   }
 
   initProjectFilters() {
-    // If there are filter buttons on the projects page
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
@@ -70,15 +183,17 @@ class Portfolio {
       const categories = card.dataset.category ? card.dataset.category.split(' ') : [];
       const shouldShow = filter === 'all' || categories.includes(filter);
       
+      card.style.transition = 'all 0.3s ease';
+      
       if (shouldShow) {
         card.style.display = 'block';
         setTimeout(() => {
           card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
+          card.style.transform = 'scale(1) translateY(0)';
         }, index * 50);
       } else {
         card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
+        card.style.transform = 'scale(0.95) translateY(20px)';
         setTimeout(() => {
           card.style.display = 'none';
         }, 300);
@@ -90,19 +205,54 @@ class Portfolio {
     const projectCards = document.querySelectorAll('.project-card, .featured-project');
     
     projectCards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-8px)';
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0)';
+      card.addEventListener('mouseenter', (e) => {
+        this.createRipple(e, card);
       });
     });
   }
 
+  createRipple(e, element) {
+    const ripple = document.createElement('div');
+    const rect = element.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    ripple.style.cssText = `
+      position: absolute;
+      width: ${size}px;
+      height: ${size}px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.1);
+      pointer-events: none;
+      transform: translate(${x}px, ${y}px) scale(0);
+      animation: rippleEffect 0.6s ease-out;
+    `;
+    
+    element.style.position = 'relative';
+    element.style.overflow = 'hidden';
+    element.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
+    
+    // Add ripple animation if not exists
+    if (!document.querySelector('#ripple-animation')) {
+      const style = document.createElement('style');
+      style.id = 'ripple-animation';
+      style.textContent = `
+        @keyframes rippleEffect {
+          to {
+            transform: translate(var(--x), var(--y)) scale(4);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
   initPublicationInteractions() {
-    // Add copy citation functionality
-    const citeButtons = document.querySelectorAll('.btn:has(.fa-quote-right)');
+    const citeButtons = document.querySelectorAll('.btn:has(.fa-quote-right), .project-link:has(.fa-quote-right)');
     
     citeButtons.forEach(button => {
       button.addEventListener('click', (e) => {
@@ -117,7 +267,7 @@ class Portfolio {
         
         if (navigator.clipboard) {
           navigator.clipboard.writeText(citation).then(() => {
-            this.showToast('Citation copied to clipboard!');
+            this.showToast('Citation copied to clipboard!', 'success');
           });
         } else {
           this.showToast('Citation: ' + citation);
@@ -196,19 +346,27 @@ class Portfolio {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
         
-        if (href.startsWith('#')) {
-          e.preventDefault();
-          const target = document.querySelector(href);
-          if (target) {
-            this.smoothScrollTo(target, 80);
-            this.closeNavigation();
+        // Handle anchor links
+        if (href.includes('#')) {
+          const [page, hash] = href.split('#');
+          
+          // If it's a same-page anchor
+          if (!page || page === window.location.pathname || page === './index.html' && window.location.pathname.endsWith('/')) {
+            e.preventDefault();
+            const target = document.getElementById(hash);
+            if (target) {
+              this.smoothScrollTo(target, 80);
+              this.closeNavigation();
+            }
           }
         }
       });
     });
 
-    // Update active nav link on scroll
-    this.updateActiveNavLink();
+    // Update active nav link on scroll for homepage
+    if (this.currentPage === 'home') {
+      this.updateActiveNavLink();
+    }
   }
 
   closeNavigation() {
@@ -258,6 +416,24 @@ class Portfolio {
   // ====================
   initScrollEffects() {
     this.lastScrollY = window.scrollY;
+    this.initScrollAnimations();
+  }
+
+  initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+    
+    animatedElements.forEach(el => observer.observe(el));
   }
 
   handleScroll() {
@@ -307,8 +483,9 @@ class Portfolio {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
           entry.target.classList.add('fade-in');
+          entry.target.classList.add('animated');
           
           // Trigger counter animation
           if (entry.target.classList.contains('stat-number')) {
@@ -319,33 +496,41 @@ class Portfolio {
     }, observerOptions);
 
     // Observe elements for animation
-    document.querySelectorAll('.skill-category, .project-card, .contact-item, .about-content, .hero-content').forEach(el => {
+    document.querySelectorAll('.skill-category, .project-card, .contact-item').forEach(el => {
       observer.observe(el);
     });
   }
 
   initCounters() {
-    // This will be triggered by intersection observer
+    const counters = document.querySelectorAll('[data-count]');
+    
+    counters.forEach(counter => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !counter.classList.contains('counted')) {
+            this.animateCounter(counter);
+            counter.classList.add('counted');
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observer.observe(counter);
+    });
   }
 
   animateCounter(element) {
-    const text = element.textContent;
-    const number = parseInt(text.replace(/[^\d]/g, ''));
-    const suffix = text.replace(/[\d]/g, '');
-    
-    if (isNaN(number)) return;
-
+    const target = parseInt(element.dataset.count || element.textContent);
     const duration = 2000;
-    const step = number / (duration / 16);
+    const step = target / (duration / 16);
     let current = 0;
 
     const timer = setInterval(() => {
       current += step;
-      if (current >= number) {
-        current = number;
+      if (current >= target) {
+        current = target;
         clearInterval(timer);
       }
-      element.textContent = Math.floor(current) + suffix;
+      element.textContent = Math.floor(current) + (element.textContent.includes('+') ? '+' : '');
     }, 16);
   }
 
@@ -496,6 +681,16 @@ class Portfolio {
       toast.style.transform = 'translateY(100%)';
       setTimeout(() => toast.remove(), 300);
     }, 3000);
+  }
+
+  isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
   }
 
   throttle(func, limit) {
