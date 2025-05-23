@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Research work by Jack Kinney - Academic papers and studies in robotics, quantum computing, and artificial intelligence.">
-  <meta name="keywords" content="robotics research, quantum computing research, AI research, academic papers, publications, UCSC">
+  <meta name="description" content="Jack Kinney - Robotics Engineering student at UC Santa Cruz, specializing in quantum computing, reinforcement learning, computer vision, and autonomous systems.">
+  <meta name="keywords" content="robotics, quantum computing, reinforcement learning, computer vision, machine learning, UCSC, engineering">
   <meta name="author" content="Jack Kinney">
   <meta name="theme-color" content="#6366f1">
   
-  <title>Research - Jack Kinney | Robotics Engineering Student</title>
+  <title>Jack Kinney — Robotics Engineering Student</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -361,6 +361,14 @@
       color: var(--text-secondary);
     }
 
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      justify-content: center;
+      margin-bottom: var(--space-12);
+    }
+
     .hero-stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -387,14 +395,114 @@
       margin-top: var(--space-1);
     }
 
-    /* Research Interests */
-    .research-interests-grid {
+    /* About Section */
+    .about-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-16);
+      align-items: center;
+    }
+
+    .about-image {
+      position: relative;
+    }
+
+    .image-container {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+      background: var(--bg-tertiary);
+      aspect-ratio: 3/4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    .image-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 2px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-xl);
+      z-index: 2;
+    }
+
+    .image-placeholder i {
+      font-size: 3rem;
+      color: var(--primary);
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .about-content h2 {
+      margin-bottom: var(--space-6);
+    }
+
+    .about-content p {
+      margin-bottom: var(--space-4);
+    }
+
+    .about-highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+
+    .highlight {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+
+    .highlight i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .highlight h4 {
+      margin-bottom: var(--space-1);
+      font-size: 1rem;
+    }
+
+    .highlight p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Skills Section */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: var(--space-8);
     }
 
-    .research-interest {
+    .skill-category {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-xl);
@@ -403,13 +511,13 @@
       transition: var(--transition);
     }
 
-    .research-interest:hover {
+    .skill-category:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
       border-color: var(--primary);
     }
 
-    .interest-icon {
+    .skill-icon {
       width: 80px;
       height: 80px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
@@ -420,28 +528,105 @@
       margin: 0 auto var(--space-6);
     }
 
-    .interest-icon i {
+    .skill-icon i {
       font-size: 2rem;
       color: white;
     }
 
-    .research-interest h3 {
-      margin-bottom: var(--space-4);
-    }
-
-    .research-interest p {
+    .skill-category h3 {
       margin-bottom: var(--space-6);
-      font-size: 0.9rem;
     }
 
-    .interest-topics {
+    .skill-list {
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-2);
       justify-content: center;
     }
 
-    .topic-tag {
+    .skill-tag {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      color: var(--primary);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .skill-tag:hover {
+      background: rgba(99, 102, 241, 0.2);
+      transform: scale(1.05);
+    }
+
+    /* Projects Section */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--space-8);
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--primary);
+    }
+
+    .project-image {
+      position: relative;
+      height: 200px;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 2px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius-lg);
+    }
+
+    .project-placeholder i {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .project-content {
+      padding: var(--space-6);
+    }
+
+    .project-content h3 {
+      margin-bottom: var(--space-4);
+    }
+
+    .project-content p {
+      margin-bottom: var(--space-6);
+      font-size: 0.875rem;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+    }
+
+    .tech-tag {
       background: rgba(99, 102, 241, 0.1);
       border: 1px solid rgba(99, 102, 241, 0.2);
       color: var(--primary);
@@ -451,332 +636,130 @@
       font-weight: 500;
     }
 
-    /* Publications */
-    .publications-list {
+    .project-links {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    .project-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      background: rgba(99, 102, 241, 0.05);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius);
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .project-link:hover {
+      background: rgba(99, 102, 241, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Contact Section */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+    }
+
+    .contact-info {
       display: flex;
       flex-direction: column;
-      gap: var(--space-8);
-    }
-
-    .publication-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: var(--space-8);
-      transition: var(--transition);
-    }
-
-    .publication-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--primary);
-    }
-
-    .publication-card.featured {
-      border-color: var(--primary);
-      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(99, 102, 241, 0.03) 100%);
-    }
-
-    .publication-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: var(--space-4);
-      flex-wrap: wrap;
-      gap: var(--space-4);
-    }
-
-    .publication-badges {
-      display: flex;
-      gap: var(--space-2);
-    }
-
-    .badge {
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--radius);
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .badge.featured {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-    }
-
-    .badge.conference {
-      background: rgba(99, 102, 241, 0.1);
-      color: var(--primary);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-    }
-
-    .badge.journal {
-      background: rgba(16, 185, 129, 0.1);
-      color: var(--success);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-    }
-
-    .badge.workshop {
-      background: rgba(245, 158, 11, 0.1);
-      color: var(--warning);
-      border: 1px solid rgba(245, 158, 11, 0.2);
-    }
-
-    .publication-meta {
-      text-align: right;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    .venue {
-      font-weight: 600;
-      color: var(--primary);
-      display: block;
-    }
-
-    .date {
-      margin-top: var(--space-1);
-    }
-
-    .publication-card h3 {
-      margin-bottom: var(--space-3);
-      font-size: 1.25rem;
-      line-height: 1.4;
-    }
-
-    .authors {
-      margin-bottom: var(--space-4);
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    .author.primary {
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .abstract {
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: var(--space-6);
-      font-size: 0.9rem;
-    }
-
-    .publication-stats {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-6);
-      margin-bottom: var(--space-6);
     }
 
-    .pub-stat {
+    .contact-item {
       display: flex;
       align-items: center;
-      gap: var(--space-2);
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    .pub-stat i {
-      color: var(--primary);
-    }
-
-    .publication-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-3);
-    }
-
-    /* Current Research */
-    .current-research-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: var(--space-8);
-    }
-
-    .research-project {
+      gap: var(--space-4);
+      padding: var(--space-4);
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: var(--space-8);
+      border-radius: var(--radius-lg);
       transition: var(--transition);
     }
 
-    .research-project:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--primary);
+    .contact-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
-    .project-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--space-6);
-      flex-wrap: wrap;
-      gap: var(--space-4);
-    }
-
-    .project-status .status-badge.active {
-      background: rgba(16, 185, 129, 0.1);
-      color: var(--success);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-    }
-
-    .status-badge {
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--radius);
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .status-badge.planning {
-      background: rgba(245, 158, 11, 0.1);
-      color: var(--warning);
-      border: 1px solid rgba(245, 158, 11, 0.2);
-    }
-
-    .progress-info {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-    .progress-text {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      white-space: nowrap;
-    }
-
-    .progress-bar {
-      width: 100px;
-      height: 6px;
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-      border-radius: var(--radius);
-      transition: var(--transition);
-    }
-
-    .research-project h3 {
-      margin-bottom: var(--space-4);
-    }
-
-    .research-project p {
-      margin-bottom: var(--space-6);
-      font-size: 0.9rem;
-    }
-
-    .research-details {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-    }
-
-    .detail {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    .detail i {
-      color: var(--primary);
-    }
-
-    /* Academic Activities */
-    .activities-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: var(--space-8);
-    }
-
-    .activity-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: var(--space-8);
-      transition: var(--transition);
-    }
-
-    .activity-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--primary);
-    }
-
-    .activity-icon {
-      width: 60px;
-      height: 60px;
+    .contact-icon {
+      width: 50px;
+      height: 50px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       border-radius: var(--radius-lg);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: var(--space-6);
+      flex-shrink: 0;
     }
 
-    .activity-icon i {
-      font-size: 1.5rem;
+    .contact-icon i {
+      font-size: 1.25rem;
       color: white;
     }
 
-    .activity-card h3 {
-      margin-bottom: var(--space-4);
+    .contact-details h4 {
+      margin-bottom: var(--space-1);
+      font-size: 1rem;
     }
 
-    .activity-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    .contact-details a,
+    .contact-details span {
+      color: var(--text-muted);
+      font-size: 0.875rem;
     }
 
-    .activity-list li {
-      padding: var(--space-2) 0;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      position: relative;
-      padding-left: var(--space-6);
-    }
-
-    .activity-list li::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
+    .contact-details a:hover {
       color: var(--primary);
-      font-weight: bold;
     }
 
-    /* CTA Section */
-    .cta-content {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto;
+    .contact-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
     }
 
-    .cta-content h2 {
-      margin-bottom: var(--space-4);
+    .form-group {
+      margin-bottom: var(--space-6);
     }
 
-    .cta-content p {
-      font-size: 1.125rem;
-      margin-bottom: var(--space-8);
+    .form-group label {
+      display: block;
+      margin-bottom: var(--space-2);
+      font-weight: 600;
+      color: var(--text-primary);
     }
 
-    .cta-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-4);
-      justify-content: center;
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: var(--space-3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
     }
 
     /* Footer */
@@ -815,6 +798,25 @@
     }
 
     /* Responsive Design */
+    @media (max-width: 1024px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-12);
+        text-align: center;
+      }
+      
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-12);
+      }
+      
+      .about-highlights {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: var(--space-8) auto 0;
+      }
+    }
+
     @media (max-width: 768px) {
       .nav {
         position: fixed;
@@ -851,47 +853,22 @@
         padding: calc(var(--space-16) + 80px) 0 var(--space-16);
       }
       
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      
       .hero-stats {
         grid-template-columns: repeat(3, 1fr);
         gap: var(--space-6);
       }
       
-      .publication-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .publication-meta {
-        text-align: left;
-      }
-      
-      .publication-stats {
-        flex-direction: column;
-        gap: var(--space-3);
-      }
-      
-      .current-research-grid {
+      .projects-grid {
         grid-template-columns: 1fr;
       }
       
-      .project-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .progress-info {
-        width: 100%;
-        justify-content: space-between;
-      }
-      
-      .progress-bar {
-        flex: 1;
-        margin-left: var(--space-4);
-      }
-      
-      .cta-actions {
-        flex-direction: column;
-        align-items: center;
+      .skills-grid {
+        grid-template-columns: 1fr;
       }
       
       .footer-content {
@@ -909,32 +886,13 @@
         padding: var(--space-16) 0;
       }
       
-      .publication-card,
-      .research-project,
-      .activity-card {
-        padding: var(--space-6);
-      }
-      
-      .publication-links,
-      .research-details {
-        flex-direction: column;
-        gap: var(--space-2);
-      }
-      
-      .progress-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-2);
-      }
-      
-      .progress-bar {
-        width: 100%;
-        margin: 0;
-      }
-      
       .hero-stats {
         grid-template-columns: 1fr;
         gap: var(--space-4);
+      }
+      
+      .project-links {
+        flex-direction: column;
       }
     }
 
@@ -991,15 +949,14 @@
   <header class="header" id="header">
     <div class="container">
       <div class="header-content">
-        <a href="./index.html" class="logo">&lt;JTK/&gt;</a>
+        <a href="#hero" class="logo">&lt;JTK/&gt;</a>
         <nav class="nav" id="nav">
           <ul class="nav-list">
-            <li><a href="./index.html">Home</a></li>
-            <li><a href="./index.html#about">About</a></li>
-            <li><a href="./index.html#skills">Skills</a></li>
-            <li><a href="./projects.html">Projects</a></li>
-            <li><a href="./research.html" class="active">Research</a></li>
-            <li><a href="./index.html#contact">Contact</a></li>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
           </ul>
         </nav>
         <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
@@ -1012,391 +969,387 @@
   </header>
 
   <main>
-    <!-- Page Hero -->
-    <section class="hero">
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
       <div class="container">
         <div class="hero-content">
           <div class="hero-badge">
-            <i class="fas fa-flask"></i>
-            <span>Academic Research</span>
+            <i class="fas fa-robot"></i>
+            <span>Robotics Engineering Student</span>
           </div>
-          <h1>Advancing Robotics Through Research</h1>
+          <h1>Building Intelligent Systems for Tomorrow</h1>
           <p class="hero-subtitle">
-            Exploring fundamental questions in autonomous systems, quantum computing applications, 
-            and human-robot interaction through rigorous research and academic collaboration. 
-            Contributing to the scientific understanding of intelligent systems.
+            I'm Jack Kinney, a Robotics Engineering student at UC Santa Cruz, passionate about 
+            quantum computing, reinforcement learning, and computer vision. I explore how cutting-edge 
+            AI can create autonomous systems that understand and interact with our world.
           </p>
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary">
+              <i class="fas fa-rocket"></i>
+              View My Work
+            </a>
+            <a href="#contact" class="btn btn-outline">
+              <i class="fas fa-paper-plane"></i>
+              Get In Touch
+            </a>
+          </div>
           <div class="hero-stats">
             <div class="stat">
-              <span class="stat-number">6</span>
-              <span class="stat-label">Publications</span>
+              <span class="stat-number">15+</span>
+              <span class="stat-label">Projects</span>
             </div>
             <div class="stat">
               <span class="stat-number">3</span>
-              <span class="stat-label">Research Areas</span>
+              <span class="stat-label">Years Experience</span>
             </div>
             <div class="stat">
-              <span class="stat-number">2</span>
-              <span class="stat-label">Ongoing Studies</span>
+              <span class="stat-number">5</span>
+              <span class="stat-label">Research Areas</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Research Interests -->
-    <section class="section">
+    <!-- About Section -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image">
+            <div class="image-container">
+              <div class="image-placeholder">
+                <i class="fas fa-user"></i>
+              </div>
+            </div>
+          </div>
+          <div class="about-content">
+            <h2>About Me</h2>
+            <p>
+              As a Robotics Engineering student at UC Santa Cruz, I'm fascinated by the convergence 
+              of quantum computing and artificial intelligence in robotics. My work focuses on developing 
+              intelligent systems that can learn, adapt, and make decisions in complex environments.
+            </p>
+            <p>
+              I specialize in reinforcement learning algorithms for autonomous navigation, computer vision 
+              for object detection and tracking, and exploring how quantum computing can accelerate machine 
+              learning processes. My goal is to create robots that are not just automated, but truly intelligent.
+            </p>
+            <p>
+              When I'm not coding or building robots, I enjoy contributing to open-source projects, 
+              reading about the latest advances in quantum algorithms, and mentoring fellow students 
+              in robotics competitions.
+            </p>
+            <div class="about-highlights">
+              <div class="highlight">
+                <i class="fas fa-graduation-cap"></i>
+                <div>
+                  <h4>Education</h4>
+                  <p>BS Robotics Engineering, UC Santa Cruz</p>
+                </div>
+              </div>
+              <div class="highlight">
+                <i class="fas fa-award"></i>
+                <div>
+                  <h4>Achievement</h4>
+                  <p>Dean's List, Robotics Competition Winner</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section section-alt">
       <div class="container">
         <div class="section-header">
-          <h2>Research Interests</h2>
-          <p>Core areas where I'm exploring the frontiers of robotics and AI</p>
+          <h2>Technical Skills</h2>
+          <p>A comprehensive toolkit for building intelligent robotic systems</p>
         </div>
         
-        <div class="research-interests-grid">
-          <div class="research-interest">
-            <div class="interest-icon">
-              <i class="fas fa-atom"></i>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <div class="skill-icon">
+              <i class="fas fa-robot"></i>
             </div>
-            <h3>Quantum Robotics</h3>
-            <p>
-              Investigating how quantum computing algorithms can solve complex optimization 
-              problems in robotics, from path planning to multi-robot coordination.
-            </p>
-            <div class="interest-topics">
-              <span class="topic-tag">Quantum Optimization</span>
-              <span class="topic-tag">QAOA Algorithms</span>
-              <span class="topic-tag">Path Planning</span>
+            <h3>Robotics & Control</h3>
+            <div class="skill-list">
+              <span class="skill-tag">ROS/ROS2</span>
+              <span class="skill-tag">Control Theory</span>
+              <span class="skill-tag">SLAM</span>
+              <span class="skill-tag">Path Planning</span>
+              <span class="skill-tag">Sensor Fusion</span>
+              <span class="skill-tag">Arduino</span>
             </div>
           </div>
           
-          <div class="research-interest">
-            <div class="interest-icon">
+          <div class="skill-category">
+            <div class="skill-icon">
               <i class="fas fa-brain"></i>
             </div>
-            <h3>Reinforcement Learning</h3>
-            <p>
-              Developing advanced RL algorithms for autonomous systems that can learn 
-              and adapt in dynamic, uncertain environments with minimal supervision.
-            </p>
-            <div class="interest-topics">
-              <span class="topic-tag">Deep Q-Learning</span>
-              <span class="topic-tag">Policy Gradient</span>
-              <span class="topic-tag">Multi-Agent RL</span>
+            <h3>AI & Machine Learning</h3>
+            <div class="skill-list">
+              <span class="skill-tag">Reinforcement Learning</span>
+              <span class="skill-tag">Computer Vision</span>
+              <span class="skill-tag">TensorFlow</span>
+              <span class="skill-tag">PyTorch</span>
+              <span class="skill-tag">OpenCV</span>
+              <span class="skill-tag">Neural Networks</span>
             </div>
           </div>
           
-          <div class="research-interest">
-            <div class="interest-icon">
-              <i class="fas fa-eye"></i>
+          <div class="skill-category">
+            <div class="skill-icon">
+              <i class="fas fa-atom"></i>
             </div>
-            <h3>Computer Vision</h3>
-            <p>
-              Creating robust vision systems that enable robots to understand and interact 
-              with complex visual environments in real-time applications.
-            </p>
-            <div class="interest-topics">
-              <span class="topic-tag">Object Detection</span>
-              <span class="topic-tag">SLAM</span>
-              <span class="topic-tag">Scene Understanding</span>
+            <h3>Quantum Computing</h3>
+            <div class="skill-list">
+              <span class="skill-tag">Qiskit</span>
+              <span class="skill-tag">Quantum Algorithms</span>
+              <span class="skill-tag">QAOA</span>
+              <span class="skill-tag">Quantum ML</span>
+              <span class="skill-tag">Circuit Design</span>
+              <span class="skill-tag">IBM Quantum</span>
+            </div>
+          </div>
+          
+          <div class="skill-category">
+            <div class="skill-icon">
+              <i class="fas fa-code"></i>
+            </div>
+            <h3>Programming</h3>
+            <div class="skill-list">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">C++</span>
+              <span class="skill-tag">MATLAB</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Linux</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Publications -->
-    <section class="section section-alt">
+    <!-- Projects Section -->
+    <section id="projects" class="section">
       <div class="container">
         <div class="section-header">
-          <h2>Recent Publications</h2>
-          <p>Academic contributions to the robotics and AI research community</p>
+          <h2>Featured Projects</h2>
+          <p>Innovative solutions at the intersection of robotics, AI, and quantum computing</p>
         </div>
         
-        <div class="publications-list">
-          <!-- Featured Publication -->
-          <div class="publication-card featured">
-            <div class="publication-header">
-              <div class="publication-badges">
-                <span class="badge featured">Featured</span>
-                <span class="badge conference">Conference</span>
-              </div>
-              <div class="publication-meta">
-                <span class="venue">IEEE International Conference on Robotics (ICRA 2024)</span>
-                <span class="date">March 2024</span>
+        <div class="projects-grid">
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <i class="fas fa-drone"></i>
               </div>
             </div>
-            <h3>Quantum-Enhanced Path Planning for Multi-Robot Systems</h3>
-            <div class="authors">
-              <span class="author primary">J. Kinney</span>,
-              <span class="author">Dr. Sarah Chen</span>,
-              <span class="author">Prof. Michael Rodriguez</span>
-            </div>
-            <p class="abstract">
-              We present a novel approach combining quantum optimization algorithms with classical 
-              path planning techniques for multi-robot coordination. Our method demonstrates 
-              significant improvements in computational efficiency and solution quality compared 
-              to traditional approaches.
-            </p>
-            <div class="publication-stats">
-              <div class="pub-stat">
-                <i class="fas fa-quote-right"></i>
-                <span>18 citations</span>
+            <div class="project-content">
+              <h3>Autonomous Navigation Drone</h3>
+              <p>
+                Developed a quadcopter with reinforcement learning-based navigation that can 
+                autonomously explore unknown environments while avoiding obstacles and mapping 
+                the terrain in real-time.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">ROS2</span>
+                <span class="tech-tag">PyTorch</span>
+                <span class="tech-tag">OpenCV</span>
+                <span class="tech-tag">SLAM</span>
               </div>
-              <div class="pub-stat">
-                <i class="fas fa-download"></i>
-                <span>145 downloads</span>
+              <div class="project-links">
+                <a href="#" class="project-link">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-external-link-alt"></i>
+                  Demo
+                </a>
               </div>
-              <div class="pub-stat">
-                <i class="fas fa-award"></i>
-                <span>Best Student Paper</span>
-              </div>
-            </div>
-            <div class="publication-links">
-              <a href="#" class="btn btn-primary">
-                <i class="fas fa-file-pdf"></i>
-                PDF
-              </a>
-              <a href="#" class="btn btn-outline">
-                <i class="fab fa-github"></i>
-                Code
-              </a>
-              <a href="#" class="btn btn-outline">
-                <i class="fas fa-quote-right"></i>
-                Cite
-              </a>
             </div>
           </div>
 
-          <!-- Regular Publications -->
-          <div class="publication-card">
-            <div class="publication-header">
-              <div class="publication-badges">
-                <span class="badge journal">Journal</span>
-              </div>
-              <div class="publication-meta">
-                <span class="venue">Journal of Intelligent Robotics Systems</span>
-                <span class="date">December 2023</span>
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <i class="fas fa-atom"></i>
               </div>
             </div>
-            <h3>Deep Reinforcement Learning for Autonomous Navigation in Dynamic Environments</h3>
-            <div class="authors">
-              <span class="author primary">J. Kinney</span>,
-              <span class="author">Dr. Alex Thompson</span>
-            </div>
-            <p class="abstract">
-              This paper explores the application of deep reinforcement learning techniques 
-              to the navigation problem for autonomous mobile robots in environments with 
-              dynamic obstacles and changing conditions.
-            </p>
-            <div class="publication-stats">
-              <div class="pub-stat">
-                <i class="fas fa-quote-right"></i>
-                <span>31 citations</span>
+            <div class="project-content">
+              <h3>Quantum Path Optimization</h3>
+              <p>
+                Implemented quantum algorithms to solve complex path planning problems for 
+                multi-robot systems, achieving significant speedups over classical methods 
+                using quantum annealing techniques.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">Qiskit</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">QAOA</span>
+                <span class="tech-tag">Optimization</span>
               </div>
-              <div class="pub-stat">
-                <i class="fas fa-download"></i>
-                <span>124 downloads</span>
+              <div class="project-links">
+                <a href="#" class="project-link">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-file-pdf"></i>
+                  Paper
+                </a>
               </div>
-            </div>
-            <div class="publication-links">
-              <a href="#" class="btn btn-primary">
-                <i class="fas fa-file-pdf"></i>
-                PDF
-              </a>
-              <a href="#" class="btn btn-outline">
-                <i class="fab fa-github"></i>
-                Code
-              </a>
             </div>
           </div>
 
-          <div class="publication-card">
-            <div class="publication-header">
-              <div class="publication-badges">
-                <span class="badge workshop">Workshop</span>
-              </div>
-              <div class="publication-meta">
-                <span class="venue">ICRA Workshop on Quantum Robotics</span>
-                <span class="date">May 2023</span>
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <i class="fas fa-eye"></i>
               </div>
             </div>
-            <h3>Exploring Quantum Algorithms for Robotic Task Allocation</h3>
-            <div class="authors">
-              <span class="author primary">J. Kinney</span>,
-              <span class="author">Dr. Lisa Park</span>
-            </div>
-            <p class="abstract">
-              A preliminary investigation into the potential of quantum computing algorithms 
-              for solving complex task allocation problems in multi-robot systems, with 
-              promising initial results.
-            </p>
-            <div class="publication-stats">
-              <div class="pub-stat">
-                <i class="fas fa-quote-right"></i>
-                <span>12 citations</span>
+            <div class="project-content">
+              <h3>Real-time Object Tracking</h3>
+              <p>
+                Built a computer vision system that uses deep learning to track multiple 
+                objects in real-time, enabling robots to understand and interact with 
+                dynamic environments effectively.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">TensorFlow</span>
+                <span class="tech-tag">OpenCV</span>
+                <span class="tech-tag">YOLO</span>
+                <span class="tech-tag">Real-time</span>
               </div>
-              <div class="pub-stat">
-                <i class="fas fa-download"></i>
-                <span>67 downloads</span>
+              <div class="project-links">
+                <a href="#" class="project-link">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-play"></i>
+                  Video
+                </a>
               </div>
             </div>
-            <div class="publication-links">
-              <a href="#" class="btn btn-primary">
-                <i class="fas fa-file-pdf"></i>
-                PDF
-              </a>
-              <a href="#" class="btn btn-outline">
-                <i class="fas fa-presentation"></i>
-                Slides
-              </a>
+          </div>
+
+          <div class="project-card">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <i class="fas fa-robot"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>Reinforcement Learning Arm</h3>
+              <p>
+                Trained a 6-DOF robotic arm using deep Q-learning to perform precise 
+                pick-and-place tasks, with the ability to adapt to new objects and 
+                environments without retraining.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">DQN</span>
+                <span class="tech-tag">Gazebo</span>
+                <span class="tech-tag">ROS</span>
+                <span class="tech-tag">MoveIt</span>
+              </div>
+              <div class="project-links">
+                <a href="#" class="project-link">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-cog"></i>
+                  Simulation
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Current Research -->
-    <section class="section">
+    <!-- Contact Section -->
+    <section id="contact" class="section section-alt">
       <div class="container">
         <div class="section-header">
-          <h2>Current Research</h2>
-          <p>Ongoing studies and future research directions</p>
+          <h2>Let's Connect</h2>
+          <p>Interested in robotics, quantum computing, or AI? Let's discuss ideas and opportunities!</p>
         </div>
         
-        <div class="current-research-grid">
-          <div class="research-project">
-            <div class="project-header">
-              <div class="project-status">
-                <span class="status-badge active">Active</span>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
               </div>
-              <div class="progress-info">
-                <span class="progress-text">75% Complete</span>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 75%"></div>
-                </div>
+              <div class="contact-details">
+                <h4>Email</h4>
+                <a href="mailto:jack.kinney@ucsc.edu">jack.kinney@ucsc.edu</a>
               </div>
             </div>
-            <h3>Quantum-Classical Hybrid Algorithms for Robotics</h3>
-            <p>
-              Developing hybrid quantum-classical algorithms that leverage the strengths of both 
-              computing paradigms for solving complex robotics optimization problems with improved 
-              efficiency and scalability.
-            </p>
-            <div class="research-details">
-              <div class="detail">
-                <i class="fas fa-calendar-alt"></i>
-                <span>18 months duration</span>
+            
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fab fa-linkedin"></i>
               </div>
-              <div class="detail">
+              <div class="contact-details">
+                <h4>LinkedIn</h4>
+                <a href="https://linkedin.com/in/jack-kinney" target="_blank">linkedin.com/in/jack-kinney</a>
+              </div>
+            </div>
+            
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fab fa-github"></i>
+              </div>
+              <div class="contact-details">
+                <h4>GitHub</h4>
+                <a href="https://github.com/jackkinney" target="_blank">github.com/jackkinney</a>
+              </div>
+            </div>
+            
+            <div class="contact-item">
+              <div class="contact-icon">
                 <i class="fas fa-university"></i>
-                <span>Collaboration with IBM Quantum</span>
+              </div>
+              <div class="contact-details">
+                <h4>University</h4>
+                <span>UC Santa Cruz</span>
               </div>
             </div>
-          </div>
-
-          <div class="research-project">
-            <div class="project-header">
-              <div class="project-status">
-                <span class="status-badge planning">Planning</span>
-              </div>
-              <div class="progress-info">
-                <span class="progress-text">30% Complete</span>
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width: 30%"></div>
-                </div>
-              </div>
-            </div>
-            <h3>Distributed Learning for Robot Swarms</h3>
-            <p>
-              Investigating distributed machine learning approaches that allow robot swarms 
-              to collaboratively learn and adapt while maintaining privacy and reducing 
-              communication overhead.
-            </p>
-            <div class="research-details">
-              <div class="detail">
-                <i class="fas fa-calendar-alt"></i>
-                <span>24 months proposed</span>
-              </div>
-              <div class="detail">
-                <i class="fas fa-users"></i>
-                <span>Multi-institutional collaboration</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Academic Activities -->
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <h2>Academic Activities</h2>
-          <p>Contributing to the research community through service and collaboration</p>
-        </div>
-        
-        <div class="activities-grid">
-          <div class="activity-card">
-            <div class="activity-icon">
-              <i class="fas fa-chalkboard-teacher"></i>
-            </div>
-            <h3>Teaching & Mentoring</h3>
-            <ul class="activity-list">
-              <li>Teaching Assistant - Robotics Fundamentals (CSE 140)</li>
-              <li>Research Mentor - 3 Undergraduate Students</li>
-              <li>Peer Tutor - Advanced Mathematics</li>
-            </ul>
           </div>
           
-          <div class="activity-card">
-            <div class="activity-icon">
-              <i class="fas fa-journal-whills"></i>
-            </div>
-            <h3>Editorial & Review</h3>
-            <ul class="activity-list">
-              <li>Student Reviewer - IEEE Robotics Letters</li>
-              <li>Volunteer - ICRA 2024 Conference</li>
-              <li>Workshop Organizer - UCSC Robotics Symposium</li>
-            </ul>
-          </div>
-          
-          <div class="activity-card">
-            <div class="activity-icon">
-              <i class="fas fa-handshake"></i>
-            </div>
-            <h3>Collaborations</h3>
-            <ul class="activity-list">
-              <li>IBM Quantum Network - Research Partnership</li>
-              <li>Stanford Bio-X - Cross-institutional Project</li>
-              <li>Google Quantum AI - Summer Research Intern</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="section">
-      <div class="container">
-        <div class="cta-content">
-          <h2>Interested in Research Collaboration?</h2>
-          <p>
-            I'm always open to discussing research opportunities, academic collaborations, 
-            and innovative projects that advance the field of robotics and AI.
-          </p>
-          <div class="cta-actions">
-            <a href="./index.html#contact" class="btn btn-primary">
-              <i class="fas fa-envelope"></i>
-              Contact Me
-            </a>
-            <a href="./projects.html" class="btn btn-outline">
-              <i class="fas fa-rocket"></i>
-              View Projects
-            </a>
-            <a href="#" class="btn btn-outline">
-              <i class="fas fa-file-pdf"></i>
-              Academic CV
-            </a>
+          <div class="contact-form-container">
+            <form class="contact-form" id="contact-form">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+              </div>
+              
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+                Send Message
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -1408,16 +1361,16 @@
       <div class="footer-content">
         <p>&copy; 2025 Jack Kinney. Robotics Engineering Student at UC Santa Cruz.</p>
         <div class="footer-links">
-          <a href="#" target="_blank">Academic CV</a>
-          <a href="./projects.html">Projects</a>
-          <a href="./index.html">Home</a>
+          <a href="#" target="_blank">Resume</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script>
-    // Same JavaScript functionality as other pages
+    // Portfolio JavaScript
     class Portfolio {
       constructor() {
         this.init();
@@ -1428,7 +1381,7 @@
         this.initNavigation();
         this.initScrollEffects();
         this.initAnimations();
-        this.initProgressBars();
+        this.initForm();
       }
 
       bindEvents() {
@@ -1477,6 +1430,8 @@
             }
           });
         });
+
+        this.updateActiveNavLink();
       }
 
       closeNavigation() {
@@ -1488,6 +1443,28 @@
           navToggle.classList.remove('active');
           document.body.style.overflow = '';
         }
+      }
+
+      updateActiveNavLink() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        if (sections.length === 0) return;
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              const link = document.querySelector(`.nav-list a[href="#${entry.target.id}"]`);
+              if (entry.isIntersecting && link) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+              }
+            });
+          },
+          { threshold: 0.3, rootMargin: '-100px 0px -100px 0px' }
+        );
+
+        sections.forEach(section => observer.observe(section));
       }
 
       smoothScrollTo(target, offset = 0) {
@@ -1550,7 +1527,7 @@
           });
         }, observerOptions);
 
-        document.querySelectorAll('.research-interest, .publication-card, .research-project, .activity-card, .hero-content').forEach(el => {
+        document.querySelectorAll('.skill-category, .project-card, .contact-item, .about-content, .hero-content').forEach(el => {
           observer.observe(el);
         });
       }
@@ -1580,26 +1557,139 @@
         }, 16);
       }
 
-      initProgressBars() {
-        const progressBars = document.querySelectorAll('.progress-fill');
+      initForm() {
+        const form = document.getElementById('contact-form');
+        if (!form) return;
+
+        form.addEventListener('submit', this.handleFormSubmit.bind(this));
+
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+          input.addEventListener('blur', () => this.validateField(input));
+          input.addEventListener('input', () => this.clearFieldError(input));
+        });
+      }
+
+      handleFormSubmit(e) {
+        e.preventDefault();
         
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const progressBar = entry.target;
-              const width = progressBar.style.width;
-              progressBar.style.width = '0%';
-              
-              setTimeout(() => {
-                progressBar.style.width = width;
-              }, 200);
-              
-              observer.unobserve(progressBar);
-            }
-          });
+        const form = e.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        const inputs = form.querySelectorAll('input, textarea');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+          if (!this.validateField(input)) {
+            isValid = false;
+          }
         });
 
-        progressBars.forEach(bar => observer.observe(bar));
+        if (!isValid) return;
+
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitButton.disabled = true;
+
+        setTimeout(() => {
+          this.showToast('Message sent successfully!', 'success');
+          form.reset();
+          
+          submitButton.innerHTML = originalText;
+          submitButton.disabled = false;
+        }, 2000);
+      }
+
+      validateField(field) {
+        const value = field.value.trim();
+        let isValid = true;
+        let errorMessage = '';
+
+        this.clearFieldError(field);
+
+        if (field.required && value.length === 0) {
+          isValid = false;
+          errorMessage = 'This field is required';
+        } else if (field.type === 'email' && value.length > 0) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            isValid = false;
+            errorMessage = 'Please enter a valid email address';
+          }
+        }
+
+        if (!isValid) {
+          this.showFieldError(field, errorMessage);
+        }
+
+        return isValid;
+      }
+
+      showFieldError(field, message) {
+        field.style.borderColor = '#ef4444';
+        
+        const errorElement = document.createElement('div');
+        errorElement.className = 'field-error';
+        errorElement.textContent = message;
+        errorElement.style.cssText = `
+          color: #ef4444;
+          font-size: 0.875rem;
+          margin-top: 0.5rem;
+        `;
+        
+        field.parentNode.appendChild(errorElement);
+      }
+
+      clearFieldError(field) {
+        field.style.borderColor = '';
+        const errorElement = field.parentNode.querySelector('.field-error');
+        if (errorElement) {
+          errorElement.remove();
+        }
+      }
+
+      showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        toast.style.cssText = `
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          background: ${type === 'success' ? '#10b981' : '#ef4444'};
+          color: white;
+          padding: 1rem 2rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+          z-index: 1000;
+          animation: slideInUp 0.3s ease-out;
+        `;
+        
+        if (!document.querySelector('#toast-styles')) {
+          const style = document.createElement('style');
+          style.id = 'toast-styles';
+          style.textContent = `
+            @keyframes slideInUp {
+              from {
+                transform: translateY(100%);
+                opacity: 0;
+              }
+              to {
+                transform: translateY(0);
+                opacity: 1;
+              }
+            }
+          `;
+          document.head.appendChild(style);
+        }
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(100%)';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
       }
 
       throttle(func, limit) {
@@ -1630,7 +1720,7 @@
       }
 
       onDOMLoaded() {
-        console.log('Research page loaded successfully');
+        console.log('Portfolio loaded successfully');
       }
 
       onWindowLoad() {

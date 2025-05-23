@@ -1,0 +1,53 @@
+{
+  "name": "jack-kinney-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio website for Jack Kinney - Robotics Engineering student specializing in quantum computing, reinforcement learning, and computer vision",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx live-server --port=3000 --host=localhost --open=/ --watch=.",
+    "dev": "npx live-server --port=3000 --host=localhost --open=/ --watch=.",
+    "serve": "npx http-server -p 3000 -o",
+    "lint": "npx htmlhint *.html",
+    "validate": "npx html-validate *.html",
+    "format": "npx prettier --write *.html *.md",
+    "build": "echo 'No build process needed - static files ready for deployment'",
+    "deploy": "echo 'Push to GitHub and enable GitHub Pages in repository settings'",
+    "test": "echo 'Testing HTML structure...' && npx htmlhint *.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/your-username.github.io.git"
+  },
+  "keywords": [
+    "portfolio",
+    "robotics",
+    "quantum-computing",
+    "reinforcement-learning",
+    "computer-vision",
+    "ucsc",
+    "student",
+    "engineering",
+    "ai",
+    "machine-learning"
+  ],
+  "author": {
+    "name": "Jack Kinney",
+    "email": "jack.kinney@ucsc.edu",
+    "url": "https://your-username.github.io"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/your-username.github.io/issues"
+  },
+  "homepage": "https://your-username.github.io",
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
