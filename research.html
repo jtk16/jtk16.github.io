@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Research publications and academic work by Jack Kinney - Robotics, AI, autonomous systems, and quantum computing research papers and studies.">
+  <meta name="keywords" content="robotics research, AI research, academic papers, publications, autonomous systems, quantum computing, machine learning research">
+  <meta name="author" content="Jack Kinney">
+  <meta name="theme-color" content="#6366f1">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://your-username.github.io/research.html">
+  <meta property="og:title" content="Research - Jack Kinney | Robotics Engineer">
+  <meta property="og:description" content="Academic research and publications in robotics, AI, and autonomous systems by Jack Kinney, UCSC Robotics Engineering student.">
+  <meta property="og:image" content="./assets/images/research-og.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://your-username.github.io/research.html">
+  <meta property="twitter:title" content="Research - Jack Kinney | Robotics Engineer">
+  <meta property="twitter:description" content="Academic research and publications in robotics, AI, and autonomous systems by Jack Kinney, UCSC Robotics Engineering student.">
+  <meta property="twitter:image" content="./assets/images/research-og.jpg">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="./assets/images/favicon.ico">
+  <link rel="apple-touch-icon" href="./assets/images/apple-touch-icon.png">
+  
+  <title>Research - Jack Kinney | Robotics Engineer & AI Researcher</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./assets/css/style.css" as="style">
+  <link rel="preload" href="./assets/js/main.js" as="script">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress"></div>
+
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="./index.html" class="logo">&lt;JTK16/&gt;</a>
+      <nav class="nav" id="nav">
+        <ul class="nav__list">
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./index.html#about">About</a></li>
+          <li><a href="./index.html#skills">Skills</a></li>
+          <li><a href="./projects.html">Projects</a></li>
+          <li><a href="./research.html" class="active">Research</a></li>
+          <li><a href="./index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Page Hero -->
+    <section class="page-hero">
+      <div class="container">
+        <div class="page-hero-content">
+          <div class="hero-badge reveal">
+            <i class="fas fa-flask"></i>
+            <span>Academic Research</span>
+          </div>
+          <h1 class="reveal">Advancing the Science of Robotics</h1>
+          <p class="subtitle reveal">
+            Exploring the fundamental questions in autonomous systems, artificial intelligence, 
+            and human-robot interaction through rigorous scientific research and innovation.
+          </p>
+          <div class="research-metrics reveal">
+            <div class="metric-item">
+              <span class="metric-number">8</span>
+              <span class="metric-label">Publications</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-number">150+</span>
+              <span class="metric-label">Citations</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-number">3</span>
+              <span class="metric-label">Ongoing Studies</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-number">5</span>
+              <span class="metric-label">Collaborations</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research Interests -->
+    <section class="section research-interests">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Research Interests</h2>
+          <p class="section-subtitle">
+            Core areas where I'm pushing the boundaries of knowledge and technology
+          </p>
+        </div>
+        
+        <div class="interests-grid">
+          <div class="interest-card reveal">
+            <div class="interest-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3>Autonomous Systems</h3>
+            <p>
+              Developing intelligent systems capable of independent decision-making 
+              in complex, dynamic environments through advanced control theory and AI.
+            </p>
+            <ul class="interest-topics">
+              <li>Multi-agent coordination</li>
+              <li>Distributed control systems</li>
+              <li>Swarm intelligence</li>
+              <li>Emergent behavior</li>
+            </ul>
+          </div>
+          
+          <div class="interest-card reveal">
+            <div class="interest-icon">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <h3>Human-Robot Interaction</h3>
+            <p>
+              Investigating natural and intuitive ways for humans and robots to 
+              collaborate, communicate, and work together safely and effectively.
+            </p>
+            <ul class="interest-topics">
+              <li>Gesture recognition</li>
+              <li>Natural language processing</li>
+              <li>Trust and transparency</li>
+              <li>Collaborative manipulation</li>
+            </ul>
+          </div>
+          
+          <div class="interest-card reveal">
+            <div class="interest-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>Machine Learning</h3>
+            <p>
+              Applying cutting-edge ML techniques to robotics challenges including 
+              perception, planning, and control in uncertain environments.
+            </p>
+            <ul class="interest-topics">
+              <li>Deep reinforcement learning</li>
+              <li>Computer vision</li>
+              <li>Transfer learning</li>
+              <li>Neural network optimization</li>
+            </ul>
+          </div>
+          
+          <div class="interest-card reveal">
+            <div class="interest-icon">
+              <i class="fas fa-atom"></i>
+            </div>
+            <h3>Quantum Computing</h3>
+            <p>
+              Exploring quantum algorithms and their applications to robotics 
+              optimization problems and machine learning acceleration.
+            </p>
+            <ul class="interest-topics">
+              <li>Quantum optimization</li>
+              <li>Quantum machine learning</li>
+              <li>QAOA algorithms</li>
+              <li>Hybrid classical-quantum systems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Publications -->
+    <section class="section publications">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Publications</h2>
+          <p class="section-subtitle">
+            Peer-reviewed research contributions to the robotics and AI community
+          </p>
+        </div>
+
+        <!-- Filter Options -->
+        <div class="publication-filters">
+          <button class="filter-btn active" data-filter="all">All Publications</button>
+          <button class="filter-btn" data-filter="conference">Conference Papers</button>
+          <button class="filter-btn" data-filter="journal">Journal Articles</button>
+          <button class="filter-btn" data-filter="workshop">Workshops</button>
+          <button class="filter-btn" data-filter="preprint">Preprints</button>
+        </div>
+        
+        <div class="publications-list">
+          <!-- Featured Publication -->
+          <article class="publication-card featured reveal" data-category="conference">
+            <div class="publication-badge">
+              <i class="fas fa-star"></i>
+              <span>Featured</span>
+            </div>
+            <div class="publication-content">
+              <div class="publication-meta">
+                <span class="venue">IEEE International Conference on Robotics and Automation (ICRA 2024)</span>
+                <span class="date">March 2024</span>
+                <span class="type conference">Conference Paper</span>
+              </div>
+              <h3 class="publication-title">
+                Deep Reinforcement Learning for Multi-Robot Coordination in Dynamic Environments
+              </h3>
+              <div class="authors">
+                <span class="author primary">J. Kinney</span>,
+                <span class="author">Dr. Sarah Chen</span>,
+                <span class="author">Prof. Michael Rodriguez</span>
+              </div>
+              <p class="abstract">
+                We present a novel deep reinforcement learning approach for coordinating multiple robots 
+                in dynamic environments. Our method combines hierarchical reinforcement learning with 
+                attention mechanisms to enable scalable multi-agent coordination while maintaining 
+                real-time performance constraints.
+              </p>
+              <div class="publication-metrics">
+                <div class="metric">
+                  <i class="fas fa-eye"></i>
+                  <span>1,247 views</span>
+                </div>
+                <div class="metric">
+                  <i class="fas fa-quote-right"></i>
+                  <span>23 citations</span>
+                </div>
+                <div class="metric">
+                  <i class="fas fa-download"></i>
+                  <span>156 downloads</span>
+                </div>
+                <div class="metric impact">
+                  <i class="fas fa-award"></i>
+                  <span>Best Paper Award</span>
+                </div>
+              </div>
+              <div class="publication-tags">
+                <span class="tag">Multi-Robot Systems</span>
+                <span class="tag">Deep RL</span>
+                <span class="tag">Coordination</span>
+                <span class="tag">Attention Mechanisms</span>
+              </div>
+              <div class="publication-links">
+                <a href="./assets/docs/papers/icra2024-multirobots.pdf" class="btn btn-primary" target="_blank">
+                  <i class="fas fa-file-pdf"></i>
+                  PDF
+                </a>
+                <a href="https://github.com/jtk16/multi-robot-rl" class="btn btn-outline" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="btn btn-ghost">
+                  <i class="fas fa-play"></i>
+                  Video
+                </a>
+                <a href="#" class="btn btn-ghost">
+                  <i class="fas fa-quote-right"></i>
+                  Cite
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Regular Publications -->
+          <article class="publication-card reveal" data-category="journal">
+            <div class="publication-content">
+              <div class="publication-meta">
+                <span class="venue">Journal of Robotics Research</span>
+                <span class="date">December 2023</span>
+                <span class="type journal">Journal Article</span>
+              </div>
+              <h3 class="publication-title">
+                Quantum-Enhanced Path Planning for Autonomous Mobile Robots
+              </h3>
+              <div class="authors">
+                <span class="author primary">J. Kinney</span>,
+                <span class="author">Dr. Alex Thompson</span>
+              </div>
+              <p class="abstract">
+                This paper explores the application of quantum computing algorithms to the path planning 
+                problem in robotics, demonstrating significant improvements in computational efficiency 
+                for complex multi-objective optimization scenarios.
+              </p>
+              <div class="publication-metrics">
+                <div class="metric">
+                  <i class="fas fa-quote-right"></i>
+                  <span>47 citations</span>
+                </div>
+                <div class="metric">
+                  <i class="fas fa-download"></i>
+                  <span>203 downloads</span>
+                </div>
+              </div>
+              <div class="publication-tags">
+                <span class="tag">Quantum Computing</span>
+                <span class="tag">Path Planning</span>
+                <span class="tag">Optimization</span>
+              </div>
+              <div class="publication-links">
+                <a href="./assets/docs/papers/jrr2023-quantum-planning.pdf" class="btn btn-sm btn-primary" target="_blank">
+                  <i class="fas fa-file-pdf"></i>
+                  PDF
+                </a>
+                <a href="https://github.com/jtk16/quantum-path-planning" class="btn btn-sm btn-outline" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="btn btn-sm btn-ghost">
+                  <i class="fas fa-quote-right"></i>
+                  Cite
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="publication-card reveal" data-category="conference">
+            <div class="publication-content">
+              <div class="publication-meta">
+                <span class="venue">Conference on Neural Information Processing Systems (NeurIPS 2023)</span>
+                <span class="date">December 2023</span>
+                <span class="type conference">Conference Paper</span>
+              </div>
+              <h3 class="publication-title">
+                Attention-Based Visual SLAM for Dynamic Environments
+              </h3>
+              <div class="authors">
+                <span class="author primary">J. Kinney</span>,
+                <span class="author">Lisa Park</span>,
+                <span class="author">Dr. James Wilson</span>
+              </div>
+              <p class="abstract">
+                We introduce an attention-based approach to visual SLAM that significantly improves 
+                performance in dynamic environments by focusing on stable features and filtering out 
+                moving objects in real-time.
+              </p>
+              <div class="publication-metrics">
+                <div class="metric">
+                  <i class="fas fa-quote-right"></i>
+                  <span>31 citations</span>
+                </div>
+                <div class="metric">
+                  <i class="fas fa-download"></i>
+                  <span>178 downloads</span>
+                </div>
+              </div>
+              <div class="publication-tags">
+                <span class="tag">SLAM</span>
+                <span class="tag">Computer Vision</span>
+                <span class="tag">Attention Mechanisms</span>
+              </div>
+              <div class="publication-links">
+                <a href="./assets/docs/papers/neurips2023-visual-slam.pdf" class="btn btn-sm btn-primary" target="_blank">
+                  <i class="fas fa-file-pdf"></i>
+                  PDF
+                </a>
+                <a href="https://github.com/jtk16/attention-slam" class="btn btn-sm btn-outline" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="btn btn-sm btn-ghost">
+                  <i class="fas fa-external-link-alt"></i>
+                  Demo
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="publication-card reveal" data-category="workshop">
+            <div class="publication-content">
+              <div class="publication-meta">
+                <span class="venue">ICRA Workshop on Human-Robot Interaction</span>
+                <span class="date">May 2023</span>
+                <span class="type workshop">Workshop Paper</span>
+              </div>
+              <h3 class="publication-title">
+                Gesture-Based Robot Control Using Deep Learning and IMU Sensors
+              </h3>
+              <div class="authors">
+                <span class="author primary">J. Kinney</span>,
+                <span class="author">Dr. Maria Garcia</span>
+              </div>
+              <p class="abstract">
+                A preliminary study on using wearable IMU sensors and deep learning to create 
+                natural gesture-based interfaces for robot control, enabling intuitive 
+                human-robot collaboration.
+              </p>
+              <div class="publication-metrics">
+                <div class="metric">
+                  <i class="fas fa-quote-right"></i>
+                  <span>12 citations</span>
+                </div>
+                <div class="metric">
+                  <i class="fas fa-download"></i>
+                  <span>89 downloads</span>
+                </div>
+              </div>
+              <div class="publication-tags">
+                <span class="tag">HRI</span>
+                <span class="tag">Gesture Recognition</span>
+                <span class="tag">IMU Sensors</span>
+              </div>
+              <div class="publication-links">
+                <a href="./assets/docs/papers/icra-workshop2023-gestures.pdf" class="btn btn-sm btn-primary" target="_blank">
+                  <i class="fas fa-file-pdf"></i>
+                  PDF
+                </a>
+                <a href="https://github.com/jtk16/gesture-robot-control" class="btn btn-sm btn-outline" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="publication-card reveal" data-category="preprint">
+            <div class="publication-content">
+              <div class="publication-meta">
+                <span class="venue">arXiv Preprint</span>
+                <span class="date">January 2025</span>
+                <span class="type preprint">Preprint</span>
+              </div>
+              <h3 class="publication-title">
+                Federated Learning for Distributed Robot Swarms: Privacy-Preserving Coordination
+              </h3>
+              <div class="authors">
+                <span class="author primary">J. Kinney</span>,
+                <span class="author">Dr. Rachel Kim</span>,
+                <span class="author">Prof. David Chen</span>
+              </div>
+              <p class="abstract">
+                We propose a federated learning framework for robot swarms that enables 
+                collaborative learning while preserving data privacy and reducing communication 
+                overhead in large-scale multi-robot systems.
+              </p>
+              <div class="publication-metrics">
+                <div class="metric">
+                  <i class="fas fa-eye"></i>
+                  <span>234 views</span>
+                </div>
+                <div class="metric">
+                  <i class="fas fa-download"></i>
+                  <span>45 downloads</span>
+                </div>
+                <div class="metric status">
+                  <i class="fas fa-clock"></i>
+                  <span>Under Review</span>
+                </div>
+              </div>
+              <div class="publication-tags">
+                <span class="tag">Federated Learning</span>
+                <span class="tag">Swarm Robotics</span>
+                <span class="tag">Privacy</span>
+              </div>
+              <div class="publication-links">
+                <a href="./assets/docs/papers/arxiv2025-federated-swarm.pdf" class="btn btn-sm btn-primary" target="_blank">
+                  <i class="fas fa-file-pdf"></i>
+                  PDF
+                </a>
+                <a href="https://arxiv.org/abs/2025.xxxxx" class="btn btn-sm btn-outline" target="_blank" rel="noopener">
+                  <i class="fas fa-external-link-alt"></i>
+                  arXiv
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Current Research -->
+    <section class="section current-research">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Current Research</h2>
+          <p class="section-subtitle">
+            Ongoing studies and investigations that will shape the future of robotics
+          </p>
+        </div>
+        
+        <div class="research-projects">
+          <div class="research-project reveal">
+            <div class="project-status">
+              <span class="status-badge active">Active</span>
+              <span class="progress-indicator">
+                <span class="progress-bar" style="width: 65%"></span>
+              </span>
+              <span class="progress-text">65% Complete</span>
+            </div>
+            <h3>Explainable AI in Robotic Decision Making</h3>
+            <p class="research-description">
+              Developing interpretable machine learning models for autonomous robots to provide 
+              clear explanations for their decisions, improving trust and safety in human-robot 
+              collaboration scenarios.
+            </p>
+            <div class="research-details">
+              <div class="detail-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Duration: 18 months</span>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-users"></i>
+                <span>Team: 4 researchers</span>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-dollar-sign"></i>
+                <span>Funding: NSF Grant</span>
+              </div>
+            </div>
+            <div class="research-tags">
+              <span class="tag">Explainable AI</span>
+              <span class="tag">Trust</span>
+              <span class="tag">Human-Robot Interaction</span>
+            </div>
+          </div>
+
+          <div class="research-project reveal">
+            <div class="project-status">
+              <span class="status-badge planning">Planning</span>
+              <span class="progress-indicator">
+                <span class="progress-bar" style="width: 25%"></span>
+              </span>
+              <span class="progress-text">25% Complete</span>
+            </div>
+            <h3>Quantum-Classical Hybrid Optimization for Robotics</h3>
+            <p class="research-description">
+              Investigating hybrid quantum-classical algorithms for solving complex optimization 
+              problems in robotics, including path planning, resource allocation, and task scheduling 
+              in multi-robot systems.
+            </p>
+            <div class="research-details">
+              <div class="detail-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Duration: 24 months</span>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-users"></i>
+                <span>Collaboration: IBM Quantum</span>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-microchip"></i>
+                <span>Hardware: 127-qubit processor</span>
+              </div>
+            </div>
+            <div class="research-tags">
+              <span class="tag">Quantum Computing</span>
+              <span class="tag">Optimization</span>
+              <span class="tag">Multi-Robot Systems</span>
+            </div>
+          </div>
+
+          <div class="research-project reveal">
+            <div class="project-status">
+              <span class="status-badge proposal">Proposal</span>
+              <span class="progress-indicator">
+                <span class="progress-bar" style="width: 10%"></span>
+              </span>
+              <span class="progress-text">Seeking Funding</span>
+            </div>
+            <h3>Bio-Inspired Adaptive Control for Soft Robots</h3>
+            <p class="research-description">
+              Exploring bio-inspired control mechanisms for soft robotic systems, drawing inspiration 
+              from biological nervous systems to create adaptive, resilient control strategies for 
+              deformable robots.
+            </p>
+            <div class="research-details">
+              <div class="detail-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Proposed: 36 months</span>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-university"></i>
+                <span>Collaboration: Stanford Bio-X</span>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-seedling"></i>
+                <span>Bio-inspiration: Neural networks</span>
+              </div>
+            </div>
+            <div class="research-tags">
+              <span class="tag">Soft Robotics</span>
+              <span class="tag">Bio-Inspired</span>
+              <span class="tag">Adaptive Control</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Collaborations -->
+    <section class="section collaborations">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Research Collaborations</h2>
+          <p class="section-subtitle">
+            Working with leading institutions and researchers worldwide
+          </p>
+        </div>
+        
+        <div class="collaborations-grid">
+          <div class="collaboration-card reveal">
+            <div class="institution-logo">
+              <i class="fas fa-university"></i>
+            </div>
+            <h3>Stanford University</h3>
+            <p class="collaboration-type">Bio-X Program</p>
+            <p>
+              Collaborative research on bio-inspired robotics and adaptive control systems 
+              with the Stanford Bio-X interdisciplinary program.
+            </p>
+            <div class="collaboration-status active">
+              <i class="fas fa-circle"></i>
+              <span>Active Collaboration</span>
+            </div>
+          </div>
+
+          <div class="collaboration-card reveal">
+            <div class="institution-logo">
+              <i class="fas fa-atom"></i>
+            </div>
+            <h3>IBM Quantum Network</h3>
+            <p class="collaboration-type">Industry Partnership</p>
+            <p>
+              Access to quantum computing hardware and expertise for advancing 
+              quantum algorithms in robotics optimization problems.
+            </p>
+            <div class="collaboration-status active">
+              <i class="fas fa-circle"></i>
+              <span>Hardware Access</span>
+            </div>
+          </div>
+
+          <div class="collaboration-card reveal">
+            <div class="institution-logo">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3>MIT CSAIL</h3>
+            <p class="collaboration-type">Research Exchange</p>
+            <p>
+              Joint research on multi-agent systems and distributed AI with the 
+              Computer Science and Artificial Intelligence Laboratory.
+            </p>
+            <div class="collaboration-status planned">
+              <i class="fas fa-circle"></i>
+              <span>Summer 2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Academic Service -->
+    <section class="section academic-service">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Academic Service</h2>
+          <p class="section-subtitle">
+            Contributing to the research community through service and leadership
+          </p>
+        </div>
+        
+        <div class="service-grid">
+          <div class="service-category">
+            <h3><i class="fas fa-journal-whills"></i> Editorial & Review</h3>
+            <ul class="service-list">
+              <li>
+                <span class="service-role">Reviewer</span>
+                <span class="service-venue">IEEE Transactions on Robotics</span>
+                <span class="service-period">2024-Present</span>
+              </li>
+              <li>
+                <span class="service-role">Program Committee</span>
+                <span class="service-venue">ICRA 2025</span>
+                <span class="service-period">2024</span>
+              </li>
+              <li>
+                <span class="service-role">Reviewer</span>
+                <span class="service-venue">Journal of Field Robotics</span>
+                <span class="service-period">2023-Present</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="service-category">
+            <h3><i class="fas fa-users"></i> Conference Organization</h3>
+            <ul class="service-list">
+              <li>
+                <span class="service-role">Student Volunteer</span>
+                <span class="service-venue">ICRA 2024, Yokohama</span>
+                <span class="service-period">2024</span>
+              </li>
+              <li>
+                <span class="service-role">Workshop Co-organizer</span>
+                <span class="service-venue">UCSC Robotics Symposium</span>
+                <span class="service-period">2023, 2024</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="service-category">
+            <h3><i class="fas fa-chalkboard-teacher"></i> Mentorship</h3>
+            <ul class="service-list">
+              <li>
+                <span class="service-role">Research Mentor</span>
+                <span class="service-venue">5 Undergraduate Students</span>
+                <span class="service-period">2023-Present</span>
+              </li>
+              <li>
+                <span class="service-role">Teaching Assistant</span>
+                <span class="service-venue">Robotics Fundamentals (CSE 140)</span>
+                <span class="service-period">Fall 2024</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="section cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2>Interested in Collaboration?</h2>
+          <p>
+            I'm always open to discussing research opportunities, collaborations, 
+            and innovative projects that push the boundaries of robotics and AI.
+          </p>
+          <div class="cta-actions">
+            <a href="./index.html#contact" class="btn btn-primary">
+              <i class="fas fa-envelope"></i>
+              Contact Me
+            </a>
+            <a href="./projects.html" class="btn btn-outline">
+              <i class="fas fa-rocket"></i>
+              View Projects
+            </a>
+            <a href="./assets/docs/cv-academic.pdf" class="btn btn-ghost" target="_blank">
+              <i class="fas fa-file-pdf"></i>
+              Academic CV
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 Jack Kinney. Built with passion for robotics and AI research. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="./assets/docs/cv-academic.pdf" class="footer-link" target="_blank">Academic CV</a>
+          <a href="./projects.html" class="footer-link">Projects</a>
+          <a href="./index.html" class="footer-link">Home</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jack Kinney - Robotics Engineer specializing in autonomous systems, machine learning, and cutting-edge robotics solutions. UCSC Robotics Engineering student passionate about innovation.">
+  <meta name="keywords" content="robotics, machine learning, autonomous systems, computer vision, quantum computing, UCSC, engineering">
+  <meta name="author" content="Jack Kinney">
+  <meta name="theme-color" content="#6366f1">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://your-username.github.io/">
+  <meta property="og:title" content="Jack Kinney — Robotics Engineer & AI Researcher">
+  <meta property="og:description" content="Building the future with intelligent machines. Robotics Engineering student at UC Santa Cruz.">
+  <meta property="og:image" content="./assets/images/profile.jpg">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://your-username.github.io/">
+  <meta property="twitter:title" content="Jack Kinney — Robotics Engineer & AI Researcher">
+  <meta property="twitter:description" content="Building the future with intelligent machines. Robotics Engineering student at UC Santa Cruz.">
+  <meta property="twitter:image" content="./assets/images/profile.jpg">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="./assets/images/favicon.ico">
+  <link rel="apple-touch-icon" href="./assets/images/apple-touch-icon.png">
+  
+  <title>Jack Kinney — Robotics Engineer & AI Researcher</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="./assets/css/style.css" as="style">
+  <link rel="preload" href="./assets/js/main.js" as="script">
+  <link rel="preload" href="./assets/images/profile.jpg" as="image">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.json">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress"></div>
+
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#hero" class="logo">&lt;JTK16/&gt;</a>
+      <nav class="nav" id="nav">
+        <ul class="nav__list">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="./projects.html">Projects</a></li>
+          <li><a href="./research.html">Research</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="hero" data-particles="50">
+      <div class="container hero-content">
+        <div class="hero-badge reveal">
+          <i class="fas fa-robot"></i>
+          <span>Robotics Engineer & AI Researcher</span>
+        </div>
+        <h1 class="reveal" data-typing="Building the Future with Intelligent Machines" data-delay="1000">Building the Future with Intelligent Machines</h1>
+        <p class="subtitle reveal">
+          I'm Jack Kinney, a passionate Robotics Engineering student at UC Santa Cruz, 
+          specializing in autonomous systems, machine learning, and cutting-edge AI technologies 
+          that bridge the gap between imagination and reality.
+        </p>
+        <div class="hero-actions reveal">
+          <a href="#projects" class="btn btn-primary">
+            <i class="fas fa-rocket"></i>
+            Explore My Work
+          </a>
+          <a href="#contact" class="btn btn-outline">
+            <i class="fas fa-paper-plane"></i>
+            Get In Touch
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section reveal">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image animate-float">
+            <img src="./assets/images/profile.jpg" alt="Jack Kinney - Robotics Engineer" loading="lazy">
+          </div>
+          <div class="about-content">
+            <h3>Passionate About Innovation & Technology</h3>
+            <p>
+              As a Robotics Engineering major at UC Santa Cruz, I'm driven by the endless possibilities 
+              that emerge when cutting-edge technology meets creative problem-solving. My journey began 
+              with a fascination for how machines can be taught to think, learn, and interact with our world.
+            </p>
+            <p>
+              From developing autonomous drone navigation systems to exploring the frontiers of quantum 
+              computing, I thrive on tackling complex challenges that push the boundaries of what's possible. 
+              My work spans multiple disciplines, combining robotics, AI, computer vision, and machine learning 
+              to create solutions that matter.
+            </p>
+            <p>
+              When I'm not coding or building robots, you'll find me researching the latest developments 
+              in AI ethics, contributing to open-source projects, or mentoring fellow students who share 
+              the same passion for technology and innovation.
+            </p>
+          </div>
+        </div>
+        
+        <div class="stats-grid stagger-children">
+          <div class="stat-item reveal">
+            <span class="stat-number counter">15+</span>
+            <span class="stat-label">Projects Completed</span>
+          </div>
+          <div class="stat-item reveal">
+            <span class="stat-number counter">3</span>
+            <span class="stat-label">Research Papers</span>
+          </div>
+          <div class="stat-item reveal">
+            <span class="stat-number counter">2k+</span>
+            <span class="stat-label">Code Commits</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Technical Expertise</h2>
+          <p class="section-subtitle">
+            A comprehensive toolkit for building intelligent systems and solving complex problems
+          </p>
+        </div>
+        
+        <div class="skills-grid stagger-children">
+          <div class="skill-category reveal">
+            <h3>
+              <i class="fas fa-robot"></i>
+              Robotics & Hardware
+            </h3>
+            <div class="skills-list">
+              <span class="skill-tag">ROS/ROS2</span>
+              <span class="skill-tag">PX4/ArduPilot</span>
+              <span class="skill-tag">Gazebo</span>
+              <span class="skill-tag">Arduino</span>
+              <span class="skill-tag">Raspberry Pi</span>
+              <span class="skill-tag">LIDAR</span>
+              <span class="skill-tag">IMU Sensors</span>
+              <span class="skill-tag">Motor Control</span>
+            </div>
+          </div>
+          
+          <div class="skill-category reveal">
+            <h3>
+              <i class="fas fa-brain"></i>
+              AI & Machine Learning
+            </h3>
+            <div class="skills-list">
+              <span class="skill-tag">TensorFlow</span>
+              <span class="skill-tag">PyTorch</span>
+              <span class="skill-tag">OpenCV</span>
+              <span class="skill-tag">scikit-learn</span>
+              <span class="skill-tag">Reinforcement Learning</span>
+              <span class="skill-tag">Neural Networks</span>
+              <span class="skill-tag">Computer Vision</span>
+              <span class="skill-tag">NLP</span>
+            </div>
+          </div>
+          
+          <div class="skill-category reveal">
+            <h3>
+              <i class="fas fa-code"></i>
+              Programming Languages
+            </h3>
+            <div class="skills-list">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">C++</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">MATLAB</span>
+              <span class="skill-tag">SQL</span>
+              <span class="skill-tag">Bash</span>
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Docker</span>
+            </div>
+          </div>
+          
+          <div class="skill-category reveal">
+            <h3>
+              <i class="fas fa-atom"></i>
+              Emerging Technologies
+            </h3>
+            <div class="skills-list">
+              <span class="skill-tag">Quantum Computing</span>
+              <span class="skill-tag">Qiskit</span>
+              <span class="skill-tag">Edge Computing</span>
+              <span class="skill-tag">IoT Systems</span>
+              <span class="skill-tag">Cloud Computing</span>
+              <span class="skill-tag">Blockchain</span>
+              <span class="skill-tag">SLAM</span>
+              <span class="skill-tag">5G Networks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Featured Projects</h2>
+          <p class="section-subtitle">
+            Innovative solutions that showcase the intersection of robotics, AI, and real-world applications
+          </p>
+        </div>
+        
+        <!-- Project Filter Buttons -->
+        <div class="project-filters">
+          <button class="filter-btn active" data-filter="all">All Projects</button>
+          <button class="filter-btn" data-filter="robotics">Robotics</button>
+          <button class="filter-btn" data-filter="ai">AI/ML</button>
+          <button class="filter-btn" data-filter="quantum">Quantum</button>
+          <button class="filter-btn" data-filter="research">Research</button>
+        </div>
+
+        <!-- Project Search -->
+        <div class="project-search-container">
+          <input type="text" class="project-search" placeholder="Search projects...">
+          <i class="fas fa-search"></i>
+        </div>
+        
+        <div class="projects-grid stagger-children">
+          <article class="project-card reveal" data-category="robotics ai">
+            <div class="project-image">
+              <img src="./assets/images/projects/drone-project.jpg" alt="Autonomous Reconnaissance Drone" loading="lazy">
+              <div class="project-overlay">
+                <i class="fas fa-helicopter"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>Autonomous Reconnaissance Drone</h3>
+              <p>
+                Developed an intelligent quadcopter system with advanced obstacle avoidance, 
+                real-time path planning, and autonomous mission execution using ROS2 and PX4 flight stack.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">ROS2</span>
+                <span class="tech-tag">PX4</span>
+                <span class="tech-tag">OpenCV</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">LIDAR</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/jtk16/autonomous-drone" class="project-link" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-external-link-alt"></i>
+                  Demo
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="robotics ai">
+            <div class="project-image">
+              <img src="./assets/images/projects/robotic-arm.jpg" alt="AI-Powered Robotic Manipulator" loading="lazy">
+              <div class="project-overlay">
+                <i class="fas fa-robot"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>AI-Powered Robotic Manipulator</h3>
+              <p>
+                Designed a 6-DOF robotic arm with machine learning-based inverse kinematics, 
+                computer vision object recognition, and precise pick-and-place operations.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">TensorFlow</span>
+                <span class="tech-tag">ROS</span>
+                <span class="tech-tag">C++</span>
+                <span class="tech-tag">OpenCV</span>
+                <span class="tech-tag">Gazebo</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/jtk16/robotic-manipulator" class="project-link" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="./assets/docs/papers/robotic-arm-paper.pdf" class="project-link" target="_blank">
+                  <i class="fas fa-file-pdf"></i>
+                  Paper
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="ai research">
+            <div class="project-image">
+              <img src="./assets/images/projects/slam-algorithm.jpg" alt="Next-Gen SLAM Algorithm" loading="lazy">
+              <div class="project-overlay">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>Next-Gen SLAM Algorithm</h3>
+              <p>
+                Implemented a novel Simultaneous Localization and Mapping algorithm using 
+                deep learning for improved accuracy in dynamic environments with real-time visualization.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">PyTorch</span>
+                <span class="tech-tag">C++</span>
+                <span class="tech-tag">CUDA</span>
+                <span class="tech-tag">PCL</span>
+                <span class="tech-tag">RViz</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/jtk16/slam-algorithm" class="project-link" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-play"></i>
+                  Video
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card reveal" data-category="quantum research">
+            <div class="project-image">
+              <img src="./assets/images/projects/quantum-ml.jpg" alt="Quantum ML Optimization" loading="lazy">
+              <div class="project-overlay">
+                <i class="fas fa-atom"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>Quantum ML Optimization</h3>
+              <p>
+                Explored quantum machine learning algorithms for solving complex optimization problems 
+                in robotics path planning, achieving significant performance improvements.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">Qiskit</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">NumPy</span>
+                <span class="tech-tag">QAOA</span>
+                <span class="tech-tag">VQE</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/jtk16/quantum-ml-optimization" class="project-link" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-external-link-alt"></i>
+                  Research
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Let's Build Something Amazing</h2>
+          <p class="section-subtitle">
+            Ready to collaborate on the next breakthrough in robotics and AI? Let's connect!
+          </p>
+        </div>
+        
+        <div class="contact-grid">
+          <div class="contact-info">
+            <h3>Get In Touch</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+              Whether you're interested in collaboration, have questions about my work, 
+              or want to discuss the future of robotics, I'd love to hear from you.
+            </p>
+            
+            <ul class="contact-list">
+              <li>
+                <a href="mailto:jack.t.kinney@gmail.com">
+                  <i class="fas fa-envelope"></i>
+                  <div>
+                    <strong>Email</strong><br>
+                    <span style="color: var(--text-muted);">jack.t.kinney@gmail.com</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="tel:+1234567890">
+                  <i class="fas fa-phone"></i>
+                  <div>
+                    <strong>Phone</strong><br>
+                    <span style="color: var(--text-muted);">+1 (234) 567-890</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/j-kinney" target="_blank" rel="noopener">
+                  <i class="fab fa-linkedin"></i>
+                  <div>
+                    <strong>LinkedIn</strong><br>
+                    <span style="color: var(--text-muted);">Connect professionally</span>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/jtk16" target="_blank" rel="noopener">
+                  <i class="fab fa-github"></i>
+                  <div>
+                    <strong>GitHub</strong><br>
+                    <span style="color: var(--text-muted);">View my repositories</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+
+            <div class="social-links">
+              <a href="https://twitter.com/jtk16" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="https://youtube.com/@jtk16" class="social-link" target="_blank" rel="noopener" aria-label="YouTube">
+                <i class="fab fa-youtube"></i>
+              </a>
+              <a href="https://medium.com/@jtk16" class="social-link" target="_blank" rel="noopener" aria-label="Medium">
+                <i class="fab fa-medium"></i>
+              </a>
+              <a href="https://discord.gg/jtk16" class="social-link" target="_blank" rel="noopener" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Contact Form -->
+          <div class="contact-form-container">
+            <form class="contact-form" id="contact-form">
+              <h3>Send a Message</h3>
+              <div class="form-group">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" name="name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" id="subject" name="subject" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="message" class="form-label">Message</label>
+                <textarea id="message" name="message" class="form-textarea" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 Jack Kinney. Built with passion for robotics and AI. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="./assets/docs/resume.pdf" class="footer-link" target="_blank">Resume</a>
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="./assets/js/main.js"></script>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => console.log('SW registered: ', registration))
+          .catch(registrationError => console.log('SW registration failed: ', registrationError));
+      });
+    }
+  </script>
+</body>
+</html>
