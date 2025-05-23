@@ -1,48 +1,290 @@
-/* ===== CSS Reset ===== */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
+/* ===== Robust CSS Reset ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+html {
+  line-height: 1.15; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary); /* Set your base font */
+  background-color: var(--bg-primary); /* Set your base background */
+  color: var(--text-primary); /* Set your base text color */
+}
+
+main {
+  display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 2em; /* Can be adjusted */
+  margin: 0.67em 0;
+}
+
+p {
+  line-height: 1.5;
+}
+
+a {
+  background-color: transparent;
+  text-decoration: none;
+  color: var(--primary); /* Base link color */
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+img {
+  border-style: none;
+  max-width: 100%;
+  height: auto;
+  display: block; /* Prevents extra space below images */
+}
+
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+button, input {
+  overflow: visible;
+}
+
+button, select {
+  text-transform: none;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+/* ===== FOCUS STYLES (Improved) ===== */
+*:focus-visible { /* Use :focus-visible for better accessibility */
+  outline: 3px solid var(--primary-light, #a5b4fc); /* Lighter/more visible outline */
+  outline-offset: 3px;
+  border-radius: var(--radius-sm); /* Slightly rounded outline */
+}
+
+/* ===== Basic Variables (Ensure these are defined) ===== */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #ec4899;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #334155;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #475569;
+  --danger: #ef4444;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-16: 4rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-sm: 0.25rem;
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --transition: all 0.3s ease-in-out;
+  --font-primary: 'Inter', sans-serif;
+}
+
+/* ===== Container & Section Base ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+.section {
+    padding: var(--space-16) 0;
+    position: relative; /* Important for positioning contexts */
+}
+
+.section-alt {
+    background-color: var(--bg-secondary);
+}
+
+/* ===== Skills Section (Technical Expertise - Robust Layout) ===== */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-8);
+}
+
+.skill-category {
+    background: var(--bg-card);
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.skill-category:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.skill-category h3 {
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+}
+
+.skill-list {
+    display: flex; /* Use flexbox */
+    flex-wrap: wrap; /* Allow tags to wrap */
+    gap: var(--space-2); /* Spacing between tags */
+}
+
+.skill-tag {
+    display: inline-block; /* Ensure it behaves like a block */
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-lg);
+    font-size: 0.875rem;
+    transition: var(--transition);
+    border: 1px solid transparent;
+}
+
+.skill-tag:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* ===== Projects Section (Robust Layout) ===== */
+.projects-grid,
+.publications-list,
+.current-research-grid {
+    display: grid;
+    gap: var(--space-8); /* Ensure good spacing */
+}
+
+.project-card,
+.publication-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+    padding: var(--space-6);
+    transition: var(--transition);
+    overflow: hidden; /* Prevent content spill */
+    position: relative; /* For badges/absolute elements */
+    display: flex; /* Use flexbox for internal layout */
+    flex-direction: column;
+}
+
+.project-card:hover,
+.publication-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary);
+}
+
+.project-content,
+.publication-card > * {
+    z-index: 1; /* Keep content above potential backgrounds */
+    flex-grow: 1; /* Make content fill space */
+}
+
+.project-card h3,
+.publication-card h3 {
+    margin-bottom: var(--space-3);
+}
+
+/* Example for Project Card Badges (to prevent overlap) */
+.project-badges,
+.publication-badges {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    display: flex;
+    gap: var(--space-2);
+    z-index: 2; /* Ensure badges are on top */
+}
+
+.badge {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-lg);
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+}
+
+.badge.featured { background: var(--primary); }
+.badge.conference { background: #3498db; }
+/* Add more badge styles */
+
+
+/* Ensure links/buttons inside cards are spaced */
+.project-links,
+.publication-links {
+    margin-top: var(--space-4); /* Add space above links */
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+/* Prevent image overlap (if using images) */
+.project-image {
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--bg-secondary); /* Placeholder color */
+    aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+}
+
+.project-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 3rem;
+    color: var(--text-muted);
+}
+
+/* ===== General Animation Fixes ===== */
+/* Ensure animations don't cause layout shifts */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smoother transition */
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Include the rest of your original CSS ===== */
+/* ===== PAGE LOADER, HERO, BACK TO TOP, FILTERS, MOBILE MENU, HOVER EFFECTS, FORM, etc. ===== */
+/* ===== Ensure all original styles are below these new/robust rules ===== */
 /* ===== FOCUS STYLES ===== */
 *:focus {
   outline: 2px solid var(--primary);
