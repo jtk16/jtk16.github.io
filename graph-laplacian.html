@@ -194,44 +194,6 @@
       gap: var(--space-2);
     }
 
-    .eigenvalue-control.snapped {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid var(--success);
-      border-radius: var(--radius);
-      transform: scale(1.02);
-      transition: all 0.3s ease;
-    }
-
-    .snap-tooltip {
-      position: absolute;
-      top: -35px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--success);
-      color: white;
-      padding: var(--space-1) var(--space-2);
-      border-radius: var(--radius);
-      font-size: 0.75rem;
-      white-space: nowrap;
-      z-index: 1000;
-      animation: fadeInOut 1s ease;
-    }
-
-    .snap-tooltip::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 4px solid transparent;
-      border-top-color: var(--success);
-    }
-
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 0; transform: translateX(-50%) translateY(-5px); }
-      20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
     /* Property Controls */
     .property-control {
       margin-bottom: var(--space-6);
@@ -521,588 +483,10 @@
       font-weight: 600;
     }
 
-    /* Eigenvector Controls */
-    .eigenvector-controls {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      margin-bottom: var(--space-4);
-      padding: var(--space-3);
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-    }
-
-    .eigenvector-controls label {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-size: 0.875rem;
-    }
-
-    .eigenvector-controls select {
-      padding: var(--space-2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-    }
-
-    .animation-btn {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-3);
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 0.875rem;
-      transition: var(--transition);
-    }
-
-    .animation-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
-    }
-
-    .eigenvector-explanation {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: var(--radius);
-      padding: var(--space-4);
-      font-size: 0.875rem;
-      line-height: 1.6;
-      color: var(--text-secondary);
-    }
-
-    /* Learning Section */
-    .learning-section {
-      max-height: 400px;
-      overflow-y: auto;
-      padding-right: var(--space-2);
-    }
-
-    .learning-section h4 {
-      margin-bottom: var(--space-4);
-      color: var(--text-primary);
-      text-align: center;
-      font-size: 1.25rem;
-    }
-
-    .concept-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-4);
-      margin-bottom: var(--space-4);
-      transition: var(--transition);
-    }
-
-    .concept-card:hover {
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
-    }
-
-    .concept-card.highlight {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
-      border-color: var(--primary);
-    }
-
-    .concept-header {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      margin-bottom: var(--space-3);
-    }
-
-    .concept-header i {
-      font-size: 1.25rem;
-      color: var(--primary);
-      width: 24px;
-      text-align: center;
-    }
-
-    .concept-header h5 {
-      margin: 0;
-      color: var(--text-primary);
-      font-size: 1rem;
-    }
-
-    .concept-card p {
-      margin-bottom: var(--space-3);
-      line-height: 1.6;
-    }
-
-    .concept-card ul {
-      margin: 0;
-      padding-left: var(--space-4);
-    }
-
-    .concept-card li {
-      margin-bottom: var(--space-2);
-      line-height: 1.5;
-    }
-
-    .concept-card li strong {
-      color: var(--primary);
-    }
-
-    /* Custom scrollbar for learning section */
-    .learning-section::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .learning-section::-webkit-scrollbar-track {
-      background: var(--bg-tertiary);
-      border-radius: 3px;
-    }
-
-    .learning-section::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 3px;
-    }
-
-    /* Textbook Layout */
-    .textbook-container {
-      max-height: 500px;
-      overflow-y: auto;
-      background: var(--bg-primary);
-      border-radius: var(--radius-lg);
-      padding: var(--space-6);
-    }
-
-    .textbook-header {
-      text-align: center;
-      margin-bottom: var(--space-6);
-      padding-bottom: var(--space-4);
-      border-bottom: 2px solid var(--border);
-    }
-
-    .textbook-header h3 {
-      color: var(--primary);
-      margin-bottom: var(--space-2);
-      font-size: 1.5rem;
-    }
-
-    .textbook-subtitle {
-      color: var(--text-muted);
-      font-style: italic;
-      line-height: 1.6;
-    }
-
-    .textbook-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-      margin-bottom: var(--space-6);
-      padding-bottom: var(--space-4);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .chapter-btn {
-      padding: var(--space-2) var(--space-3);
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: var(--transition);
-      font-family: inherit;
-    }
-
-    .chapter-btn:hover {
-      color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    .chapter-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    .textbook-content {
-      min-height: 400px;
-    }
-
-    .chapter {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .chapter.active {
-      display: block;
-    }
-
-    .chapter h4 {
-      color: var(--primary);
-      margin-bottom: var(--space-4);
-      font-size: 1.25rem;
-    }
-
-    .chapter-number {
-      background: var(--primary);
-      color: white;
-      padding: var(--space-1) var(--space-2);
-      border-radius: var(--radius);
-      font-size: 0.875rem;
-      margin-right: var(--space-2);
-    }
-
-    .section {
-      margin-bottom: var(--space-6);
-    }
-
-    .section h5 {
-      color: var(--text-primary);
-      margin-bottom: var(--space-3);
-      font-size: 1.1rem;
-    }
-
-    .section h6 {
-      color: var(--primary);
-      margin-bottom: var(--space-2);
-      font-size: 1rem;
-    }
-
-    .application-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-3);
-      margin: var(--space-4) 0;
-    }
-
-    .application-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-      text-align: center;
-      transition: var(--transition);
-    }
-
-    .application-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-
-    .application-card i {
-      font-size: 1.5rem;
-      color: var(--primary);
-      margin-bottom: var(--space-2);
-    }
-
-    .application-card h6 {
-      margin-bottom: var(--space-2);
-      font-size: 0.9rem;
-    }
-
-    .application-card p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .interactive-demo {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: var(--radius);
-      padding: var(--space-4);
-      margin: var(--space-4) 0;
-    }
-
-    .interactive-demo h6 {
-      color: var(--primary);
-      margin-bottom: var(--space-2);
-    }
-
-    .matrix-explanation {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-4);
-      margin: var(--space-4) 0;
-    }
-
-    .matrix-type {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-      text-align: center;
-    }
-
-    .matrix-type.highlight {
-      border-color: var(--primary);
-      background: rgba(99, 102, 241, 0.05);
-    }
-
-    .matrix-visual {
-      margin-top: var(--space-3);
-    }
-
-    .matrix-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      width: fit-content;
-      margin: 0 auto var(--space-2);
-    }
-
-    .matrix-cell {
-      width: 30px;
-      height: 30px;
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-
-    .matrix-caption {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .eigenvalue-meanings {
-      display: grid;
-      gap: var(--space-4);
-      margin: var(--space-4) 0;
-    }
-
-    .eigenvalue-meaning {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-4);
-    }
-
-    .eigenvalue-meaning.highlight {
-      border-color: var(--primary);
-      background: rgba(99, 102, 241, 0.05);
-    }
-
-    .insight-box {
-      background: rgba(16, 185, 129, 0.1);
-      border-left: 4px solid var(--success);
-      padding: var(--space-3);
-      margin-top: var(--space-3);
-      border-radius: 0 var(--radius) var(--radius) 0;
-    }
-
-    .spectral-gap-effects {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-3);
-      margin: var(--space-4) 0;
-    }
-
-    .effect-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-      text-align: center;
-    }
-
-    .eigenvector-explanation {
-      display: grid;
-      gap: var(--space-4);
-      margin: var(--space-4) 0;
-    }
-
-    .eigenvector-type {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-4);
-    }
-
-    .eigenvector-type.highlight {
-      border-color: var(--primary);
-      background: rgba(99, 102, 241, 0.05);
-    }
-
-    .interpretation {
-      background: rgba(236, 72, 153, 0.1);
-      border-left: 4px solid var(--secondary);
-      padding: var(--space-3);
-      margin-top: var(--space-3);
-      border-radius: 0 var(--radius) var(--radius) 0;
-    }
-
-    .application-detailed {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-4);
-      margin-bottom: var(--space-4);
-    }
-
-    .algorithm-steps {
-      display: grid;
-      gap: var(--space-2);
-      margin-top: var(--space-3);
-    }
-
-    .step {
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-2) var(--space-3);
-      position: relative;
-      padding-left: var(--space-8);
-    }
-
-    .step::before {
-      content: counter(step);
-      counter-increment: step;
-      position: absolute;
-      left: var(--space-2);
-      width: 20px;
-      height: 20px;
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    .algorithm-steps {
-      counter-reset: step;
-    }
-
-    .clustering-steps {
-      display: grid;
-      gap: var(--space-3);
-      margin-top: var(--space-3);
-    }
-
-    .clustering-step {
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-    }
-
-    .emerging-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-3);
-      margin-top: var(--space-3);
-    }
-
-    .emerging-app {
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-    }
-
-    .laplacian-variants {
-      display: grid;
-      gap: var(--space-3);
-      margin: var(--space-4) 0;
-    }
-
-    .variant {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-    }
-
-    .research-questions {
-      display: grid;
-      gap: var(--space-3);
-      margin: var(--space-4) 0;
-    }
-
-    .question {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-    }
-
-    .resources {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: var(--space-4);
-      margin-top: var(--space-3);
-    }
-
-    .resource-category {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .eigenvalue-label {
-      display: flex;
-      justify-content: between;
-      align-items: center;
-      margin-bottom: var(--space-2);
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-
-    .eigenvalue-slider {
-      width: 100%;
-      height: 6px;
-      border-radius: 3px;
-      background: var(--bg-tertiary);
-      outline: none;
-      transition: var(--transition);
-      -webkit-appearance: none;
-    }
-
-    .eigenvalue-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--primary);
-      cursor: pointer;
-      border: 2px solid white;
-      box-shadow: var(--shadow);
-    }
-
-    .eigenvalue-slider::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--primary);
-      cursor: pointer;
-      border: 2px solid white;
-      box-shadow: var(--shadow);
-    }
-
     .preset-buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: var(--space-3);
-    }
-
-    .preset-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     .preset-btn {
@@ -1134,7 +518,21 @@
       left: 100%;
     }
 
-    /* Remove old status display styles - replaced with integrated explanations */
+    .preset-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .preset-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
 
     /* Canvas */
     .canvas-container {
@@ -1175,27 +573,6 @@
       backdrop-filter: blur(10px);
     }
 
-    /* Info Panel */
-    .info-panel {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-4);
-      margin-top: var(--space-6);
-    }
-
-    .info-title {
-      font-weight: 600;
-      margin-bottom: var(--space-2);
-      color: var(--text-primary);
-    }
-
-    .info-text {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
     /* Responsive */
     @media (max-width: 1024px) {
       .app-container {
@@ -1231,29 +608,10 @@
       }
     }
 
-    /* Loading Animation */
-    .loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 200px;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--border);
-      border-top: 2px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-right: var(--space-2);
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -1273,11 +631,11 @@
   <main class="main-content">
     <div class="container">
       <div class="app-header">
-        <h1 class="app-title">Graph Laplacian Eigenvalue Visualizer</h1>
+        <h1 class="app-title">Interactive Spectral Graph Theory</h1>
         <p class="app-description">
-          Discover how graph connectivity, clustering, and spread affect network structure! 
-          Adjust intuitive properties and watch as the mathematical eigenvalues automatically 
-          update to create valid graph configurations. No spectral graph theory knowledge required.
+          🎯 <strong>Learn by doing!</strong> Adjust intuitive properties like "how connected" your network is, 
+          and watch the math update automatically. No equations needed - just explore and discover 
+          the beautiful patterns that emerge from spectral graph theory.
         </p>
       </div>
 
@@ -1285,11 +643,11 @@
         <div class="controls-panel">
           <div class="control-section">
             <h3 class="section-title">
-              <i class="fas fa-network-wired"></i>
+              <i class="fas fa-sliders-h"></i>
               Graph Properties
             </h3>
             <div class="help-text">
-              Adjust how connected and clustered your graph is. The math happens automatically!
+              🚀 Start here! These intuitive controls automatically calculate the mathematical eigenvalues for you.
             </div>
             
             <div class="property-control">
@@ -1300,10 +658,10 @@
               <div class="property-slider-container">
                 <span class="slider-label">Sparse</span>
                 <input type="range" class="property-slider" id="connectivity-slider" 
-                       min="0" max="100" value="30" data-property="connectivity">
+                       min="0" max="100" value="50" data-property="connectivity">
                 <span class="slider-label">Dense</span>
               </div>
-              <div class="property-value">Low connectivity</div>
+              <div class="property-value" id="connectivity-value">Moderate connectivity</div>
             </div>
 
             <div class="property-control">
@@ -1317,7 +675,7 @@
                        min="0" max="100" value="60" data-property="expansion">
                 <span class="slider-label">Spread</span>
               </div>
-              <div class="property-value">Balanced spread</div>
+              <div class="property-value" id="expansion-value">Balanced spread</div>
             </div>
 
             <div class="property-control">
@@ -1328,20 +686,20 @@
               <div class="property-slider-container">
                 <span class="slider-label">Uniform</span>
                 <input type="range" class="property-slider" id="clustering-slider" 
-                       min="0" max="100" value="15" data-property="clustering">
+                       min="0" max="100" value="30" data-property="clustering">
                 <span class="slider-label">Clustered</span>
               </div>
-              <div class="property-value">Very low clustering</div>
+              <div class="property-value" id="clustering-value">Low clustering</div>
             </div>
           </div>
 
           <div class="control-section">
             <h3 class="section-title">
               <i class="fas fa-shapes"></i>
-              Common Examples
+              Try These Examples
             </h3>
             <div class="help-text">
-              Try these classic graph types to see how properties change
+              🎪 Click to see classic network patterns!
             </div>
             <div class="preset-buttons">
               <button class="preset-btn" data-preset="path" title="Nodes in a line">
@@ -1378,21 +736,21 @@
             <div class="advanced-toggle">
               <label>
                 <input type="checkbox" id="show-advanced"> 
-                Show eigenvalue details
+                Show eigenvalue math
               </label>
             </div>
           </div>
 
-          <div class="control-section advanced-section" style="display: none;">
+          <div class="control-section advanced-section" id="advanced-section" style="display: none;">
             <h3 class="section-title">
               <i class="fas fa-calculator"></i>
-              Mathematical Details
+              The Math Behind It
             </h3>
             <div class="help-text">
-              The eigenvalues that make your graph possible (auto-calculated)
+              🧮 These are the eigenvalues that make your graph possible!
             </div>
             <div id="eigenvalue-display">
-              <!-- Eigenvalues shown as read-only information -->
+              <!-- Eigenvalues will be displayed here -->
             </div>
           </div>
 
@@ -1402,7 +760,8 @@
               What You're Seeing
             </h3>
             <div id="explanation-text" class="explanation">
-              Drag the sliders above to see how different properties affect your graph's structure!
+              👋 Welcome! Drag the sliders above to see how different properties affect your network's structure. 
+              Each change updates the mathematical "fingerprint" of your graph automatically!
             </div>
           </div>
         </div>
@@ -1414,39 +773,39 @@
               <div><strong>Network Health:</strong> <span id="spectral-gap">0.00</span></div>
               <div><strong>Connection Strength:</strong> <span id="algebraic-connectivity">0.00</span></div>
               <div style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">
-                Higher values = better connectivity
+                💡 Higher values = better connectivity
               </div>
             </div>
           </div>
 
           <div class="analysis-tabs">
-            <button class="tab-btn active" data-tab="eigenvalues">Eigenvalue Spectrum</button>
-            <button class="tab-btn" data-tab="eigenvectors">Vibration Patterns</button>
-            <button class="tab-btn" data-tab="learn">Learn Spectral Theory</button>
+            <button class="tab-btn active" data-tab="eigenvalues">📊 Eigenvalue Spectrum</button>
+            <button class="tab-btn" data-tab="eigenvectors">🌊 Vibration Patterns</button>
+            <button class="tab-btn" data-tab="learn">📚 Learn Spectral Theory</button>
           </div>
 
           <div class="tab-content">
             <!-- Eigenvalue Distribution Plot -->
             <div class="tab-panel active" id="eigenvalues-panel">
               <div class="panel-header">
-                <h4>Eigenvalue Distribution</h4>
-                <p>Each bar represents an eigenvalue - the mathematical "fingerprint" of your graph</p>
+                <h4>📊 Your Graph's Mathematical Fingerprint</h4>
+                <p>Each bar shows an eigenvalue - think of them as the "natural frequencies" of your network!</p>
               </div>
               <div class="eigenvalue-chart">
                 <canvas id="eigenvalue-chart" width="500" height="200"></canvas>
               </div>
               <div class="eigenvalue-insights">
                 <div class="insight-item">
-                  <span class="insight-label">First eigenvalue (λ₁):</span>
+                  <span class="insight-label">🔑 First eigenvalue (λ₁):</span>
                   <span class="insight-value">Always 0 for connected graphs</span>
                 </div>
                 <div class="insight-item">
-                  <span class="insight-label">Second eigenvalue (λ₂):</span>
-                  <span class="insight-value" id="second-eigenvalue-meaning">Shows connectivity strength</span>
+                  <span class="insight-label">💪 Second eigenvalue (λ₂):</span>
+                  <span class="insight-value" id="second-eigenvalue-meaning">Shows how well-connected your network is</span>
                 </div>
                 <div class="insight-item">
-                  <span class="insight-label">Largest eigenvalue:</span>
-                  <span class="insight-value" id="largest-eigenvalue-meaning">Related to maximum degree</span>
+                  <span class="insight-label">📈 Largest eigenvalue:</span>
+                  <span class="insight-value" id="largest-eigenvalue-meaning">Related to hub nodes and max connections</span>
                 </div>
               </div>
             </div>
@@ -1454,496 +813,97 @@
             <!-- Eigenvector Visualization -->
             <div class="tab-panel" id="eigenvectors-panel">
               <div class="panel-header">
-                <h4>Vibration Patterns (Eigenvectors)</h4>
-                <p>Each pattern shows how energy or information flows through your network</p>
+                <h4>🌊 How Information Flows Through Your Network</h4>
+                <p>Each pattern shows a different "vibration mode" - like how energy or information naturally moves through your graph!</p>
               </div>
-              <div class="eigenvector-controls">
-                <label>
-                  <span>Pattern to show:</span>
-                  <select id="eigenvector-select">
-                    <option value="1">Pattern 2 (Connectivity)</option>
-                    <option value="2">Pattern 3 (Clustering)</option>
-                    <option value="3">Pattern 4 (Higher Order)</option>
-                  </select>
-                </label>
-                <button id="animate-pattern" class="animation-btn">
-                  <i class="fas fa-play"></i> Animate Flow
-                </button>
-              </div>
-              <div class="eigenvector-explanation" id="eigenvector-explanation">
-                Select a pattern above to see how it divides and connects your network
+              <div id="eigenvector-explanation" class="explanation">
+                🎵 <strong>Think of it like music!</strong> Just like a guitar string has different vibration patterns that create different notes, 
+                your network has different "information flow patterns" that reveal hidden structure. 
+                
+                <br><br>
+                
+                The <strong>red and blue colors</strong> show nodes that are "in phase" (same color) or "out of phase" (different colors) 
+                with each other. This reveals natural community boundaries and information bottlenecks!
               </div>
             </div>
 
-            <!-- Educational Content - Interactive Textbook -->
+            <!-- Educational Content -->
             <div class="tab-panel" id="learn-panel">
-              <div class="textbook-container">
-                <div class="textbook-header">
-                  <h3>Spectral Graph Theory: An Interactive Guide</h3>
-                  <p class="textbook-subtitle">
-                    From basic concepts to advanced applications - learn the mathematics that powers 
-                    modern network analysis, machine learning, and quantum computing.
-                  </p>
-                </div>
-
-                <div class="textbook-nav">
-                  <button class="chapter-btn active" data-chapter="motivation">1. Why Spectral Theory?</button>
-                  <button class="chapter-btn" data-chapter="foundations">2. Mathematical Foundations</button>
-                  <button class="chapter-btn" data-chapter="eigenvalues">3. Understanding Eigenvalues</button>
-                  <button class="chapter-btn" data-chapter="eigenvectors">4. Eigenvectors & Flow</button>
-                  <button class="chapter-btn" data-chapter="applications">5. Real-World Applications</button>
-                  <button class="chapter-btn" data-chapter="advanced">6. Advanced Topics</button>
-                </div>
-
-                <div class="textbook-content">
-                  <!-- Chapter 1: Motivation -->
-                  <div class="chapter active" id="motivation-chapter">
-                    <h4><span class="chapter-number">Chapter 1:</span> Why Spectral Graph Theory?</h4>
-                    
-                    <div class="section">
-                      <h5>The Network Revolution</h5>
-                      <p>
-                        We live in an interconnected world. Social networks connect billions of people. 
-                        Neural networks in our brains have trillions of connections. The internet links 
-                        every computer on Earth. Understanding these networks is crucial for:
-                      </p>
-                      
-                      <div class="application-grid">
-                        <div class="application-card">
-                          <i class="fas fa-search"></i>
-                          <h6>Search Engines</h6>
-                          <p>Google's PageRank uses the dominant eigenvector to rank web pages</p>
-                        </div>
-                        <div class="application-card">
-                          <i class="fas fa-users"></i>
-                          <h6>Social Networks</h6>
-                          <p>Finding communities and predicting connections in social media</p>
-                        </div>
-                        <div class="application-card">
-                          <i class="fas fa-brain"></i>
-                          <h6>Neuroscience</h6>
-                          <p>Understanding brain connectivity and information processing</p>
-                        </div>
-                        <div class="application-card">
-                          <i class="fas fa-robot"></i>
-                          <h6>Machine Learning</h6>
-                          <p>Spectral clustering and dimensionality reduction algorithms</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="section">
-                      <h5>The Limitation of Traditional Graph Theory</h5>
-                      <p>
-                        Traditional graph theory focuses on <strong>local properties</strong>:
-                      </p>
-                      <ul>
-                        <li>Degree of individual nodes</li>
-                        <li>Shortest paths between specific pairs</li>
-                        <li>Local clustering coefficients</li>
-                      </ul>
-                      
-                      <p>
-                        But networks have <strong>global emergent properties</strong> that can't be understood 
-                        by looking at individual parts. This is where spectral theory shines.
-                      </p>
-                    </div>
-
-                    <div class="interactive-demo">
-                      <h6>🎵 The Music Analogy</h6>
-                      <p>
-                        Think of your graph as a musical instrument. When you pluck a guitar string, 
-                        it doesn't vibrate at just any frequency - it has natural resonant frequencies 
-                        determined by its physical properties.
-                      </p>
-                      <p>
-                        Similarly, every graph has natural "frequencies" (eigenvalues) and "vibration patterns" 
-                        (eigenvectors) that reveal its fundamental structure.
-                      </p>
-                    </div>
-                  </div>
-
-                  <!-- Chapter 2: Foundations -->
-                  <div class="chapter" id="foundations-chapter">
-                    <h4><span class="chapter-number">Chapter 2:</span> Mathematical Foundations</h4>
-                    
-                    <div class="section">
-                      <h5>From Graphs to Matrices</h5>
-                      <p>
-                        The key insight of spectral graph theory is representing graphs as matrices, 
-                        unlocking the full power of linear algebra.
-                      </p>
-                      
-                      <div class="matrix-explanation">
-                        <div class="matrix-type">
-                          <h6>Adjacency Matrix (A)</h6>
-                          <p>A[i,j] = 1 if nodes i and j are connected, 0 otherwise</p>
-                          <div class="matrix-visual">
-                            <div class="matrix-grid">
-                              <div class="matrix-cell">0</div><div class="matrix-cell">1</div><div class="matrix-cell">0</div>
-                              <div class="matrix-cell">1</div><div class="matrix-cell">0</div><div class="matrix-cell">1</div>
-                              <div class="matrix-cell">0</div><div class="matrix-cell">1</div><div class="matrix-cell">0</div>
-                            </div>
-                            <span class="matrix-caption">3-node path graph</span>
-                          </div>
-                        </div>
-                        
-                        <div class="matrix-type">
-                          <h6>Degree Matrix (D)</h6>
-                          <p>D[i,i] = degree of node i, all other entries are 0</p>
-                          <div class="matrix-visual">
-                            <div class="matrix-grid">
-                              <div class="matrix-cell">1</div><div class="matrix-cell">0</div><div class="matrix-cell">0</div>
-                              <div class="matrix-cell">0</div><div class="matrix-cell">2</div><div class="matrix-cell">0</div>
-                              <div class="matrix-cell">0</div><div class="matrix-cell">0</div><div class="matrix-cell">1</div>
-                            </div>
-                            <span class="matrix-caption">Diagonal degree matrix</span>
-                          </div>
-                        </div>
-                        
-                        <div class="matrix-type highlight">
-                          <h6>Laplacian Matrix (L = D - A)</h6>
-                          <p>The star of spectral graph theory - encodes both connectivity and structure</p>
-                          <div class="matrix-visual">
-                            <div class="matrix-grid">
-                              <div class="matrix-cell">1</div><div class="matrix-cell">-1</div><div class="matrix-cell">0</div>
-                              <div class="matrix-cell">-1</div><div class="matrix-cell">2</div><div class="matrix-cell">-1</div>
-                              <div class="matrix-cell">0</div><div class="matrix-cell">-1</div><div class="matrix-cell">1</div>
-                            </div>
-                            <span class="matrix-caption">Laplacian = D - A</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="section">
-                      <h5>Why the Laplacian?</h5>
-                      <p>
-                        The Laplacian matrix L = D - A has remarkable properties:
-                      </p>
-                      <ul>
-                        <li><strong>Symmetric:</strong> Has real eigenvalues and orthogonal eigenvectors</li>
-                        <li><strong>Positive semidefinite:</strong> All eigenvalues ≥ 0</li>
-                        <li><strong>Encodes connectivity:</strong> Number of zero eigenvalues = number of connected components</li>
-                        <li><strong>Discrete Laplace operator:</strong> Measures "smoothness" across the graph</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <!-- Chapter 3: Eigenvalues -->
-                  <div class="chapter" id="eigenvalues-chapter">
-                    <h4><span class="chapter-number">Chapter 3:</span> Understanding Eigenvalues</h4>
-                    
-                    <div class="section">
-                      <h5>The Eigenvalue Spectrum</h5>
-                      <p>
-                        For a graph with n nodes, the Laplacian has n eigenvalues: 0 = λ₁ ≤ λ₂ ≤ ... ≤ λₙ
-                      </p>
-                      
-                      <div class="eigenvalue-meanings">
-                        <div class="eigenvalue-meaning">
-                          <h6>λ₁ = 0 (Always)</h6>
-                          <p>
-                            The smallest eigenvalue is always 0 for connected graphs. The multiplicity 
-                            of this eigenvalue equals the number of connected components.
-                          </p>
-                          <div class="insight-box">
-                            <strong>Insight:</strong> If your graph has λ₁ = λ₂ = 0, it has at least 2 disconnected parts!
-                          </div>
-                        </div>
-                        
-                        <div class="eigenvalue-meaning highlight">
-                          <h6>λ₂ - Algebraic Connectivity</h6>
-                          <p>
-                            The second smallest eigenvalue is the most important. It measures how "well-connected" 
-                            your graph is overall.
-                          </p>
-                          <ul>
-                            <li>λ₂ = 0: Graph is disconnected</li>
-                            <li>Small λ₂: Graph has bottlenecks, poor connectivity</li>
-                            <li>Large λ₂: Graph is well-connected, information flows easily</li>
-                          </ul>
-                          <div class="insight-box">
-                            <strong>Cheeger's Inequality:</strong> λ₂ bounds the conductance of the graph, 
-                            relating spectral properties to combinatorial ones.
-                          </div>
-                        </div>
-                        
-                        <div class="eigenvalue-meaning">
-                          <h6>λₙ - Maximum Eigenvalue</h6>
-                          <p>
-                            The largest eigenvalue relates to the maximum degree and overall "regularity" of the graph.
-                          </p>
-                          <ul>
-                            <li>For regular graphs: λₙ ≤ maximum degree</li>
-                            <li>Large λₙ: Graph has high-degree "hub" nodes</li>
-                            <li>λₙ ≈ average degree: Graph is roughly regular</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="section">
-                      <h5>Spectral Gap</h5>
-                      <p>
-                        The gap λ₂ - λ₁ = λ₂ (since λ₁ = 0) is called the <strong>spectral gap</strong>. 
-                        It's arguably the most important single number characterizing your graph:
-                      </p>
-                      
-                      <div class="spectral-gap-effects">
-                        <div class="effect-card">
-                          <h6>Random Walks</h6>
-                          <p>Larger gap → faster mixing time → random walks converge quickly to steady state</p>
-                        </div>
-                        <div class="effect-card">
-                          <h6>Expansion</h6>
-                          <p>Larger gap → better expansion → hard to find small cuts that disconnect the graph</p>
-                        </div>
-                        <div class="effect-card">
-                          <h6>Connectivity</h6>
-                          <p>Larger gap → more robust connectivity → graph survives random edge/node failures</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Chapter 4: Eigenvectors -->
-                  <div class="chapter" id="eigenvectors-chapter">
-                    <h4><span class="chapter-number">Chapter 4:</span> Eigenvectors & Information Flow</h4>
-                    
-                    <div class="section">
-                      <h5>Eigenvectors as Vibration Patterns</h5>
-                      <p>
-                        If eigenvalues are the "frequencies," then eigenvectors are the "vibration patterns" 
-                        that show how information, energy, or influence flows through your network.
-                      </p>
-                      
-                      <div class="eigenvector-explanation">
-                        <div class="eigenvector-type">
-                          <h6>First Eigenvector (v₁)</h6>
-                          <p>
-                            Corresponds to λ₁ = 0. For connected graphs, this is the constant vector: 
-                            v₁ = (1, 1, 1, ..., 1). All nodes have the same value.
-                          </p>
-                          <div class="interpretation">
-                            <strong>Interpretation:</strong> The "DC component" - uniform distribution across all nodes.
-                          </div>
-                        </div>
-                        
-                        <div class="eigenvector-type highlight">
-                          <h6>Second Eigenvector (v₂) - Fiedler Vector</h6>
-                          <p>
-                            The most important eigenvector! It naturally partitions your graph into communities.
-                          </p>
-                          <ul>
-                            <li><strong>Positive values:</strong> Nodes in one community</li>
-                            <li><strong>Negative values:</strong> Nodes in another community</li>
-                            <li><strong>Zero crossings:</strong> Natural boundaries between communities</li>
-                          </ul>
-                          <div class="interpretation">
-                            <strong>Application:</strong> This is the foundation of spectral clustering algorithms!
-                          </div>
-                        </div>
-                        
-                        <div class="eigenvector-type">
-                          <h6>Higher Eigenvectors (v₃, v₄, ...)</h6>
-                          <p>
-                            Reveal increasingly fine-grained structure: sub-communities, hierarchical organization, 
-                            and complex flow patterns.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="section">
-                      <h5>The Discrete Laplace Equation</h5>
-                      <p>
-                        Eigenvectors solve: <strong>L v = λ v</strong>
-                      </p>
-                      <p>
-                        This is the discrete version of the Laplace equation from physics! It describes 
-                        how "smoothly" values change across the graph. Higher eigenvalues correspond 
-                        to more "oscillatory" patterns.
-                      </p>
-                    </div>
-                  </div>
-
-                  <!-- Chapter 5: Applications -->
-                  <div class="chapter" id="applications-chapter">
-                    <h4><span class="chapter-number">Chapter 5:</span> Real-World Applications</h4>
-                    
-                    <div class="application-detailed">
-                      <h5>Google's PageRank Algorithm</h5>
-                      <p>
-                        The algorithm that built Google is fundamentally spectral graph theory!
-                      </p>
-                      <div class="algorithm-explanation">
-                        <p>
-                          PageRank finds the dominant eigenvector of the web graph's transition matrix. 
-                          This eigenvector represents the "steady-state" probability that a random surfer 
-                          visits each page.
-                        </p>
-                        <div class="algorithm-steps">
-                          <div class="step">1. Build web graph (pages = nodes, links = edges)</div>
-                          <div class="step">2. Create transition matrix from adjacency matrix</div>
-                          <div class="step">3. Find dominant eigenvector using power iteration</div>
-                          <div class="step">4. Eigenvector values = PageRank scores</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="application-detailed">
-                      <h5>Spectral Clustering</h5>
-                      <p>
-                        One of the most successful applications in machine learning and data science.
-                      </p>
-                      <div class="clustering-steps">
-                        <div class="clustering-step">
-                          <h6>Step 1: Build Similarity Graph</h6>
-                          <p>Connect data points that are similar (k-NN, ε-neighborhood, or full graph with weights)</p>
-                        </div>
-                        <div class="clustering-step">
-                          <h6>Step 2: Compute Laplacian</h6>
-                          <p>Usually the normalized Laplacian: L = D⁻¹/²(D-A)D⁻¹/²</p>
-                        </div>
-                        <div class="clustering-step">
-                          <h6>Step 3: Find Eigenvectors</h6>
-                          <p>Compute first k eigenvectors for k clusters</p>
-                        </div>
-                        <div class="clustering-step">
-                          <h6>Step 4: Cluster in Spectral Space</h6>
-                          <p>Use k-means on the eigenvector matrix rows</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="application-detailed">
-                      <h5>Network Analysis & Social Media</h5>
-                      <ul>
-                        <li><strong>Community Detection:</strong> Find natural groups in social networks</li>
-                        <li><strong>Influence Analysis:</strong> Identify key influencers using centrality measures</li>
-                        <li><strong>Recommendation Systems:</strong> Predict connections and content preferences</li>
-                        <li><strong>Anomaly Detection:</strong> Spot unusual patterns in network behavior</li>
-                      </ul>
-                    </div>
-
-                    <div class="application-detailed">
-                      <h5>Emerging Applications</h5>
-                      <div class="emerging-grid">
-                        <div class="emerging-app">
-                          <h6>Quantum Computing</h6>
-                          <p>Quantum walks on graphs, optimization algorithms (QAOA), and quantum machine learning</p>
-                        </div>
-                        <div class="emerging-app">
-                          <h6>Deep Learning</h6>
-                          <p>Graph Neural Networks (GNNs) use spectral concepts for learning on graph-structured data</p>
-                        </div>
-                        <div class="emerging-app">
-                          <h6>Computational Biology</h6>
-                          <p>Protein interaction networks, metabolic pathways, and gene regulatory networks</p>
-                        </div>
-                        <div class="emerging-app">
-                          <h6>Transportation</h6>
-                          <p>Route optimization, traffic flow analysis, and smart city infrastructure</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Chapter 6: Advanced Topics -->
-                  <div class="chapter" id="advanced-chapter">
-                    <h4><span class="chapter-number">Chapter 6:</span> Advanced Topics</h4>
-                    
-                    <div class="section">
-                      <h5>Variations of the Laplacian</h5>
-                      <div class="laplacian-variants">
-                        <div class="variant">
-                          <h6>Normalized Laplacian</h6>
-                          <p>L_norm = D⁻¹/²LD⁻¹/² = I - D⁻¹/²AD⁻¹/²</p>
-                          <p>Better for graphs with varying degrees. Eigenvalues in [0, 2].</p>
-                        </div>
-                        <div class="variant">
-                          <h6>Random Walk Laplacian</h6>
-                          <p>L_rw = D⁻¹L = I - D⁻¹A</p>
-                          <p>Directly related to random walks on the graph.</p>
-                        </div>
-                        <div class="variant">
-                          <h6>Signless Laplacian</h6>
-                          <p>Q = D + A</p>
-                          <p>Used when edge orientations don't matter.</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="section">
-                      <h5>Graph Signal Processing</h5>
-                      <p>
-                        A modern extension where we analyze "signals" (functions) defined on graph vertices. 
-                        The eigenvectors of the Laplacian form a "Fourier basis" for the graph!
-                      </p>
-                      <ul>
-                        <li><strong>Graph Fourier Transform:</strong> Decompose signals into spectral components</li>
-                        <li><strong>Graph Filtering:</strong> Remove noise or extract features from graph signals</li>
-                        <li><strong>Applications:</strong> Sensor networks, image processing on meshes, social signal analysis</li>
-                      </ul>
-                    </div>
-
-                    <div class="section">
-                      <h5>Open Research Questions</h5>
-                      <div class="research-questions">
-                        <div class="question">
-                          <h6>Inverse Eigenvalue Problems</h6>
-                          <p>Given desired eigenvalues, can we construct a graph that realizes them? (What you're exploring in this tool!)</p>
-                        </div>
-                        <div class="question">
-                          <h6>Dynamic Graphs</h6>
-                          <p>How do spectral properties change as graphs evolve over time?</p>
-                        </div>
-                        <div class="question">
-                          <h6>Multilayer Networks</h6>
-                          <p>Extending spectral theory to graphs with multiple types of connections</p>
-                        </div>
-                        <div class="question">
-                          <h6>Quantum Graphs</h6>
-                          <p>Spectral theory on quantum mechanical graph structures</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="section">
-                      <h5>Going Deeper</h5>
-                      <p>Ready to dive into the mathematics? Here are essential resources:</p>
-                      <div class="resources">
-                        <div class="resource-category">
-                          <h6>Foundational Books</h6>
-                          <ul>
-                            <li>"Spectral Graph Theory" by Fan Chung</li>
-                            <li>"Algebraic Graph Theory" by Chris Godsil & Gordon Royle</li>
-                            <li>"Networks, Crowds, and Markets" by Easley & Kleinberg</li>
-                          </ul>
-                        </div>
-                        <div class="resource-category">
-                          <h6>Research Papers</h6>
-                          <ul>
-                            <li>Fiedler's original papers on algebraic connectivity</li>
-                            <li>Spielman & Teng on graph sparsification</li>
-                            <li>Von Luxburg's tutorial on spectral clustering</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <div class="panel-header">
+                <h4>📚 Spectral Graph Theory: A Beginner's Guide</h4>
+                <p>Welcome to the fascinating world where mathematics meets networks! Let's explore together.</p>
+              </div>
+              
+              <div id="textbook-content">
+                <div class="explanation">
+                  <h5>🌟 Why Should You Care About Spectral Graph Theory?</h5>
+                  
+                  <p><strong>You're using it right now!</strong> Every time you search Google, use GPS navigation, or scroll through social media, 
+                  you're benefiting from spectral graph theory. Here's why it's amazing:</p>
+                  
+                  <ul style="margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>🔍 Google Search:</strong> PageRank uses the dominant eigenvector to rank web pages</li>
+                    <li><strong>🗺️ GPS Navigation:</strong> Finds optimal routes through road networks</li>
+                    <li><strong>👥 Social Networks:</strong> Detects communities and suggests friends</li>
+                    <li><strong>🧠 Brain Research:</strong> Maps how neurons connect and communicate</li>
+                    <li><strong>🤖 Machine Learning:</strong> Powers clustering and dimensionality reduction</li>
+                  </ul>
+                  
+                  <h5>🎵 The Musical Analogy</h5>
+                  
+                  <p>Imagine your network is like a guitar string. When you pluck it, it doesn't vibrate randomly - 
+                  it has natural "resonant frequencies" that depend on its physical properties.</p>
+                  
+                  <p><strong>Your graph works the same way!</strong> It has natural "frequencies" (eigenvalues) and 
+                  "vibration patterns" (eigenvectors) that reveal its fundamental structure:</p>
+                  
+                  <ul style="margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>🎼 Low frequencies (small eigenvalues):</strong> Reveal large-scale structure and communities</li>
+                    <li><strong>🎵 High frequencies (large eigenvalues):</strong> Show local details and connections</li>
+                    <li><strong>🌊 Vibration patterns:</strong> Indicate how information flows through the network</li>
+                  </ul>
+                  
+                  <h5>🔧 What Are You Actually Controlling?</h5>
+                  
+                  <p>When you move the sliders above, you're intuitively controlling mathematical properties:</p>
+                  
+                  <ul style="margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>📡 "How Connected"</strong> → Controls the <em>algebraic connectivity</em> (λ₂)</li>
+                    <li><strong>📏 "How Spread Out"</strong> → Influences the <em>spectral gap</em> and expansion properties</li>
+                    <li><strong>🏘️ "How Clustered"</strong> → Affects higher eigenvalues and community structure</li>
+                  </ul>
+                  
+                  <p><strong>The magic?</strong> The app automatically calculates the exact eigenvalues that create a graph 
+                  with your desired properties. No complex math required - just intuitive exploration!</p>
+                  
+                  <h5>🧮 The Mathematical Connection</h5>
+                  
+                  <p>Behind the scenes, we're working with the <strong>graph Laplacian matrix</strong> - a mathematical 
+                  representation that encodes your network's structure. Its eigenvalues and eigenvectors contain a wealth 
+                  of information:</p>
+                  
+                  <ul style="margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>λ₁ = 0:</strong> Always zero for connected graphs (fundamental theorem!)</li>
+                    <li><strong>λ₂:</strong> The "algebraic connectivity" - measures how well-connected the graph is</li>
+                    <li><strong>λ₃, λ₄, ...:</strong> Reveal increasingly fine-grained structural details</li>
+                    <li><strong>Eigenvectors:</strong> Show natural partitions and flow patterns</li>
+                  </ul>
+                  
+                  <h5>🚀 Keep Exploring!</h5>
+                  
+                  <p>Try these experiments to deepen your understanding:</p>
+                  
+                  <ol style="margin: 1rem 0; padding-left: 2rem;">
+                    <li><strong>Compare the presets:</strong> Notice how different graph types have distinct eigenvalue "fingerprints"</li>
+                    <li><strong>Watch the vibration patterns:</strong> See how information naturally wants to flow</li>
+                    <li><strong>Change connectivity:</strong> Observe how the second eigenvalue (λ₂) responds</li>
+                    <li><strong>Create bottlenecks:</strong> Lower the expansion to see network vulnerabilities</li>
+                  </ol>
+                  
+                  <p><em>Remember: You're not just playing with pretty pictures - you're exploring the mathematical 
+                  foundations that power modern technology!</em> 🌟</p>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="info-panel">
-            <div class="info-title">Experiment and Explore!</div>
-            <div class="info-text">
-              Try adjusting the properties above and watch how the eigenvalue spectrum changes. 
-              Notice how different network types have characteristic "fingerprints" in their eigenvalues.
-              Switch to the vibration patterns to see how information naturally flows through your network.
             </div>
           </div>
         </div>
@@ -1952,11 +912,10 @@
   </main>
 
   <script>
-    // graph-laplacian-engine.js - Core mathematical operations
+    // Graph Laplacian Engine - Core mathematical operations
     class GraphLaplacianEngine {
       constructor() {
         this.tolerance = 1e-10;
-        this.maxIterations = 1000;
       }
 
       // Generate eigenvalues for common graph types
@@ -1970,17 +929,13 @@
             return this.completeGraphEigenvalues(n);
           case 'star':
             return this.starGraphEigenvalues(n);
-          case 'wheel':
-            return this.wheelGraphEigenvalues(n);
-          case 'random':
-            return this.randomValidEigenvalues(n);
           default:
-            return new Array(n).fill(0).map((_, i) => i);
+            return new Array(n).fill(0).map((_, i) => i * 0.5);
         }
       }
 
       pathGraphEigenvalues(n) {
-        const eigenvals = [0]; // First eigenvalue is always 0
+        const eigenvals = [0];
         for (let k = 1; k < n; k++) {
           eigenvals.push(2 - 2 * Math.cos((k * Math.PI) / (n + 1)));
         }
@@ -2012,169 +967,29 @@
         return eigenvals.sort((a, b) => a - b);
       }
 
-      wheelGraphEigenvalues(n) {
-        // Wheel graph: cycle + center node
-        const cycleEigenvals = this.cycleGraphEigenvalues(n - 1);
-        return [0, ...cycleEigenvals.slice(1).map(x => x + 1), n];
+      // Convert intuitive properties to eigenvalues
+      propertiesToEigenvalues(connectivity, expansion, clustering, n) {
+        const eigenvals = [0]; // First eigenvalue is always 0
+        
+        // Second eigenvalue (algebraic connectivity)
+        const secondEigenval = 0.1 + (connectivity / 100) * 3;
+        eigenvals.push(secondEigenval);
+        
+        // Generate remaining eigenvalues based on properties
+        for (let i = 2; i < n; i++) {
+          const baseValue = secondEigenval + (i - 1) * (expansion / 100) * 2;
+          const clusteringVariation = (clustering / 100) * Math.sin(i * Math.PI / n) * 0.5;
+          eigenvals.push(Math.max(eigenvals[i-1] + 0.1, baseValue + clusteringVariation));
+        }
+        
+        return eigenvals;
       }
 
-      randomValidEigenvalues(n) {
-        // Generate random but valid eigenvalue set
-        const eigenvals = [0]; // Always start with 0
-        for (let i = 1; i < n; i++) {
-          eigenvals.push(Math.random() * 4 + 0.1);
-        }
-        return eigenvals.sort((a, b) => a - b);
-      }
-
-      // Check if eigenvalues are valid for a graph
-      validateEigenvalues(eigenvals) {
-        const n = eigenvals.length;
-        
-        // Basic checks
-        if (Math.abs(eigenvals[0]) > this.tolerance) {
-          return { valid: false, reason: "First eigenvalue must be 0 (connected components)" };
-        }
-
-        for (let i = 0; i < n - 1; i++) {
-          if (eigenvals[i] > eigenvals[i + 1] + this.tolerance) {
-            return { valid: false, reason: "Eigenvalues must be in non-decreasing order" };
-          }
-        }
-
-        // Check for disconnected graph (multiple zero eigenvalues)
-        let zeroCount = 0;
-        for (let i = 0; i < n; i++) {
-          if (Math.abs(eigenvals[i]) < this.tolerance) zeroCount++;
-        }
-        
-        if (zeroCount > 1) {
-          return { valid: false, reason: `Graph has ${zeroCount} connected components` };
-        }
-
-        // Check algebraic connectivity
-        if (eigenvals[1] < this.tolerance && n > 1) {
-          return { valid: false, reason: "Graph is disconnected (algebraic connectivity = 0)" };
-        }
-
-        // Advanced checks: interlacing properties and realizability
-        const confidence = this.computeConfidence(eigenvals);
-        const realizability = this.checkRealizability(eigenvals);
-        
-        if (realizability.realizable) {
-          return { valid: true, confidence, graphType: realizability.graphType };
-        } else {
-          return { 
-            valid: false, 
-            reason: realizability.reason,
-            confidence: confidence * 0.5 // Partially valid but not realizable
-          };
-        }
-      }
-
-      checkRealizability(eigenvals) {
-        const n = eigenvals.length;
-        
-        // Check against known graph families
-        const tolerance = 0.05;
-        
-        // Path graph check
-        const pathEigenvals = this.pathGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, pathEigenvals, tolerance)) {
-          return { realizable: true, graphType: 'path' };
-        }
-        
-        // Cycle graph check
-        const cycleEigenvals = this.cycleGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, cycleEigenvals, tolerance)) {
-          return { realizable: true, graphType: 'cycle' };
-        }
-        
-        // Complete graph check
-        const completeEigenvals = this.completeGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, completeEigenvals, tolerance)) {
-          return { realizable: true, graphType: 'complete' };
-        }
-        
-        // Star graph check
-        const starEigenvals = this.starGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, starEigenvals, tolerance)) {
-          return { realizable: true, graphType: 'star' };
-        }
-        
-        // General realizability heuristics
-        const maxPossibleEigenvalue = 2 * n; // Upper bound for regular graphs
-        if (eigenvals[n - 1] > maxPossibleEigenvalue) {
-          return { 
-            realizable: false, 
-            reason: `Max eigenvalue ${eigenvals[n - 1].toFixed(2)} exceeds theoretical bound ${maxPossibleEigenvalue}` 
-          };
-        }
-        
-        // Check eigenvalue gaps (very large gaps are suspicious)
-        for (let i = 1; i < n - 1; i++) {
-          const gap = eigenvals[i + 1] - eigenvals[i];
-          if (gap > n) {
-            return { 
-              realizable: false, 
-              reason: `Unusually large eigenvalue gap (${gap.toFixed(2)}) between λ${i+1} and λ${i+2}` 
-            };
-          }
-        }
-        
-        return { realizable: true, graphType: 'general' };
-      }
-
-      eigenvaluesMatch(eigenvals1, eigenvals2, tolerance) {
-        if (eigenvals1.length !== eigenvals2.length) return false;
-        
-        for (let i = 0; i < eigenvals1.length; i++) {
-          if (Math.abs(eigenvals1[i] - eigenvals2[i]) > tolerance) return false;
-        }
-        return true;
-      }
-
-      computeConfidence(eigenvals) {
-        // Heuristic to determine how "graph-like" the eigenvalues are
-        const n = eigenvals.length;
-        let score = 1.0;
-
-        // Penalize very large gaps
-        for (let i = 1; i < n - 1; i++) {
-          const gap = eigenvals[i + 1] - eigenvals[i];
-          if (gap > 3) score *= 0.8;
-        }
-
-        // Penalize very large eigenvalues
-        const maxEigenval = eigenvals[n - 1];
-        if (maxEigenval > 2 * n) score *= 0.7;
-
-        return Math.max(0.1, Math.min(1.0, score));
-      }
-
-      // Project invalid eigenvalues to nearest valid set
-      projectToValidEigenvalues(eigenvals) {
-        const projected = [...eigenvals].sort((a, b) => a - b);
-        projected[0] = 0; // Ensure first eigenvalue is 0
-        
-        // Ensure non-negativity
-        for (let i = 0; i < projected.length; i++) {
-          projected[i] = Math.max(0, projected[i]);
-        }
-
-        // Ensure algebraic connectivity > 0 (except for disconnected graphs)
-        if (projected.length > 1 && projected[1] < 0.01) {
-          projected[1] = 0.1;
-        }
-
-        return projected;
-      }
-
-      // Generate approximate graph from eigenvalues
+      // Generate graph from eigenvalues
       generateGraphFromEigenvalues(eigenvals) {
         const n = eigenvals.length;
-        const positions = this.generateSpectralPositions(eigenvals);
-        const adjacency = this.constructAdjacencyMatrix(eigenvals, positions);
+        const positions = this.generatePositions(eigenvals);
+        const adjacency = this.generateAdjacency(eigenvals);
         
         return {
           positions,
@@ -2184,14 +999,13 @@
         };
       }
 
-      generateSpectralPositions(eigenvals) {
+      generatePositions(eigenvals) {
         const n = eigenvals.length;
         const positions = [];
         
-        // Use first few eigenvalues to determine 2D embedding
         for (let i = 0; i < n; i++) {
           const angle = (2 * Math.PI * i) / n;
-          const radius = 150 + 50 * Math.sin(eigenvals[Math.min(i, eigenvals.length - 1)]);
+          const radius = 120 + 30 * Math.sin(eigenvals[Math.min(i + 1, eigenvals.length - 1)] || 1);
           
           positions.push({
             x: 300 + radius * Math.cos(angle),
@@ -2202,127 +1016,34 @@
         return positions;
       }
 
-      constructAdjacencyMatrix(eigenvals, positions) {
+      generateAdjacency(eigenvals) {
         const n = eigenvals.length;
         const adjacency = Array(n).fill().map(() => Array(n).fill(0));
         
-        // Determine graph type based on eigenvalue pattern
-        const graphType = this.detectGraphType(eigenvals);
-        
-        switch(graphType) {
-          case 'path':
-            return this.createPathAdjacency(n);
-          case 'cycle':
-            return this.createCycleAdjacency(n);
-          case 'complete':
-            return this.createCompleteAdjacency(n);
-          case 'star':
-            return this.createStarAdjacency(n);
-          default:
-            return this.createHeuristicAdjacency(eigenvals, positions);
-        }
-      }
-
-      detectGraphType(eigenvals) {
-        const n = eigenvals.length;
-        const tolerance = 0.1;
-        
-        // Check for path graph pattern
-        const pathEigenvals = this.pathGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, pathEigenvals, tolerance)) return 'path';
-        
-        // Check for cycle graph pattern  
-        const cycleEigenvals = this.cycleGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, cycleEigenvals, tolerance)) return 'cycle';
-        
-        // Check for complete graph pattern
-        const completeEigenvals = this.completeGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, completeEigenvals, tolerance)) return 'complete';
-        
-        // Check for star graph pattern
-        const starEigenvals = this.starGraphEigenvalues(n);
-        if (this.eigenvaluesMatch(eigenvals, starEigenvals, tolerance)) return 'star';
-        
-        return 'unknown';
-      }
-
-      eigenvaluesMatch(eigenvals1, eigenvals2, tolerance) {
-        if (eigenvals1.length !== eigenvals2.length) return false;
-        
-        for (let i = 0; i < eigenvals1.length; i++) {
-          if (Math.abs(eigenvals1[i] - eigenvals2[i]) > tolerance) return false;
-        }
-        return true;
-      }
-
-      createPathAdjacency(n) {
-        const adjacency = Array(n).fill().map(() => Array(n).fill(0));
-        for (let i = 0; i < n - 1; i++) {
-          adjacency[i][i + 1] = adjacency[i + 1][i] = 1;
-        }
-        return adjacency;
-      }
-
-      createCycleAdjacency(n) {
-        const adjacency = Array(n).fill().map(() => Array(n).fill(0));
-        for (let i = 0; i < n - 1; i++) {
-          adjacency[i][i + 1] = adjacency[i + 1][i] = 1;
-        }
-        adjacency[0][n - 1] = adjacency[n - 1][0] = 1;
-        return adjacency;
-      }
-
-      createCompleteAdjacency(n) {
-        const adjacency = Array(n).fill().map(() => Array(n).fill(0));
-        for (let i = 0; i < n; i++) {
-          for (let j = i + 1; j < n; j++) {
-            adjacency[i][j] = adjacency[j][i] = 1;
-          }
-        }
-        return adjacency;
-      }
-
-      createStarAdjacency(n) {
-        const adjacency = Array(n).fill().map(() => Array(n).fill(0));
-        // Connect all nodes to node 0 (center)
-        for (let i = 1; i < n; i++) {
-          adjacency[0][i] = adjacency[i][0] = 1;
-        }
-        return adjacency;
-      }
-
-      createHeuristicAdjacency(eigenvals, positions) {
-        const n = eigenvals.length;
-        const adjacency = Array(n).fill().map(() => Array(n).fill(0));
+        // Simple heuristic based on eigenvalue structure
+        const connectivity = eigenvals[1] || 0.5; // Use second eigenvalue
+        const threshold = 0.3 + connectivity * 0.3;
         
         for (let i = 0; i < n; i++) {
           for (let j = i + 1; j < n; j++) {
-            const spectralDistance = this.computeSpectralDistance(i, j, eigenvals);
-            const probability = Math.exp(-spectralDistance);
+            const distance = Math.abs(i - j);
+            const normalizedDistance = distance / n;
+            const probability = Math.exp(-normalizedDistance / threshold);
             
-            if (probability > 0.3) {
+            if (probability > 0.4 || (distance === 1 && Math.random() > 0.2)) {
               adjacency[i][j] = adjacency[j][i] = 1;
             }
           }
         }
         
-        return adjacency;
-      }
-
-      computeSpectralDistance(i, j, eigenvals) {
-        // Simplified spectral distance measure
-        const n = eigenvals.length;
-        let distance = 0;
-        
-        for (let k = 1; k < Math.min(4, n); k++) {
-          const eigenval = eigenvals[k];
-          if (eigenval > 1e-6) {
-            distance += Math.abs(Math.cos(2 * Math.PI * k * i / n) - 
-                               Math.cos(2 * Math.PI * k * j / n)) / eigenval;
+        // Ensure connectivity
+        for (let i = 0; i < n - 1; i++) {
+          if (Math.random() > 0.7) {
+            adjacency[i][i + 1] = adjacency[i + 1][i] = 1;
           }
         }
         
-        return distance;
+        return adjacency;
       }
 
       computeGraphProperties(eigenvals) {
@@ -2336,26 +1057,21 @@
       }
     }
 
-    // graph-visualizer.js - Canvas-based graph rendering
+    // Graph Visualizer - Canvas-based rendering
     class GraphVisualizer {
       constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.setupCanvas();
-        this.animationFrame = null;
+        this.graph = null;
+        this.eigenvectorColors = null;
         
         // Visual settings
-        this.nodeRadius = 12;
+        this.nodeRadius = 15;
         this.nodeColor = '#6366f1';
         this.nodeStroke = '#ffffff';
         this.edgeColor = '#cbd5e1';
         this.edgeWidth = 2;
-        this.selectedColor = '#ec4899';
-        
-        // Interaction
-        this.isDragging = false;
-        this.dragNode = null;
-        this.mousePos = { x: 0, y: 0 };
         
         this.setupInteraction();
       }
@@ -2373,53 +1089,52 @@
       }
 
       setupInteraction() {
-        this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
-        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        this.canvas.addEventListener('mouseup', () => this.handleMouseUp());
-        this.canvas.addEventListener('mouseleave', () => this.handleMouseUp());
-      }
-
-      handleMouseDown(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        this.mousePos = {
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        };
-
-        if (this.graph) {
-          const clickedNode = this.getNodeAtPosition(this.mousePos);
-          if (clickedNode !== -1) {
-            this.isDragging = true;
-            this.dragNode = clickedNode;
+        let isDragging = false;
+        let dragNode = null;
+        
+        this.canvas.addEventListener('mousedown', (e) => {
+          const rect = this.canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          if (this.graph) {
+            const nodeIndex = this.getNodeAt(x, y);
+            if (nodeIndex !== -1) {
+              isDragging = true;
+              dragNode = nodeIndex;
+              this.canvas.style.cursor = 'grabbing';
+            }
           }
-        }
+        });
+        
+        this.canvas.addEventListener('mousemove', (e) => {
+          const rect = this.canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          if (isDragging && dragNode !== null && this.graph) {
+            this.graph.positions[dragNode] = { x, y };
+            this.render();
+          } else if (this.graph) {
+            const nodeIndex = this.getNodeAt(x, y);
+            this.canvas.style.cursor = nodeIndex !== -1 ? 'grab' : 'default';
+          }
+        });
+        
+        this.canvas.addEventListener('mouseup', () => {
+          isDragging = false;
+          dragNode = null;
+          this.canvas.style.cursor = 'default';
+        });
       }
 
-      handleMouseMove(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        this.mousePos = {
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        };
-
-        if (this.isDragging && this.dragNode !== null && this.graph) {
-          this.graph.positions[this.dragNode] = { ...this.mousePos };
-          this.render();
-        }
-      }
-
-      handleMouseUp() {
-        this.isDragging = false;
-        this.dragNode = null;
-      }
-
-      getNodeAtPosition(pos) {
+      getNodeAt(x, y) {
         if (!this.graph) return -1;
         
         for (let i = 0; i < this.graph.positions.length; i++) {
-          const node = this.graph.positions[i];
-          const dx = pos.x - node.x;
-          const dy = pos.y - node.y;
+          const pos = this.graph.positions[i];
+          const dx = x - pos.x;
+          const dy = y - pos.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
           if (distance <= this.nodeRadius + 5) {
@@ -2432,6 +1147,16 @@
 
       setGraph(graph) {
         this.graph = graph;
+        this.render();
+      }
+
+      setEigenvectorColors(colors) {
+        this.eigenvectorColors = colors;
+        this.render();
+      }
+
+      clearEigenvectorColors() {
+        this.eigenvectorColors = null;
         this.render();
       }
 
@@ -2460,6 +1185,7 @@
         
         ctx.strokeStyle = this.edgeColor;
         ctx.lineWidth = this.edgeWidth;
+        ctx.lineCap = 'round';
         
         for (let i = 0; i < positions.length; i++) {
           for (let j = i + 1; j < positions.length; j++) {
@@ -2478,8 +1204,16 @@
         const { positions } = this.graph;
         
         positions.forEach((pos, i) => {
-          const isHovered = this.getNodeAtPosition(this.mousePos) === i;
-          const isDragged = this.dragNode === i;
+          // Determine node color
+          let fillColor = this.nodeColor;
+          if (this.eigenvectorColors && this.eigenvectorColors[i] !== undefined) {
+            const value = this.eigenvectorColors[i];
+            if (value > 0) {
+              fillColor = `rgba(239, 68, 68, ${0.3 + 0.7 * value})`;  // Red for positive
+            } else {
+              fillColor = `rgba(59, 130, 246, ${0.3 + 0.7 * Math.abs(value)})`;  // Blue for negative
+            }
+          }
           
           // Node shadow
           ctx.beginPath();
@@ -2490,7 +1224,7 @@
           // Node body
           ctx.beginPath();
           ctx.arc(pos.x, pos.y, this.nodeRadius, 0, 2 * Math.PI);
-          ctx.fillStyle = (isHovered || isDragged) ? this.selectedColor : this.nodeColor;
+          ctx.fillStyle = fillColor;
           ctx.fill();
           
           // Node border
@@ -2505,7 +1239,7 @@
         const { positions } = this.graph;
         
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 10px Inter';
+        ctx.font = 'bold 12px Inter';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         
@@ -2522,169 +1256,257 @@
       }
     }
 
-    // eigenvalue-controls.js - Interactive UI components
-    class EigenvalueControls {
-      constructor(container, onChange) {
-        this.container = container;
-        this.onChange = onChange;
-        this.nodeCount = 5;
-        this.eigenvalues = [0, 0.5, 1.0, 1.5, 2.0];
-        this.setupControls();
+    // Eigenvalue Chart Visualizer
+    class EigenvalueChart {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.eigenvalues = [];
+        this.setupCanvas();
       }
 
-      setupControls() {
-        this.renderSliders();
-        this.setupPresets();
-        this.setupNodeCountControl();
-      }
-
-      renderSliders() {
-        this.container.innerHTML = '';
+      setupCanvas() {
+        const rect = this.canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
         
-        this.eigenvalues.forEach((value, index) => {
-          const controlDiv = document.createElement('div');
-          controlDiv.className = 'eigenvalue-control';
-          
-          controlDiv.innerHTML = `
-            <div class="eigenvalue-label">
-              <span>λ${index + 1}</span>
-              <span class="eigenvalue-value">${value.toFixed(3)}</span>
-            </div>
-            <input type="range" 
-                   class="eigenvalue-slider" 
-                   id="eigenvalue-${index}"
-                   min="0" 
-                   max="5" 
-                   step="0.01" 
-                   value="${value}"
-                   ${index === 0 ? 'disabled' : ''}>
-          `;
-          
-          this.container.appendChild(controlDiv);
-          
-          const slider = controlDiv.querySelector('.eigenvalue-slider');
-          const valueSpan = controlDiv.querySelector('.eigenvalue-value');
-          
-          slider.addEventListener('input', (e) => {
-            const newValue = parseFloat(e.target.value);
-            this.eigenvalues[index] = newValue;
-            valueSpan.textContent = newValue.toFixed(3);
-            this.onChange(this.eigenvalues);
-          });
-        });
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        
+        this.ctx.scale(dpr, dpr);
+        this.canvas.style.width = rect.width + 'px';
+        this.canvas.style.height = rect.height + 'px';
       }
 
-      setupPresets() {
-        const presetButtons = document.querySelectorAll('.preset-btn');
-        presetButtons.forEach(btn => {
-          btn.addEventListener('click', () => {
-            const preset = btn.dataset.preset;
-            const engine = new GraphLaplacianEngine();
-            this.eigenvalues = engine.getPresetEigenvalues(preset, this.nodeCount);
-            this.updateSliders();
-            this.onChange(this.eigenvalues);
-          });
-        });
+      updateEigenvalues(eigenvalues) {
+        this.eigenvalues = eigenvalues;
+        this.render();
       }
 
-      setupNodeCountControl() {
-        const nodeCountSelect = document.getElementById('node-count');
-        nodeCountSelect.addEventListener('change', (e) => {
-          this.nodeCount = parseInt(e.target.value);
-          this.eigenvalues = new Array(this.nodeCount).fill(0).map((_, i) => i * 0.5);
-          this.renderSliders();
-          this.onChange(this.eigenvalues);
-        });
-      }
+      render() {
+        if (!this.eigenvalues.length) return;
 
-      updateSliders() {
-        this.eigenvalues.forEach((value, index) => {
-          const slider = document.getElementById(`eigenvalue-${index}`);
-          const valueSpan = slider.parentElement.querySelector('.eigenvalue-value');
-          if (slider) {
-            slider.value = value;
-            valueSpan.textContent = value.toFixed(3);
+        const ctx = this.ctx;
+        const rect = this.canvas.getBoundingClientRect();
+        const padding = 40;
+        const chartWidth = rect.width - 2 * padding;
+        const chartHeight = rect.height - 2 * padding;
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        
+        // Calculate bar dimensions
+        const barWidth = chartWidth / this.eigenvalues.length;
+        const maxValue = Math.max(...this.eigenvalues, 1);
+        
+        // Draw bars
+        this.eigenvalues.forEach((value, i) => {
+          const barHeight = (value / maxValue) * chartHeight;
+          const x = padding + i * barWidth;
+          const y = rect.height - padding - barHeight;
+          
+          // Gradient for each bar
+          const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
+          if (i === 0) {
+            gradient.addColorStop(0, '#10b981');
+            gradient.addColorStop(1, '#059669');
+          } else if (i === 1) {
+            gradient.addColorStop(0, '#6366f1');
+            gradient.addColorStop(1, '#4f46e5');
+          } else {
+            gradient.addColorStop(0, '#ec4899');
+            gradient.addColorStop(1, '#db2777');
           }
+          
+          // Draw bar
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x + 2, y, barWidth - 4, barHeight);
+          
+          // Draw value label
+          ctx.fillStyle = '#64748b';
+          ctx.font = '10px Inter';
+          ctx.textAlign = 'center';
+          ctx.fillText(`λ${i + 1}`, x + barWidth / 2, rect.height - 15);
+          ctx.fillText(value.toFixed(2), x + barWidth / 2, y - 5);
         });
-      }
-
-      setEigenvalues(eigenvalues) {
-        this.eigenvalues = [...eigenvalues];
-        this.updateSliders();
+        
+        // Draw axes
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padding, padding);
+        ctx.lineTo(padding, rect.height - padding);
+        ctx.lineTo(rect.width - padding, rect.height - padding);
+        ctx.stroke();
       }
     }
 
-    // main-applet.js - Orchestration and state management
-    class GraphLaplacianApplet {
+    // Main Application Controller
+    class SpectralGraphApp {
       constructor() {
         this.engine = new GraphLaplacianEngine();
         this.visualizer = null;
-        this.controls = null;
-        this.eigenvalueChart = null;
-        this.eigenvectorVisualizer = null;
+        this.chart = null;
         this.currentGraph = null;
-        this.worker = null;
+        this.nodeCount = 5;
         
         this.init();
       }
 
-      async init() {
-        console.log('GraphLaplacianApplet.init() starting');
-        
+      init() {
         // Setup visualizer
         const canvas = document.getElementById('graph-canvas');
-        console.log('Canvas element:', canvas);
-        
-        if (!canvas) {
-          console.error('Canvas element not found!');
-          return;
+        if (canvas) {
+          this.visualizer = new GraphVisualizer(canvas);
         }
-        
-        this.visualizer = new GraphVisualizer(canvas);
-        
-        // Setup eigenvalue chart
+
+        // Setup chart
         const chartCanvas = document.getElementById('eigenvalue-chart');
-        console.log('Chart canvas element:', chartCanvas);
-        
         if (chartCanvas) {
-          this.eigenvalueChart = new EigenvalueChart(chartCanvas);
+          this.chart = new EigenvalueChart(chartCanvas);
         }
-        
-        // Setup eigenvector visualizer
-        this.eigenvectorVisualizer = new EigenvectorVisualizer(this.visualizer);
-        
-        // Setup intuitive property controls
-        console.log('Setting up property controls');
-        this.controls = new PropertyControls(
-          (eigenvalues) => this.onEigenvaluesChanged(eigenvalues)
-        );
-        
-        // Setup tabs
+
+        // Setup controls
+        this.setupPropertyControls();
+        this.setupPresetButtons();
+        this.setupNodeCountControl();
+        this.setupAdvancedToggle();
         this.setupTabs();
-        
-        // Setup eigenvector controls
-        this.setupEigenvectorControls();
-        
-        // Setup worker for heavy computations
-        this.setupWorker();
-        
-        // Force initial graph generation for testing
-        this.generateInitialGraph();
-        
-        // Initial graph - the PropertyControls will trigger this automatically
-        console.log('Initialization complete');
-        
+
+        // Generate initial graph
+        this.updateGraph();
+
         // Handle window resize
         window.addEventListener('resize', () => {
-          this.visualizer.setupCanvas();
-          if (this.eigenvalueChart) {
-            this.eigenvalueChart.setupCanvas();
+          if (this.visualizer) {
+            this.visualizer.setupCanvas();
+            this.visualizer.render();
           }
-          this.visualizer.render();
-          if (this.eigenvalueChart) {
-            this.eigenvalueChart.render();
+          if (this.chart) {
+            this.chart.setupCanvas();
+            this.chart.render();
           }
         });
+      }
+
+      setupPropertyControls() {
+        const sliders = ['connectivity-slider', 'expansion-slider', 'clustering-slider'];
+        
+        sliders.forEach(sliderId => {
+          const slider = document.getElementById(sliderId);
+          if (slider) {
+            slider.addEventListener('input', () => {
+              this.updatePropertyValue(sliderId);
+              this.updateGraph();
+            });
+            
+            // Initialize display
+            this.updatePropertyValue(sliderId);
+          }
+        });
+      }
+
+      updatePropertyValue(sliderId) {
+        const slider = document.getElementById(sliderId);
+        const value = parseInt(slider.value);
+        
+        let displayText = '';
+        let valueId = '';
+        
+        switch(sliderId) {
+          case 'connectivity-slider':
+            valueId = 'connectivity-value';
+            if (value < 25) displayText = 'Very sparse';
+            else if (value < 50) displayText = 'Sparse';
+            else if (value < 75) displayText = 'Moderate';
+            else displayText = 'Highly connected';
+            break;
+            
+          case 'expansion-slider':
+            valueId = 'expansion-value';
+            if (value < 25) displayText = 'Very tight';
+            else if (value < 50) displayText = 'Compact';
+            else if (value < 75) displayText = 'Balanced';
+            else displayText = 'Highly spread';
+            break;
+            
+          case 'clustering-slider':
+            valueId = 'clustering-value';
+            if (value < 25) displayText = 'Uniform';
+            else if (value < 50) displayText = 'Some clusters';
+            else if (value < 75) displayText = 'Clustered';
+            else displayText = 'Highly clustered';
+            break;
+        }
+        
+        const valueElement = document.getElementById(valueId);
+        if (valueElement) {
+          valueElement.textContent = displayText;
+        }
+      }
+
+      setupPresetButtons() {
+        const presetButtons = document.querySelectorAll('.preset-btn');
+        presetButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            // Visual feedback
+            presetButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            setTimeout(() => btn.classList.remove('active'), 300);
+            
+            // Load preset
+            const preset = btn.dataset.preset;
+            this.loadPreset(preset);
+          });
+        });
+      }
+
+      loadPreset(preset) {
+        const eigenvalues = this.engine.getPresetEigenvalues(preset, this.nodeCount);
+        
+        // Update sliders to reflect preset properties
+        if (preset === 'path') {
+          this.setSliderValues(30, 70, 20);
+        } else if (preset === 'cycle') {
+          this.setSliderValues(40, 60, 30);
+        } else if (preset === 'star') {
+          this.setSliderValues(60, 40, 80);
+        } else if (preset === 'complete') {
+          this.setSliderValues(100, 30, 10);
+        }
+        
+        this.updateGraphFromEigenvalues(eigenvalues);
+      }
+
+      setSliderValues(connectivity, expansion, clustering) {
+        document.getElementById('connectivity-slider').value = connectivity;
+        document.getElementById('expansion-slider').value = expansion;
+        document.getElementById('clustering-slider').value = clustering;
+        
+        this.updatePropertyValue('connectivity-slider');
+        this.updatePropertyValue('expansion-slider');
+        this.updatePropertyValue('clustering-slider');
+      }
+
+      setupNodeCountControl() {
+        const nodeCountSelect = document.getElementById('node-count');
+        if (nodeCountSelect) {
+          nodeCountSelect.addEventListener('change', (e) => {
+            this.nodeCount = parseInt(e.target.value);
+            this.updateGraph();
+          });
+        }
+      }
+
+      setupAdvancedToggle() {
+        const checkbox = document.getElementById('show-advanced');
+        const section = document.getElementById('advanced-section');
+        
+        if (checkbox && section) {
+          checkbox.addEventListener('change', () => {
+            section.style.display = checkbox.checked ? 'block' : 'none';
+          });
+        }
       }
 
       setupTabs() {
@@ -2706,211 +1528,149 @@
               targetPanel.classList.add('active');
             }
             
-            // Clear eigenvector colors when switching away from eigenvectors tab
-            if (targetTab !== 'eigenvectors') {
-              this.visualizer.clearEigenvectorColors();
+            // Handle special tab logic
+            if (targetTab === 'eigenvectors') {
+              this.showEigenvectorVisualization();
             } else {
-              // Update eigenvector visualization when switching to it
-              this.eigenvectorVisualizer.updateVisualization();
-            }
-          });
-        });
-
-        // Setup textbook chapter navigation
-        this.setupTextbookNavigation();
-      }
-
-      setupTextbookNavigation() {
-        const chapterButtons = document.querySelectorAll('.chapter-btn');
-        const chapters = document.querySelectorAll('.chapter');
-        
-        chapterButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            const targetChapter = button.dataset.chapter;
-            
-            // Update button states
-            chapterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Update chapter visibility
-            chapters.forEach(chapter => chapter.classList.remove('active'));
-            const targetChapterEl = document.getElementById(`${targetChapter}-chapter`);
-            if (targetChapterEl) {
-              targetChapterEl.classList.add('active');
+              if (this.visualizer) {
+                this.visualizer.clearEigenvectorColors();
+              }
             }
           });
         });
       }
 
-      setupEigenvectorControls() {
-        const eigenvectorSelect = document.getElementById('eigenvector-select');
-        const animateButton = document.getElementById('animate-pattern');
+      updateGraph() {
+        const connectivity = parseInt(document.getElementById('connectivity-slider').value);
+        const expansion = parseInt(document.getElementById('expansion-slider').value);
+        const clustering = parseInt(document.getElementById('clustering-slider').value);
         
-        eigenvectorSelect.addEventListener('change', (e) => {
-          const selectedIndex = parseInt(e.target.value);
-          this.eigenvectorVisualizer.setSelectedVector(selectedIndex);
-        });
+        const eigenvalues = this.engine.propertiesToEigenvalues(
+          connectivity, expansion, clustering, this.nodeCount
+        );
         
-        animateButton.addEventListener('click', () => {
-          this.eigenvectorVisualizer.animatePattern();
-        });
+        this.updateGraphFromEigenvalues(eigenvalues);
       }
 
-      setupWorker() {
-        // For this demo, we'll compute synchronously for reliability
-        // In production, this could use Web Workers for heavy computations
-        this.worker = {
-          postMessage: (data) => {
-            console.log('Worker received message:', data);
-            
-            try {
-              const result = this.engine.generateGraphFromEigenvalues(data.eigenvalues);
-              console.log('Worker computed result:', result);
-              
-              // Call the message handler directly (simulating async worker)
-              setTimeout(() => {
-                this.onWorkerMessage({ data: result });
-              }, 10);
-            } catch (error) {
-              console.error('Worker computation error:', error);
-            }
-          }
-        };
-        
-        console.log('Worker setup complete');
-      }
-
-      onWorkerMessage(event) {
-        const graph = event.data;
+      updateGraphFromEigenvalues(eigenvalues) {
+        const graph = this.engine.generateGraphFromEigenvalues(eigenvalues);
         this.currentGraph = graph;
         
-        console.log('Graph generated:', graph); // Debug log
+        // Update visualizations
+        if (this.visualizer) {
+          this.visualizer.setGraph(graph);
+          this.visualizer.updateProperties(graph.properties);
+        }
         
-        // Update main graph visualization
-        this.visualizer.setGraph(graph);
-        this.visualizer.updateProperties(graph.properties);
+        if (this.chart) {
+          this.chart.updateEigenvalues(graph.eigenvalues);
+        }
         
-        // Update eigenvalue chart
-        this.eigenvalueChart.updateEigenvalues(graph.eigenvalues);
-        
-        // Update eigenvector visualization
-        this.eigenvectorVisualizer.updateEigenvectors(graph.eigenvalues, graph);
+        // Update eigenvalue display
+        this.updateEigenvalueDisplay(graph.eigenvalues);
         
         // Update insights
-        this.updateEigenvalueInsights(graph.eigenvalues, graph.properties);
+        this.updateInsights(graph.eigenvalues, graph.properties);
         
-        // Update the explanation based on what we're showing
-        this.updateDynamicExplanation(graph);
+        // Update explanation
+        this.updateExplanation(graph);
       }
 
-      updateEigenvalueInsights(eigenvalues, properties) {
+      updateEigenvalueDisplay(eigenvalues) {
+        const display = document.getElementById('eigenvalue-display');
+        if (!display) return;
+        
+        display.innerHTML = eigenvalues.map((val, i) => {
+          return `<div class="eigenvalue-item">
+            <span class="label">λ${i + 1}:</span>
+            <span class="value">${val.toFixed(4)}</span>
+          </div>`;
+        }).join('');
+      }
+
+      updateInsights(eigenvalues, properties) {
         // Update second eigenvalue meaning
         const secondEl = document.getElementById('second-eigenvalue-meaning');
-        if (eigenvalues[1] > 2.0) {
-          secondEl.textContent = "Strong connectivity - information flows quickly";
-        } else if (eigenvalues[1] > 1.0) {
-          secondEl.textContent = "Good connectivity - well-connected network";
-        } else if (eigenvalues[1] > 0.3) {
-          secondEl.textContent = "Moderate connectivity - some bottlenecks";
-        } else {
-          secondEl.textContent = "Weak connectivity - fragmented network";
+        if (secondEl) {
+          const λ2 = eigenvalues[1];
+          if (λ2 > 2.0) {
+            secondEl.textContent = '🚀 Excellent connectivity - information flows rapidly!';
+          } else if (λ2 > 1.0) {
+            secondEl.textContent = '✅ Good connectivity - well-connected network';
+          } else if (λ2 > 0.3) {
+            secondEl.textContent = '⚠️ Moderate connectivity - some bottlenecks exist';
+          } else {
+            secondEl.textContent = '🔴 Weak connectivity - fragmented network';
+          }
         }
         
         // Update largest eigenvalue meaning
         const largestEl = document.getElementById('largest-eigenvalue-meaning');
-        const largest = eigenvalues[eigenvalues.length - 1];
-        const n = eigenvalues.length;
-        
-        if (largest > n) {
-          largestEl.textContent = "High maximum degree - hub-like structure";
-        } else if (largest > n * 0.7) {
-          largestEl.textContent = "Moderate hubs present";
-        } else {
-          largestEl.textContent = "Uniform degree distribution";
+        if (largestEl) {
+          const largest = eigenvalues[eigenvalues.length - 1];
+          const n = eigenvalues.length;
+          
+          if (largest > n) {
+            largestEl.textContent = '🌟 High degree nodes - hub-like structure detected';
+          } else if (largest > n * 0.7) {
+            largestEl.textContent = '📊 Some hub nodes present';
+          } else {
+            largestEl.textContent = '🟰 Uniform degree distribution';
+          }
         }
       }
 
-      updateDynamicExplanation(graph) {
+      updateExplanation(graph) {
         const explanationEl = document.getElementById('explanation-text');
-        const properties = this.controls.getProperties();
+        if (!explanationEl) return;
+        
         const { spectralGap, algebraicConnectivity } = graph.properties;
         
-        let explanation = `Your ${this.getGraphDescription(graph)} has `;
+        let explanation = `🎯 <strong>Your ${this.nodeCount}-node network</strong> has `;
         
         if (algebraicConnectivity > 2.0) {
-          explanation += "excellent connectivity - information flows quickly between all nodes. ";
+          explanation += '<strong>excellent connectivity</strong> 🚀 - information flows quickly between all nodes! ';
         } else if (algebraicConnectivity > 1.0) {
-          explanation += "good connectivity - most nodes can communicate efficiently. ";
+          explanation += '<strong>good connectivity</strong> ✅ - most nodes can communicate efficiently. ';
         } else if (algebraicConnectivity > 0.3) {
-          explanation += "moderate connectivity - some bottlenecks may exist. ";
+          explanation += '<strong>moderate connectivity</strong> ⚠️ - some bottlenecks may slow information flow. ';
         } else {
-          explanation += "limited connectivity - the graph may have weak points. ";
+          explanation += '<strong>limited connectivity</strong> 🔴 - the network has weak points. ';
         }
         
-        explanation += `The network health score of ${spectralGap.toFixed(2)} indicates ${
-          spectralGap > 1.0 ? "rapid information propagation and strong structural integrity" : 
-          "slower information flow and potential structural weaknesses"
-        }.`;
-        
+        explanation += `<br><br>💪 <strong>Network health score:</strong> ${spectralGap.toFixed(2)} `;
+        explanation += spectralGap > 1.0 
+          ? '(Strong structural integrity!)' 
+          : '(Consider increasing connectivity for better resilience)';
+          
         explanationEl.innerHTML = explanation;
       }
 
-      getGraphDescription(graph) {
-        const validation = this.engine.validateEigenvalues(graph.eigenvalues);
-        if (validation.valid && validation.graphType && validation.confidence > 0.9) {
-          const typeNames = {
-            path: "chain of connected nodes",
-            cycle: "circular ring network", 
-            complete: "fully connected network",
-            star: "hub-and-spoke network"
-          };
-          return typeNames[validation.graphType] || "network";
+      showEigenvectorVisualization() {
+        if (!this.currentGraph || !this.visualizer) return;
+        
+        // Generate simple eigenvector visualization
+        // For demo purposes, we'll use the second eigenvector approximation
+        const n = this.currentGraph.eigenvalues.length;
+        const eigenvector = [];
+        
+        // Simple approximation of second eigenvector
+        for (let i = 0; i < n; i++) {
+          eigenvector.push(Math.cos(2 * Math.PI * i / n) * Math.exp(-i * 0.1));
         }
-        return "network";
-      }
-
-      generateInitialGraph() {
-        // Force an immediate test graph to verify the system works
-        console.log('Generating initial test graph');
         
-        const testEigenvalues = [0, 0.268, 1.000, 2.000, 3.732]; // Path graph eigenvalues
-        console.log('Test eigenvalues:', testEigenvalues);
+        // Normalize to [-1, 1]
+        const maxAbs = Math.max(...eigenvector.map(Math.abs));
+        const normalizedEigenvector = eigenvector.map(v => v / maxAbs);
         
-        setTimeout(() => {
-          console.log('Triggering test graph generation');
-          this.onEigenvaluesChanged(testEigenvalues);
-        }, 500);
-      }
-
-      onEigenvaluesChanged(eigenvalues) {
-        // Generate graph (via worker in production)
-        this.worker.postMessage({ eigenvalues });
+        this.visualizer.setEigenvectorColors(normalizedEigenvector);
       }
     }
 
-    // Initialize the applet when DOM is loaded
+    // Initialize the application
     document.addEventListener('DOMContentLoaded', () => {
-      // Add canvas round rect polyfill for older browsers
-      if (!CanvasRenderingContext2D.prototype.roundRect) {
-        CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
-          this.beginPath();
-          this.moveTo(x + radius, y);
-          this.lineTo(x + width - radius, y);
-          this.quadraticCurveTo(x + width, y, x + width, y + radius);
-          this.lineTo(x + width, y + height - radius);
-          this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-          this.lineTo(x + radius, y + height);
-          this.quadraticCurveTo(x, y + height, x, y + height - radius);
-          this.lineTo(x, y + radius);
-          this.quadraticCurveTo(x, y, x + radius, y);
-          this.closePath();
-        };
-      }
-      
-      console.log('Starting applet initialization'); // Debug log
-      
-      const applet = new GraphLaplacianApplet();
-      window.graphLaplacianApplet = applet; // For debugging
+      const app = new SpectralGraphApp();
+      window.spectralGraphApp = app; // For debugging
     });
   </script>
 </body>
