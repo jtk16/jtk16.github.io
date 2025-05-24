@@ -453,9 +453,8 @@ class Portfolio {
     }
   }
 
-  // *** MODIFIED handleFormSubmit ***
   handleFormSubmit(e) {
-    e.preventDefault(); // Keep preventDefault for AJAX
+    e.preventDefault();
 
     const form = e.target;
     const formData = new FormData(form);
@@ -496,30 +495,30 @@ class Portfolio {
         if (charCounter) {
           charCounter.textContent = '0 / 500';
         }
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
       } else {
-        response.json().then(data => {
-          if (data.errors) {
-            this.showToast(data.errors.map(error => error.message).join(", "), 'error');
-          } else {
-            this.showToast('Oops! There was a problem submitting your form', 'error');
-          }
-          submitButton.innerHTML = originalText;
-          submitButton.disabled = false;
-        }).catch(error => {
-            this.showToast('Oops! There was a problem submitting your form (parsing error)', 'error');
-            submitButton.innerHTML = originalText;
-            submitButton.disabled = false;
-        });
+        // Check if response is JSON before parsing
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          return response.json().then(data => {
+            if (data.errors) {
+              this.showToast(data.errors.map(error => error.message).join(", "), 'error');
+            } else {
+              this.showToast('Oops! There was a problem submitting your form', 'error');
+            }
+          });
+        } else {
+          this.showToast('Oops! There was a problem submitting your form', 'error');
+        }
       }
     }).catch(error => {
+      console.error('Form submission error:', error);
       this.showToast('Oops! There was a network problem submitting your form', 'error');
+    }).finally(() => {
+      // Reset button state
       submitButton.innerHTML = originalText;
       submitButton.disabled = false;
     });
   }
-  // *** END MODIFIED handleFormSubmit ***
 
   validateField(field) {
     const value = field.value.trim();
