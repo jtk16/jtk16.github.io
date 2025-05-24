@@ -3,16 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Jack Kinney's Robotics Projects - Explore innovative solutions in robotics, AI, and quantum computing">
+  <meta name="description" content="Projects by Jack Kinney - Innovative robotics, AI, and quantum computing projects.">
   <meta name="keywords" content="robotics projects, quantum computing, reinforcement learning, computer vision, autonomous systems">
   <meta name="author" content="Jack Kinney">
   <meta name="theme-color" content="#6366f1">
   
+  <!-- Open Graph -->
+  <meta property="og:title" content="Projects - Jack Kinney">
+  <meta property="og:description" content="Explore my innovative projects in robotics, AI, and quantum computing.">
+  <meta property="og:type" content="website">
+  
   <title>Projects — Jack Kinney</title>
   
-  <!-- Preload critical resources -->
-  <link rel="preload" href="./assets/css/style.css" as="style">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,24 +26,123 @@
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Main Styles -->
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="./assets/css/style.css">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
   
   <!-- PWA Manifest -->
   <link rel="manifest" href="./manifest.json">
+  
+  <!-- Additional Styles for Projects Page -->
+  <style>
+    .projects-hero {
+      padding: calc(var(--space-16) + 80px) 0 var(--space-12);
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      text-align: center;
+    }
+    
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-12);
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: var(--space-2) var(--space-4);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius);
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    
+    .featured-project {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      padding: var(--space-8);
+      margin-bottom: var(--space-16);
+      position: relative;
+    }
+    
+    .featured-badge {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .project-image-large {
+      position: relative;
+      height: 300px;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .project-details {
+      display: flex;
+      gap: var(--space-6);
+      margin: var(--space-4) 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    
+    .project-detail {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    
+    @media (max-width: 768px) {
+      .featured-project {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .featured-badge {
+        position: static;
+        display: inline-block;
+        margin-bottom: var(--space-4);
+      }
+      
+      .project-details {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
-<body>
-  <!-- Page Loader -->
-  <div class="page-loader" id="page-loader">
-    <div class="loader-content">
-      <div class="loader-spinner"></div>
-      <p class="loader-text">Loading Projects...</p>
-    </div>
-  </div>
-
+<body class="loading">
+  <!-- Page Transition -->
+  <div class="page-transition"></div>
+  
   <!-- Scroll Progress Bar -->
   <div class="scroll-progress"></div>
 
@@ -52,6 +155,7 @@
             <li><a href="./index.html">Home</a></li>
             <li><a href="./projects.html" class="active">Projects</a></li>
             <li><a href="./research.html">Research</a></li>
+            <li><a href="./index.html#about">About</a></li>
             <li><a href="./index.html#contact">Contact</a></li>
           </ul>
         </nav>
@@ -65,111 +169,54 @@
   </header>
 
   <main>
-    <!-- Page Hero -->
-    <section class="page-hero">
+    <!-- Projects Hero -->
+    <section class="projects-hero">
       <div class="container">
-        <div class="page-hero-content">
-          <div class="hero-badge animate-fade-in">
-            <i class="fas fa-folder-open"></i>
-            <span>Project Portfolio</span>
-          </div>
-          <h1 class="animate-fade-in-up">My Projects</h1>
-          <p class="hero-subtitle animate-fade-in-up">
-            Explore my journey through robotics, AI, and quantum computing. Each project represents
-            a step towards building more intelligent and autonomous systems.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Project Filters -->
-    <section class="section-filters">
-      <div class="container">
-        <div class="filters-wrapper animate-fade-in">
-          <button class="filter-btn active" data-filter="all">
-            <i class="fas fa-th"></i>
-            All Projects
-          </button>
-          <button class="filter-btn" data-filter="robotics">
-            <i class="fas fa-robot"></i>
-            Robotics
-          </button>
-          <button class="filter-btn" data-filter="ai">
-            <i class="fas fa-brain"></i>
-            AI & ML
-          </button>
-          <button class="filter-btn" data-filter="quantum">
-            <i class="fas fa-atom"></i>
-            Quantum
-          </button>
-          <button class="filter-btn" data-filter="vision">
-            <i class="fas fa-eye"></i>
-            Computer Vision
-          </button>
-        </div>
+        <h1>My Projects</h1>
+        <p class="hero-subtitle">
+          Exploring the frontiers of robotics, AI, and quantum computing through practical applications
+        </p>
       </div>
     </section>
 
     <!-- Featured Project -->
     <section class="section">
       <div class="container">
-        <div class="featured-project animate-on-scroll">
-          <div class="project-badges">
-            <span class="badge featured">Featured</span>
-            <span class="badge recent">Recent</span>
-          </div>
+        <div class="featured-project">
+          <span class="featured-badge">Featured</span>
           <div class="project-image-large">
-            <div class="project-placeholder-large">
-              <i class="fas fa-drone"></i>
+            <div class="project-placeholder">
+              <i class="fas fa-brain"></i>
             </div>
           </div>
           <div class="project-content-large">
-            <h3>Autonomous Navigation Drone with Deep Reinforcement Learning</h3>
+            <h2>Quantum-Enhanced Robot Navigation</h2>
             <p class="project-description">
-              This flagship project showcases the integration of deep reinforcement learning with 
-              real-time sensor fusion for autonomous navigation. The drone can explore unknown 
-              environments, create 3D maps, and make intelligent decisions about path planning 
-              while avoiding both static and dynamic obstacles.
+              A groundbreaking project that combines quantum computing with traditional pathfinding algorithms 
+              to achieve unprecedented efficiency in multi-robot coordination. Using quantum annealing and 
+              QAOA, this system can solve complex navigation problems that would take classical computers 
+              exponentially longer to compute.
             </p>
-            <div class="project-highlights">
-              <div class="highlight-item">
-                <i class="fas fa-check-circle"></i>
-                <span>Real-time SLAM implementation</span>
+            <div class="project-details">
+              <div class="project-detail">
+                <i class="fas fa-calendar"></i>
+                <span>2024 - Present</span>
               </div>
-              <div class="highlight-item">
-                <i class="fas fa-check-circle"></i>
-                <span>99.2% obstacle avoidance accuracy</span>
+              <div class="project-detail">
+                <i class="fas fa-users"></i>
+                <span>Team of 4</span>
               </div>
-              <div class="highlight-item">
-                <i class="fas fa-check-circle"></i>
-                <span>15-minute autonomous flight time</span>
-              </div>
-              <div class="highlight-item">
-                <i class="fas fa-check-circle"></i>
-                <span>GPU-accelerated neural networks</span>
+              <div class="project-detail">
+                <i class="fas fa-award"></i>
+                <span>Best Project Award</span>
               </div>
             </div>
             <div class="project-tech">
-              <span class="tech-tag primary">ROS2</span>
-              <span class="tech-tag primary">PyTorch</span>
-              <span class="tech-tag secondary">OpenCV</span>
-              <span class="tech-tag secondary">SLAM</span>
-              <span class="tech-tag tertiary">C++</span>
-              <span class="tech-tag tertiary">CUDA</span>
-            </div>
-            <div class="project-stats">
-              <div class="stat-item">
-                <i class="fas fa-star"></i>
-                <span>234 Stars</span>
-              </div>
-              <div class="stat-item">
-                <i class="fas fa-code-branch"></i>
-                <span>45 Forks</span>
-              </div>
-              <div class="stat-item">
-                <i class="fas fa-users"></i>
-                <span>12 Contributors</span>
-              </div>
+              <span class="tech-tag">Qiskit</span>
+              <span class="tech-tag">ROS2</span>
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">Docker</span>
+              <span class="tech-tag">QAOA</span>
             </div>
             <div class="project-links">
               <a href="#" class="btn btn-primary">
@@ -177,12 +224,8 @@
                 View on GitHub
               </a>
               <a href="#" class="btn btn-outline">
-                <i class="fas fa-external-link-alt"></i>
-                Live Demo
-              </a>
-              <a href="#" class="btn btn-outline">
                 <i class="fas fa-file-pdf"></i>
-                Documentation
+                Read Paper
               </a>
             </div>
           </div>
@@ -190,30 +233,69 @@
       </div>
     </section>
 
-    <!-- All Projects Grid -->
+    <!-- Project Filters -->
     <section class="section section-alt">
       <div class="container">
-        <div class="section-header animate-on-scroll">
+        <div class="section-header">
           <h2>All Projects</h2>
-          <p>A complete collection of my work in robotics and AI</p>
+          <p>Filter by technology or domain</p>
         </div>
         
-        <div class="projects-grid" id="projects-grid">
-          <!-- Quantum Path Optimization -->
-          <div class="project-card animate-on-scroll" data-category="quantum ai">
+        <div class="filter-container">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="robotics">Robotics</button>
+          <button class="filter-btn" data-filter="ai">AI/ML</button>
+          <button class="filter-btn" data-filter="quantum">Quantum</button>
+          <button class="filter-btn" data-filter="vision">Computer Vision</button>
+          <button class="filter-btn" data-filter="web">Web/Apps</button>
+        </div>
+        
+        <div class="projects-grid">
+          <!-- Robotics Projects -->
+          <div class="project-card" data-category="robotics ai">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <i class="fas fa-drone"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>Autonomous Navigation Drone</h3>
+              <p>
+                Developed a quadcopter with reinforcement learning-based navigation that can 
+                autonomously explore unknown environments while avoiding obstacles and mapping 
+                the terrain in real-time.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">ROS2</span>
+                <span class="tech-tag">PyTorch</span>
+                <span class="tech-tag">OpenCV</span>
+                <span class="tech-tag">SLAM</span>
+              </div>
+              <div class="project-links">
+                <a href="#" class="project-link">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-external-link-alt"></i>
+                  Demo
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card" data-category="quantum robotics">
             <div class="project-image">
               <div class="project-placeholder">
                 <i class="fas fa-atom"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge in-progress">In Progress</span>
               </div>
             </div>
             <div class="project-content">
               <h3>Quantum Path Optimization</h3>
               <p>
                 Implemented quantum algorithms to solve complex path planning problems for 
-                multi-robot systems, achieving significant speedups over classical methods.
+                multi-robot systems, achieving significant speedups over classical methods 
+                using quantum annealing techniques.
               </p>
               <div class="project-tech">
                 <span class="tech-tag">Qiskit</span>
@@ -234,21 +316,18 @@
             </div>
           </div>
 
-          <!-- Real-time Object Tracking -->
-          <div class="project-card animate-on-scroll" data-category="vision ai">
+          <div class="project-card" data-category="vision ai">
             <div class="project-image">
               <div class="project-placeholder">
                 <i class="fas fa-eye"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge completed">Completed</span>
               </div>
             </div>
             <div class="project-content">
               <h3>Real-time Object Tracking</h3>
               <p>
                 Built a computer vision system that uses deep learning to track multiple 
-                objects in real-time with 95% accuracy at 30 FPS.
+                objects in real-time, enabling robots to understand and interact with 
+                dynamic environments effectively.
               </p>
               <div class="project-tech">
                 <span class="tech-tag">TensorFlow</span>
@@ -269,21 +348,18 @@
             </div>
           </div>
 
-          <!-- Reinforcement Learning Arm -->
-          <div class="project-card animate-on-scroll" data-category="robotics ai">
+          <div class="project-card" data-category="robotics ai">
             <div class="project-image">
               <div class="project-placeholder">
                 <i class="fas fa-robot"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge completed">Completed</span>
               </div>
             </div>
             <div class="project-content">
               <h3>Reinforcement Learning Arm</h3>
               <p>
                 Trained a 6-DOF robotic arm using deep Q-learning to perform precise 
-                pick-and-place tasks with adaptive behavior.
+                pick-and-place tasks, with the ability to adapt to new objects and 
+                environments without retraining.
               </p>
               <div class="project-tech">
                 <span class="tech-tag">DQN</span>
@@ -304,27 +380,24 @@
             </div>
           </div>
 
-          <!-- Swarm Robotics -->
-          <div class="project-card animate-on-scroll" data-category="robotics ai">
+          <div class="project-card" data-category="quantum ai">
             <div class="project-image">
               <div class="project-placeholder">
-                <i class="fas fa-users"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge planning">Planning</span>
+                <i class="fas fa-microchip"></i>
               </div>
             </div>
             <div class="project-content">
-              <h3>Swarm Robotics Coordination</h3>
+              <h3>Quantum Machine Learning</h3>
               <p>
-                Developing distributed algorithms for coordinating multiple robots to accomplish
-                complex tasks through emergent behavior.
+                Explored quantum neural networks for pattern recognition tasks, achieving 
+                comparable accuracy to classical networks while using significantly fewer 
+                parameters on quantum simulators.
               </p>
               <div class="project-tech">
-                <span class="tech-tag">Multi-Agent RL</span>
-                <span class="tech-tag">ROS2</span>
+                <span class="tech-tag">PennyLane</span>
+                <span class="tech-tag">Quantum ML</span>
                 <span class="tech-tag">Python</span>
-                <span class="tech-tag">Distributed Systems</span>
+                <span class="tech-tag">IBM Quantum</span>
               </div>
               <div class="project-links">
                 <a href="#" class="project-link">
@@ -332,34 +405,95 @@
                   Code
                 </a>
                 <a href="#" class="project-link">
-                  <i class="fas fa-clipboard"></i>
-                  Proposal
+                  <i class="fas fa-chart-line"></i>
+                  Results
                 </a>
               </div>
             </div>
           </div>
 
-          <!-- Quantum ML Framework -->
-          <div class="project-card animate-on-scroll" data-category="quantum ai">
+          <div class="project-card" data-category="web robotics">
             <div class="project-image">
               <div class="project-placeholder">
-                <i class="fas fa-microchip"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge completed">Completed</span>
+                <i class="fas fa-globe"></i>
               </div>
             </div>
             <div class="project-content">
-              <h3>Quantum ML Framework</h3>
+              <h3>Robot Control Dashboard</h3>
               <p>
-                Created a framework for implementing quantum machine learning algorithms
-                with classical-quantum hybrid models.
+                Created a web-based dashboard for monitoring and controlling multiple robots 
+                in real-time, featuring 3D visualization, telemetry data, and mission planning 
+                capabilities.
               </p>
               <div class="project-tech">
-                <span class="tech-tag">Qiskit</span>
-                <span class="tech-tag">TensorFlow Quantum</span>
+                <span class="tech-tag">React</span>
+                <span class="tech-tag">Three.js</span>
+                <span class="tech-tag">WebSocket</span>
+                <span class="tech-tag">Node.js</span>
+              </div>
+              <div class="project-links">
+                <a href="#" class="project-link">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fas fa-desktop"></i>
+                  Live Demo
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card" data-category="robotics vision">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <i class="fas fa-car"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>Autonomous RC Car</h3>
+              <p>
+                Built a self-driving RC car using computer vision and sensor fusion, capable 
+                of lane detection, obstacle avoidance, and traffic sign recognition in 
+                real-world environments.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">Raspberry Pi</span>
+                <span class="tech-tag">OpenCV</span>
+                <span class="tech-tag">Arduino</span>
+                <span class="tech-tag">CNN</span>
+              </div>
+              <div class="project-links">
+                <a href="#" class="project-link">
+                  <i class="fab fa-github"></i>
+                  Code
+                </a>
+                <a href="#" class="project-link">
+                  <i class="fab fa-youtube"></i>
+                  Video
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card" data-category="ai vision">
+            <div class="project-image">
+              <div class="project-placeholder">
+                <i class="fas fa-hand-paper"></i>
+              </div>
+            </div>
+            <div class="project-content">
+              <h3>Gesture Control System</h3>
+              <p>
+                Developed a real-time hand gesture recognition system for controlling robots 
+                and drones using computer vision and deep learning, supporting over 20 
+                different commands.
+              </p>
+              <div class="project-tech">
+                <span class="tech-tag">MediaPipe</span>
+                <span class="tech-tag">TensorFlow</span>
                 <span class="tech-tag">Python</span>
-                <span class="tech-tag">VQE</span>
+                <span class="tech-tag">OpenCV</span>
               </div>
               <div class="project-links">
                 <a href="#" class="project-link">
@@ -373,40 +507,21 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- 3D Scene Understanding -->
-          <div class="project-card animate-on-scroll" data-category="vision ai robotics">
-            <div class="project-image">
-              <div class="project-placeholder">
-                <i class="fas fa-cube"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge in-progress">In Progress</span>
-              </div>
-            </div>
-            <div class="project-content">
-              <h3>3D Scene Understanding</h3>
-              <p>
-                Implementing deep learning models for semantic segmentation and object
-                recognition in 3D point cloud data.
-              </p>
-              <div class="project-tech">
-                <span class="tech-tag">PointNet++</span>
-                <span class="tech-tag">PCL</span>
-                <span class="tech-tag">ROS</span>
-                <span class="tech-tag">CUDA</span>
-              </div>
-              <div class="project-links">
-                <a href="#" class="project-link">
-                  <i class="fab fa-github"></i>
-                  Code
-                </a>
-                <a href="#" class="project-link">
-                  <i class="fas fa-chart-bar"></i>
-                  Results
-                </a>
-              </div>
-            </div>
+    <!-- Call to Action -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Interested in Collaboration?</h2>
+          <p>I'm always excited to work on innovative projects that push the boundaries of technology</p>
+          <div style="margin-top: 2rem;">
+            <a href="./index.html#contact" class="btn btn-primary">
+              <i class="fas fa-envelope"></i>
+              Get in Touch
+            </a>
           </div>
         </div>
       </div>
@@ -418,18 +533,13 @@
       <div class="footer-content">
         <p>&copy; 2025 Jack Kinney. Robotics Engineering Student at UC Santa Cruz.</p>
         <div class="footer-links">
-          <a href="./assets/docs/resume.pdf" target="_blank">Resume</a>
+          <a href="./assets/docs/resume.pdf" target="_blank" rel="noopener">Resume</a>
           <a href="./index.html">Home</a>
           <a href="./research.html">Research</a>
         </div>
       </div>
     </div>
   </footer>
-
-  <!-- Back to Top Button -->
-  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
-    <i class="fas fa-chevron-up"></i>
-  </button>
 
   <!-- Main JavaScript -->
   <script src="./assets/js/main.js"></script>

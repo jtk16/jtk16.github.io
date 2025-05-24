@@ -8,31 +8,36 @@
   <meta name="author" content="Jack Kinney">
   <meta name="theme-color" content="#6366f1">
   
+  <!-- Open Graph -->
+  <meta property="og:title" content="Jack Kinney - Robotics Engineering Student">
+  <meta property="og:description" content="Building intelligent systems for tomorrow with quantum computing, AI, and robotics.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://your-username.github.io">
+  
   <title>Jack Kinney — Robotics Engineering Student</title>
   
-  <link rel="preload" href="./assets/css/style.css" as="style">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
   
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
+  <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="./assets/css/style.css">
   
-  <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
-  
+  <!-- PWA Manifest -->
   <link rel="manifest" href="./manifest.json">
 </head>
 <body>
-  <div class="page-loader" id="page-loader">
-    <div class="loader-content">
-      <div class="loader-spinner"></div>
-      <p class="loader-text">Loading Portfolio...</p>
-    </div>
-  </div>
-
+  <!-- Page Transition -->
+  <div class="page-transition"></div>
+  
+  <!-- Scroll Progress Bar -->
   <div class="scroll-progress"></div>
 
   <header class="header" id="header">
@@ -44,6 +49,7 @@
             <li><a href="./index.html" class="active">Home</a></li>
             <li><a href="./projects.html">Projects</a></li>
             <li><a href="./research.html">Research</a></li>
+            <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </nav>
@@ -57,65 +63,62 @@
   </header>
 
   <main>
+    <!-- Hero Section -->
     <section id="hero" class="hero">
-      <div class="hero-background">
-        <div class="hero-particles" id="hero-particles"></div>
-      </div>
       <div class="container">
         <div class="hero-content">
-          <div class="hero-badge animate-fade-in">
+          <div class="hero-badge">
             <i class="fas fa-robot"></i>
             <span>Robotics Engineering Student</span>
           </div>
-          <h1 class="animate-fade-in-up">Building Intelligent Systems for Tomorrow</h1>
-          <p class="hero-subtitle animate-fade-in-up">
+          <h1>Building Intelligent Systems for Tomorrow</h1>
+          <p class="hero-subtitle">
             I'm Jack Kinney, a Robotics Engineering student at UC Santa Cruz, passionate about 
             quantum computing, reinforcement learning, and computer vision. I explore how cutting-edge 
             AI can create autonomous systems that understand and interact with our world.
           </p>
-          <div class="hero-actions animate-fade-in-up">
+          <div class="hero-actions">
             <a href="./projects.html" class="btn btn-primary">
               <i class="fas fa-rocket"></i>
-              View My Work
+              View My Projects
             </a>
             <a href="#contact" class="btn btn-outline">
               <i class="fas fa-paper-plane"></i>
               Get In Touch
             </a>
           </div>
-          <div class="hero-stats animate-fade-in">
+          <div class="hero-stats">
             <div class="stat">
-              <span class="stat-number" data-count="15">0</span>
+              <span class="stat-number">15+</span>
               <span class="stat-label">Projects</span>
             </div>
             <div class="stat">
-              <span class="stat-number" data-count="3">0</span>
+              <span class="stat-number">3</span>
               <span class="stat-label">Years Experience</span>
             </div>
             <div class="stat">
-              <span class="stat-number" data-count="5">0</span>
+              <span class="stat-number">5</span>
               <span class="stat-label">Research Areas</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="hero-scroll-indicator">
-        <span>Scroll to explore</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
     </section>
 
+    <!-- About Section -->
     <section id="about" class="section">
       <div class="container">
         <div class="about-grid">
-          <div class="about-image animate-on-scroll">
+          <div class="about-image">
             <div class="image-container">
               <div class="image-placeholder">
                 <i class="fas fa-user"></i>
               </div>
-              </div>
+              <!-- Replace with your actual image -->
+              <!-- <img src="./assets/images/profile.jpg" alt="Jack Kinney" loading="lazy"> -->
+            </div>
           </div>
-          <div class="about-content animate-on-scroll">
+          <div class="about-content">
             <h2>About Me</h2>
             <p>
               As a Robotics Engineering student at UC Santa Cruz, I'm fascinated by the convergence 
@@ -153,15 +156,16 @@
       </div>
     </section>
 
+    <!-- Skills Section -->
     <section id="skills" class="section section-alt">
       <div class="container">
-        <div class="section-header animate-on-scroll">
+        <div class="section-header">
           <h2>Technical Skills</h2>
           <p>A comprehensive toolkit for building intelligent robotic systems</p>
         </div>
         
         <div class="skills-grid">
-          <div class="skill-category animate-on-scroll">
+          <div class="skill-category">
             <div class="skill-icon">
               <i class="fas fa-robot"></i>
             </div>
@@ -176,7 +180,7 @@
             </div>
           </div>
           
-          <div class="skill-category animate-on-scroll">
+          <div class="skill-category">
             <div class="skill-icon">
               <i class="fas fa-brain"></i>
             </div>
@@ -191,7 +195,7 @@
             </div>
           </div>
           
-          <div class="skill-category animate-on-scroll">
+          <div class="skill-category">
             <div class="skill-icon">
               <i class="fas fa-atom"></i>
             </div>
@@ -206,7 +210,7 @@
             </div>
           </div>
           
-          <div class="skill-category animate-on-scroll">
+          <div class="skill-category">
             <div class="skill-icon">
               <i class="fas fa-code"></i>
             </div>
@@ -224,21 +228,19 @@
       </div>
     </section>
 
+    <!-- Featured Projects Preview -->
     <section id="projects" class="section">
       <div class="container">
-        <div class="section-header animate-on-scroll">
+        <div class="section-header">
           <h2>Featured Projects</h2>
           <p>Innovative solutions at the intersection of robotics, AI, and quantum computing</p>
         </div>
         
         <div class="projects-grid">
-          <div class="project-card animate-on-scroll">
+          <div class="project-card">
             <div class="project-image">
               <div class="project-placeholder">
                 <i class="fas fa-drone"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge completed">Completed</span>
               </div>
             </div>
             <div class="project-content">
@@ -267,13 +269,10 @@
             </div>
           </div>
 
-          <div class="project-card animate-on-scroll">
+          <div class="project-card">
             <div class="project-image">
               <div class="project-placeholder">
                 <i class="fas fa-atom"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge in-progress">In Progress</span>
               </div>
             </div>
             <div class="project-content">
@@ -302,13 +301,10 @@
             </div>
           </div>
 
-          <div class="project-card animate-on-scroll">
+          <div class="project-card">
             <div class="project-image">
               <div class="project-placeholder">
                 <i class="fas fa-eye"></i>
-              </div>
-              <div class="project-status">
-                <span class="status-badge completed">Completed</span>
               </div>
             </div>
             <div class="project-content">
@@ -338,7 +334,7 @@
           </div>
         </div>
         
-        <div class="cta-actions animate-on-scroll">
+        <div style="text-align: center; margin-top: 3rem;">
           <a href="./projects.html" class="btn btn-primary">
             <i class="fas fa-folder-open"></i>
             View All Projects
@@ -347,16 +343,17 @@
       </div>
     </section>
 
+    <!-- Contact Section -->
     <section id="contact" class="section section-alt">
       <div class="container">
-        <div class="section-header animate-on-scroll">
+        <div class="section-header">
           <h2>Let's Connect</h2>
           <p>Interested in robotics, quantum computing, or AI? Let's discuss ideas and opportunities!</p>
         </div>
         
         <div class="contact-grid">
           <div class="contact-info">
-            <div class="contact-item animate-on-scroll">
+            <div class="contact-item">
               <div class="contact-icon">
                 <i class="fas fa-envelope"></i>
               </div>
@@ -366,27 +363,27 @@
               </div>
             </div>
             
-            <div class="contact-item animate-on-scroll">
+            <div class="contact-item">
               <div class="contact-icon">
                 <i class="fab fa-linkedin"></i>
               </div>
               <div class="contact-details">
                 <h4>LinkedIn</h4>
-                <a href="https://linkedin.com/in/jack-kinney" target="_blank">linkedin.com/in/jack-kinney</a>
+                <a href="https://linkedin.com/in/jack-kinney" target="_blank" rel="noopener">linkedin.com/in/jack-kinney</a>
               </div>
             </div>
             
-            <div class="contact-item animate-on-scroll">
+            <div class="contact-item">
               <div class="contact-icon">
                 <i class="fab fa-github"></i>
               </div>
               <div class="contact-details">
                 <h4>GitHub</h4>
-                <a href="https://github.com/jackkinney" target="_blank">github.com/jackkinney</a>
+                <a href="https://github.com/jackkinney" target="_blank" rel="noopener">github.com/jackkinney</a>
               </div>
             </div>
             
-            <div class="contact-item animate-on-scroll">
+            <div class="contact-item">
               <div class="contact-icon">
                 <i class="fas fa-university"></i>
               </div>
@@ -397,7 +394,7 @@
             </div>
           </div>
           
-          <div class="contact-form-container animate-on-scroll">
+          <div class="contact-form-container">
             <form class="contact-form" id="contact-form">
               <div class="form-group">
                 <label for="name">Name</label>
@@ -435,7 +432,7 @@
       <div class="footer-content">
         <p>&copy; 2025 Jack Kinney. Robotics Engineering Student at UC Santa Cruz.</p>
         <div class="footer-links">
-          <a href="./assets/docs/resume.pdf" target="_blank">Resume</a>
+          <a href="./assets/docs/resume.pdf" target="_blank" rel="noopener">Resume</a>
           <a href="./projects.html">Projects</a>
           <a href="./research.html">Research</a>
         </div>
@@ -443,10 +440,7 @@
     </div>
   </footer>
 
-  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
-    <i class="fas fa-chevron-up"></i>
-  </button>
-
-  <script src="./assets/js/main.js" defer></script>
+  <!-- Main JavaScript -->
+  <script src="./assets/js/main.js"></script>
 </body>
 </html>
