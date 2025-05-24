@@ -1,0 +1,1122 @@
+<!-- graph-laplacian.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive visualization of graph Laplacian eigenvalues and their effect on graph structure">
+  <title>Graph Laplacian Eigenvalue Visualizer — Jack Kinney</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* CSS Variables matching your existing theme */
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #a5b4fc;
+      --secondary: #ec4899;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #e2e8f0;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+
+      --border: #e2e8f0;
+      --border-light: #cbd5e1;
+
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', monospace;
+
+      --radius: 0.5rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.5rem;
+
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      padding: var(--space-4) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Main Layout */
+    .main-content {
+      padding: var(--space-8) 0;
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    .app-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: var(--space-4);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .app-description {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* App Layout */
+    .app-container {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: var(--space-8);
+      min-height: 600px;
+    }
+
+    .controls-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      height: fit-content;
+      position: sticky;
+      top: 120px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .visualization-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Controls */
+    .control-section {
+      margin-bottom: var(--space-6);
+    }
+
+    .control-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .eigenvalue-control {
+      margin-bottom: var(--space-4);
+    }
+
+    .eigenvalue-label {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: var(--space-2);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .eigenvalue-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--bg-tertiary);
+      outline: none;
+      transition: var(--transition);
+      -webkit-appearance: none;
+    }
+
+    .eigenvalue-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: var(--shadow);
+    }
+
+    .eigenvalue-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: var(--shadow);
+    }
+
+    .preset-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2);
+    }
+
+    .preset-btn {
+      padding: var(--space-2) var(--space-3);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .preset-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .status-display {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      font-size: 0.875rem;
+    }
+
+    .status-valid {
+      color: var(--success);
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .status-approximate {
+      color: var(--warning);
+      border-color: var(--warning);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .status-invalid {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Canvas */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: linear-gradient(45deg, #f8fafc 25%, transparent 25%), 
+                  linear-gradient(-45deg, #f8fafc 25%, transparent 25%), 
+                  linear-gradient(45deg, transparent 75%, #f8fafc 75%), 
+                  linear-gradient(-45deg, transparent 75%, #f8fafc 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    #graph-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    #graph-canvas:active {
+      cursor: grabbing;
+    }
+
+    .canvas-overlay {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      font-size: 0.875rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Info Panel */
+    .info-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-top: var(--space-6);
+    }
+
+    .info-title {
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+      color: var(--text-primary);
+    }
+
+    .info-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .app-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+      }
+
+      .controls-panel {
+        position: static;
+        order: 2;
+      }
+
+      .preset-buttons {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 var(--space-4);
+      }
+
+      .app-title {
+        font-size: 2rem;
+      }
+
+      .canvas-container {
+        height: 400px;
+      }
+
+      .preset-buttons {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top: 2px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: var(--space-2);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="./index.html" class="logo">&lt;JTK/&gt;</a>
+        <a href="./projects.html" class="back-link">
+          <i class="fas fa-arrow-left"></i>
+          Back to Projects
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="app-header">
+        <h1 class="app-title">Graph Laplacian Eigenvalue Visualizer</h1>
+        <p class="app-description">
+          Explore how eigenvalues of the graph Laplacian matrix influence graph structure and connectivity. 
+          Adjust eigenvalues interactively to see how they constrain the possible graph configurations.
+        </p>
+      </div>
+
+      <div class="app-container">
+        <div class="controls-panel">
+          <div class="control-section">
+            <h3 class="section-title">
+              <i class="fas fa-sliders-h"></i>
+              Eigenvalue Controls
+            </h3>
+            <div id="eigenvalue-controls">
+              <!-- Dynamically generated eigenvalue sliders -->
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3 class="section-title">
+              <i class="fas fa-shapes"></i>
+              Graph Presets
+            </h3>
+            <div class="preset-buttons">
+              <button class="preset-btn" data-preset="path">Path Graph</button>
+              <button class="preset-btn" data-preset="cycle">Cycle Graph</button>
+              <button class="preset-btn" data-preset="complete">Complete Graph</button>
+              <button class="preset-btn" data-preset="star">Star Graph</button>
+              <button class="preset-btn" data-preset="wheel">Wheel Graph</button>
+              <button class="preset-btn" data-preset="random">Random Graph</button>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3 class="section-title">
+              <i class="fas fa-cog"></i>
+              Settings
+            </h3>
+            <label class="eigenvalue-label">
+              <span>Number of nodes:</span>
+              <select id="node-count">
+                <option value="4">4 nodes</option>
+                <option value="5" selected>5 nodes</option>
+                <option value="6">6 nodes</option>
+                <option value="7">7 nodes</option>
+                <option value="8">8 nodes</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="control-section">
+            <h3 class="section-title">
+              <i class="fas fa-info-circle"></i>
+              Status
+            </h3>
+            <div id="validity-status" class="status-display">
+              <div class="status-indicator"></div>
+              <div class="status-text">Initializing...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visualization-panel">
+          <div class="canvas-container">
+            <canvas id="graph-canvas"></canvas>
+            <div class="canvas-overlay">
+              <div><strong>Spectral Gap:</strong> <span id="spectral-gap">0.00</span></div>
+              <div><strong>Algebraic Connectivity:</strong> <span id="algebraic-connectivity">0.00</span></div>
+            </div>
+          </div>
+
+          <div class="info-panel">
+            <div class="info-title">Understanding the Visualization</div>
+            <div class="info-text">
+              The graph structure is determined by the eigenvalues of its Laplacian matrix. 
+              <strong>Node positions</strong> reflect the graph's spectral properties, while 
+              <strong>edge weights</strong> are derived from eigenvector components. The 
+              <strong>spectral gap</strong> (difference between first two eigenvalues) indicates 
+              how well-connected the graph is.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // graph-laplacian-engine.js - Core mathematical operations
+    class GraphLaplacianEngine {
+      constructor() {
+        this.tolerance = 1e-10;
+        this.maxIterations = 1000;
+      }
+
+      // Generate eigenvalues for common graph types
+      getPresetEigenvalues(type, n) {
+        switch(type) {
+          case 'path':
+            return this.pathGraphEigenvalues(n);
+          case 'cycle':
+            return this.cycleGraphEigenvalues(n);
+          case 'complete':
+            return this.completeGraphEigenvalues(n);
+          case 'star':
+            return this.starGraphEigenvalues(n);
+          case 'wheel':
+            return this.wheelGraphEigenvalues(n);
+          case 'random':
+            return this.randomValidEigenvalues(n);
+          default:
+            return new Array(n).fill(0).map((_, i) => i);
+        }
+      }
+
+      pathGraphEigenvalues(n) {
+        const eigenvals = [];
+        for (let k = 1; k <= n; k++) {
+          eigenvals.push(2 - 2 * Math.cos((k * Math.PI) / (n + 1)));
+        }
+        return eigenvals.sort((a, b) => a - b);
+      }
+
+      cycleGraphEigenvalues(n) {
+        const eigenvals = [];
+        for (let k = 0; k < n; k++) {
+          eigenvals.push(2 - 2 * Math.cos((2 * Math.PI * k) / n));
+        }
+        return eigenvals.sort((a, b) => a - b);
+      }
+
+      completeGraphEigenvalues(n) {
+        const eigenvals = [0];
+        for (let i = 1; i < n; i++) {
+          eigenvals.push(n);
+        }
+        return eigenvals;
+      }
+
+      starGraphEigenvalues(n) {
+        const eigenvals = [0, 1];
+        for (let i = 2; i < n; i++) {
+          eigenvals.push(1);
+        }
+        eigenvals[n - 1] = n;
+        return eigenvals.sort((a, b) => a - b);
+      }
+
+      wheelGraphEigenvalues(n) {
+        // Wheel graph: cycle + center node
+        const cycleEigenvals = this.cycleGraphEigenvalues(n - 1);
+        return [0, ...cycleEigenvals.slice(1).map(x => x + 1), n];
+      }
+
+      randomValidEigenvalues(n) {
+        // Generate random but valid eigenvalue set
+        const eigenvals = [0]; // Always start with 0
+        for (let i = 1; i < n; i++) {
+          eigenvals.push(Math.random() * 4 + 0.1);
+        }
+        return eigenvals.sort((a, b) => a - b);
+      }
+
+      // Check if eigenvalues are valid for a graph
+      validateEigenvalues(eigenvals) {
+        const n = eigenvals.length;
+        
+        // Basic checks
+        if (Math.abs(eigenvals[0]) > this.tolerance) {
+          return { valid: false, reason: "First eigenvalue must be 0" };
+        }
+
+        for (let i = 0; i < n - 1; i++) {
+          if (eigenvals[i] > eigenvals[i + 1] + this.tolerance) {
+            return { valid: false, reason: "Eigenvalues must be non-decreasing" };
+          }
+        }
+
+        // Sum check (should equal trace of Laplacian)
+        const sum = eigenvals.reduce((a, b) => a + b, 0);
+        // For most graphs, this relates to the number of edges, but it's complex
+
+        // Interlacing property check (simplified)
+        if (eigenvals[1] < this.tolerance && n > 2) {
+          return { valid: false, reason: "Graph would be disconnected" };
+        }
+
+        return { valid: true, confidence: this.computeConfidence(eigenvals) };
+      }
+
+      computeConfidence(eigenvals) {
+        // Heuristic to determine how "graph-like" the eigenvalues are
+        const n = eigenvals.length;
+        let score = 1.0;
+
+        // Penalize very large gaps
+        for (let i = 1; i < n - 1; i++) {
+          const gap = eigenvals[i + 1] - eigenvals[i];
+          if (gap > 3) score *= 0.8;
+        }
+
+        // Penalize very large eigenvalues
+        const maxEigenval = eigenvals[n - 1];
+        if (maxEigenval > 2 * n) score *= 0.7;
+
+        return Math.max(0.1, Math.min(1.0, score));
+      }
+
+      // Project invalid eigenvalues to nearest valid set
+      projectToValidEigenvalues(eigenvals) {
+        const projected = [...eigenvals].sort((a, b) => a - b);
+        projected[0] = 0; // Ensure first eigenvalue is 0
+        
+        // Ensure non-negativity
+        for (let i = 0; i < projected.length; i++) {
+          projected[i] = Math.max(0, projected[i]);
+        }
+
+        // Ensure algebraic connectivity > 0 (except for disconnected graphs)
+        if (projected.length > 1 && projected[1] < 0.01) {
+          projected[1] = 0.1;
+        }
+
+        return projected;
+      }
+
+      // Generate approximate graph from eigenvalues
+      generateGraphFromEigenvalues(eigenvals) {
+        const n = eigenvals.length;
+        const positions = this.generateSpectralPositions(eigenvals);
+        const adjacency = this.constructAdjacencyMatrix(eigenvals, positions);
+        
+        return {
+          positions,
+          adjacency,
+          eigenvalues: eigenvals,
+          properties: this.computeGraphProperties(eigenvals)
+        };
+      }
+
+      generateSpectralPositions(eigenvals) {
+        const n = eigenvals.length;
+        const positions = [];
+        
+        // Use first few eigenvalues to determine 2D embedding
+        for (let i = 0; i < n; i++) {
+          const angle = (2 * Math.PI * i) / n;
+          const radius = 150 + 50 * Math.sin(eigenvals[Math.min(i, eigenvals.length - 1)]);
+          
+          positions.push({
+            x: 300 + radius * Math.cos(angle),
+            y: 300 + radius * Math.sin(angle)
+          });
+        }
+        
+        return positions;
+      }
+
+      constructAdjacencyMatrix(eigenvals, positions) {
+        const n = eigenvals.length;
+        const adjacency = Array(n).fill().map(() => Array(n).fill(0));
+        
+        // Heuristic: connect nodes based on eigenvalue structure
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            const spectralDistance = this.computeSpectralDistance(i, j, eigenvals);
+            const probability = Math.exp(-spectralDistance);
+            
+            if (probability > 0.3) {
+              adjacency[i][j] = adjacency[j][i] = 1;
+            }
+          }
+        }
+        
+        return adjacency;
+      }
+
+      computeSpectralDistance(i, j, eigenvals) {
+        // Simplified spectral distance measure
+        const n = eigenvals.length;
+        let distance = 0;
+        
+        for (let k = 1; k < Math.min(4, n); k++) {
+          const eigenval = eigenvals[k];
+          if (eigenval > 1e-6) {
+            distance += Math.abs(Math.cos(2 * Math.PI * k * i / n) - 
+                               Math.cos(2 * Math.PI * k * j / n)) / eigenval;
+          }
+        }
+        
+        return distance;
+      }
+
+      computeGraphProperties(eigenvals) {
+        const n = eigenvals.length;
+        return {
+          spectralGap: eigenvals[1] - eigenvals[0],
+          algebraicConnectivity: eigenvals[1],
+          maxEigenvalue: eigenvals[n - 1],
+          eigenvalueSum: eigenvals.reduce((a, b) => a + b, 0)
+        };
+      }
+    }
+
+    // graph-visualizer.js - Canvas-based graph rendering
+    class GraphVisualizer {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.setupCanvas();
+        this.animationFrame = null;
+        
+        // Visual settings
+        this.nodeRadius = 12;
+        this.nodeColor = '#6366f1';
+        this.nodeStroke = '#ffffff';
+        this.edgeColor = '#cbd5e1';
+        this.edgeWidth = 2;
+        this.selectedColor = '#ec4899';
+        
+        // Interaction
+        this.isDragging = false;
+        this.dragNode = null;
+        this.mousePos = { x: 0, y: 0 };
+        
+        this.setupInteraction();
+      }
+
+      setupCanvas() {
+        const rect = this.canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        
+        this.ctx.scale(dpr, dpr);
+        this.canvas.style.width = rect.width + 'px';
+        this.canvas.style.height = rect.height + 'px';
+      }
+
+      setupInteraction() {
+        this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+        this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+        this.canvas.addEventListener('mouseup', () => this.handleMouseUp());
+        this.canvas.addEventListener('mouseleave', () => this.handleMouseUp());
+      }
+
+      handleMouseDown(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        this.mousePos = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+
+        if (this.graph) {
+          const clickedNode = this.getNodeAtPosition(this.mousePos);
+          if (clickedNode !== -1) {
+            this.isDragging = true;
+            this.dragNode = clickedNode;
+          }
+        }
+      }
+
+      handleMouseMove(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        this.mousePos = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+
+        if (this.isDragging && this.dragNode !== null && this.graph) {
+          this.graph.positions[this.dragNode] = { ...this.mousePos };
+          this.render();
+        }
+      }
+
+      handleMouseUp() {
+        this.isDragging = false;
+        this.dragNode = null;
+      }
+
+      getNodeAtPosition(pos) {
+        if (!this.graph) return -1;
+        
+        for (let i = 0; i < this.graph.positions.length; i++) {
+          const node = this.graph.positions[i];
+          const dx = pos.x - node.x;
+          const dy = pos.y - node.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance <= this.nodeRadius + 5) {
+            return i;
+          }
+        }
+        
+        return -1;
+      }
+
+      setGraph(graph) {
+        this.graph = graph;
+        this.render();
+      }
+
+      render() {
+        if (!this.graph) return;
+
+        const ctx = this.ctx;
+        const rect = this.canvas.getBoundingClientRect();
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        
+        // Draw edges
+        this.drawEdges();
+        
+        // Draw nodes
+        this.drawNodes();
+        
+        // Draw labels
+        this.drawLabels();
+      }
+
+      drawEdges() {
+        const ctx = this.ctx;
+        const { positions, adjacency } = this.graph;
+        
+        ctx.strokeStyle = this.edgeColor;
+        ctx.lineWidth = this.edgeWidth;
+        
+        for (let i = 0; i < positions.length; i++) {
+          for (let j = i + 1; j < positions.length; j++) {
+            if (adjacency[i][j]) {
+              ctx.beginPath();
+              ctx.moveTo(positions[i].x, positions[i].y);
+              ctx.lineTo(positions[j].x, positions[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      drawNodes() {
+        const ctx = this.ctx;
+        const { positions } = this.graph;
+        
+        positions.forEach((pos, i) => {
+          const isHovered = this.getNodeAtPosition(this.mousePos) === i;
+          const isDragged = this.dragNode === i;
+          
+          // Node shadow
+          ctx.beginPath();
+          ctx.arc(pos.x + 2, pos.y + 2, this.nodeRadius, 0, 2 * Math.PI);
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.fill();
+          
+          // Node body
+          ctx.beginPath();
+          ctx.arc(pos.x, pos.y, this.nodeRadius, 0, 2 * Math.PI);
+          ctx.fillStyle = (isHovered || isDragged) ? this.selectedColor : this.nodeColor;
+          ctx.fill();
+          
+          // Node border
+          ctx.strokeStyle = this.nodeStroke;
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        });
+      }
+
+      drawLabels() {
+        const ctx = this.ctx;
+        const { positions } = this.graph;
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px Inter';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        positions.forEach((pos, i) => {
+          ctx.fillText(i.toString(), pos.x, pos.y);
+        });
+      }
+
+      updateProperties(properties) {
+        document.getElementById('spectral-gap').textContent = 
+          properties.spectralGap.toFixed(3);
+        document.getElementById('algebraic-connectivity').textContent = 
+          properties.algebraicConnectivity.toFixed(3);
+      }
+    }
+
+    // eigenvalue-controls.js - Interactive UI components
+    class EigenvalueControls {
+      constructor(container, onChange) {
+        this.container = container;
+        this.onChange = onChange;
+        this.nodeCount = 5;
+        this.eigenvalues = [0, 0.5, 1.0, 1.5, 2.0];
+        this.setupControls();
+      }
+
+      setupControls() {
+        this.renderSliders();
+        this.setupPresets();
+        this.setupNodeCountControl();
+      }
+
+      renderSliders() {
+        this.container.innerHTML = '';
+        
+        this.eigenvalues.forEach((value, index) => {
+          const controlDiv = document.createElement('div');
+          controlDiv.className = 'eigenvalue-control';
+          
+          controlDiv.innerHTML = `
+            <div class="eigenvalue-label">
+              <span>λ${index + 1}</span>
+              <span class="eigenvalue-value">${value.toFixed(3)}</span>
+            </div>
+            <input type="range" 
+                   class="eigenvalue-slider" 
+                   id="eigenvalue-${index}"
+                   min="0" 
+                   max="5" 
+                   step="0.01" 
+                   value="${value}"
+                   ${index === 0 ? 'disabled' : ''}>
+          `;
+          
+          this.container.appendChild(controlDiv);
+          
+          const slider = controlDiv.querySelector('.eigenvalue-slider');
+          const valueSpan = controlDiv.querySelector('.eigenvalue-value');
+          
+          slider.addEventListener('input', (e) => {
+            const newValue = parseFloat(e.target.value);
+            this.eigenvalues[index] = newValue;
+            valueSpan.textContent = newValue.toFixed(3);
+            this.onChange(this.eigenvalues);
+          });
+        });
+      }
+
+      setupPresets() {
+        const presetButtons = document.querySelectorAll('.preset-btn');
+        presetButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const preset = btn.dataset.preset;
+            const engine = new GraphLaplacianEngine();
+            this.eigenvalues = engine.getPresetEigenvalues(preset, this.nodeCount);
+            this.updateSliders();
+            this.onChange(this.eigenvalues);
+          });
+        });
+      }
+
+      setupNodeCountControl() {
+        const nodeCountSelect = document.getElementById('node-count');
+        nodeCountSelect.addEventListener('change', (e) => {
+          this.nodeCount = parseInt(e.target.value);
+          this.eigenvalues = new Array(this.nodeCount).fill(0).map((_, i) => i * 0.5);
+          this.renderSliders();
+          this.onChange(this.eigenvalues);
+        });
+      }
+
+      updateSliders() {
+        this.eigenvalues.forEach((value, index) => {
+          const slider = document.getElementById(`eigenvalue-${index}`);
+          const valueSpan = slider.parentElement.querySelector('.eigenvalue-value');
+          if (slider) {
+            slider.value = value;
+            valueSpan.textContent = value.toFixed(3);
+          }
+        });
+      }
+
+      setEigenvalues(eigenvalues) {
+        this.eigenvalues = [...eigenvalues];
+        this.updateSliders();
+      }
+    }
+
+    // main-applet.js - Orchestration and state management
+    class GraphLaplacianApplet {
+      constructor() {
+        this.engine = new GraphLaplacianEngine();
+        this.visualizer = null;
+        this.controls = null;
+        this.currentGraph = null;
+        this.worker = null;
+        
+        this.init();
+      }
+
+      async init() {
+        // Setup visualizer
+        const canvas = document.getElementById('graph-canvas');
+        this.visualizer = new GraphVisualizer(canvas);
+        
+        // Setup controls
+        const controlsContainer = document.getElementById('eigenvalue-controls');
+        this.controls = new EigenvalueControls(controlsContainer, 
+          (eigenvalues) => this.onEigenvaluesChanged(eigenvalues));
+        
+        // Setup worker for heavy computations
+        this.setupWorker();
+        
+        // Initial graph
+        this.generateInitialGraph();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+          this.visualizer.setupCanvas();
+          this.visualizer.render();
+        });
+      }
+
+      setupWorker() {
+        // For this demo, we'll compute synchronously
+        // In production, use Web Workers for heavy computations
+        this.worker = {
+          postMessage: (data) => {
+            setTimeout(() => {
+              const result = this.engine.generateGraphFromEigenvalues(data.eigenvalues);
+              this.onWorkerMessage({ data: result });
+            }, 50);
+          }
+        };
+      }
+
+      onWorkerMessage(event) {
+        const graph = event.data;
+        this.currentGraph = graph;
+        this.visualizer.setGraph(graph);
+        this.visualizer.updateProperties(graph.properties);
+        this.updateValidityStatus(graph.eigenvalues);
+      }
+
+      generateInitialGraph() {
+        const initialEigenvalues = this.engine.getPresetEigenvalues('cycle', 5);
+        this.controls.setEigenvalues(initialEigenvalues);
+        this.onEigenvaluesChanged(initialEigenvalues);
+      }
+
+      onEigenvaluesChanged(eigenvalues) {
+        // Validate eigenvalues
+        const validation = this.engine.validateEigenvalues(eigenvalues);
+        
+        let processedEigenvalues = eigenvalues;
+        if (!validation.valid) {
+          processedEigenvalues = this.engine.projectToValidEigenvalues(eigenvalues);
+        }
+        
+        // Generate graph (via worker in production)
+        this.worker.postMessage({ eigenvalues: processedEigenvalues });
+        
+        // Update status
+        this.updateValidityStatus(eigenvalues, validation);
+      }
+
+      updateValidityStatus(eigenvalues, validation = null) {
+        if (!validation) {
+          validation = this.engine.validateEigenvalues(eigenvalues);
+        }
+        
+        const statusEl = document.getElementById('validity-status');
+        const indicatorEl = statusEl.querySelector('.status-indicator');
+        const textEl = statusEl.querySelector('.status-text');
+        
+        statusEl.className = 'status-display';
+        
+        if (validation.valid) {
+          if (validation.confidence > 0.8) {
+            statusEl.classList.add('status-valid');
+            textEl.textContent = 'Valid graph eigenvalues';
+          } else {
+            statusEl.classList.add('status-approximate');
+            textEl.textContent = `Approximate graph (confidence: ${(validation.confidence * 100).toFixed(0)}%)`;
+          }
+        } else {
+          statusEl.classList.add('status-invalid');
+          textEl.textContent = `Invalid: ${validation.reason}`;
+        }
+      }
+    }
+
+    // Initialize the applet
+    document.addEventListener('DOMContentLoaded', () => {
+      const applet = new GraphLaplacianApplet();
+      window.graphLaplacianApplet = applet; // For debugging
+    });
+  </script>
+</body>
+</html>

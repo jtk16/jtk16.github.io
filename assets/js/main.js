@@ -576,6 +576,19 @@ class Portfolio {
   // ====================
   // UTILITIES
   // ====================
+  initGraphLaplacian() {
+    const laplacianLink = document.querySelector('a[href="./graph-laplacian.html"]');
+    if (laplacianLink) {
+      // Preload critical resources when user hovers
+      laplacianLink.addEventListener('mouseenter', () => {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = './assets/js/graph-laplacian-engine.js';
+        document.head.appendChild(link);
+      });
+    }
+  }
+
   showToast(message, type = 'success') {
     // Remove existing toasts
     const existingToast = document.querySelector('.toast');
@@ -694,3 +707,4 @@ window.addEventListener('popstate', () => {
     }, 300);
   }
 });
+

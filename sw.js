@@ -1,7 +1,7 @@
 // Service Worker for Jack Kinney Portfolio
 // Provides basic caching and offline functionality
 
-const CACHE_NAME = 'jtk-portfolio-v1.0.2'; // <-- Incremented version number
+const CACHE_NAME = 'jtk-portfolio-v1.0.3'; // <-- Incremented version number
 const urlsToCache = [
   '/',
   '/index.html',
@@ -10,6 +10,11 @@ const urlsToCache = [
   '/assets/js/main.js',
   '/assets/images/profile.jpg',
   '/manifest.json',
+  '/graph-laplacian.html',
+  '/assets/js/graph-laplacian-engine.js',
+  '/assets/js/graph-visualizer.js',
+  '/assets/js/eigenvalue-controls.js',
+  '/assets/css/graph-laplacian.css',
   // Add other critical resources here
   '[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap)',
   '[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)'

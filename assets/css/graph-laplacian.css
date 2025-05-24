@@ -1,0 +1,23 @@
+.graph-laplacian-applet {
+  /* Use your existing CSS variables */
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.eigenvalue-slider::-webkit-slider-thumb {
+  background: var(--primary);
+  border: 2px solid var(--bg-primary);
+}
+
+.status-valid {
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+}
