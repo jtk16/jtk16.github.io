@@ -482,12 +482,15 @@ class Portfolio {
 
     // Use fetch to submit to Formspree
     fetch(form.action, {
-        method: form.method,
-        body: formData,
-        headers: {
-            'Accept': 'application/json'
-        }
+    method: form.method,
+    body: formData,
+    headers: {
+        'Accept': 'application/json'
+    }
     }).then(response => {
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      
       if (response.ok) {
         this.showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
         form.reset();
@@ -496,25 +499,13 @@ class Portfolio {
           charCounter.textContent = '0 / 500';
         }
       } else {
-        // Check if response is JSON before parsing
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          return response.json().then(data => {
-            if (data.errors) {
-              this.showToast(data.errors.map(error => error.message).join(", "), 'error');
-            } else {
-              this.showToast('Oops! There was a problem submitting your form', 'error');
-            }
-          });
-        } else {
-          this.showToast('Oops! There was a problem submitting your form', 'error');
-        }
+        console.error('Form submission failed with status:', response.status);
+        this.showToast(`Form submission failed (${response.status}). Please try again.`, 'error');
       }
     }).catch(error => {
       console.error('Form submission error:', error);
-      this.showToast('Oops! There was a network problem submitting your form', 'error');
+      this.showToast('Network error. Please check your connection and try again.', 'error');
     }).finally(() => {
-      // Reset button state
       submitButton.innerHTML = originalText;
       submitButton.disabled = false;
     });
