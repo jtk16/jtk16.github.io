@@ -1,7 +1,7 @@
 {
   "name": "Jack Kinney - Robotics Engineering Student",
   "short_name": "Jack Kinney Portfolio",
-  "description": "Personal portfolio of Jack Kinney, Robotics Engineering student at UC Santa Cruz, specializing in quantum computing, reinforcement learning, and computer vision.",
+  "description": "Personal portfolio of Jack Kinney, Robotics Engineering student, specializing in quantum computing, reinforcement learning, and computer vision.",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0f172a",
@@ -33,19 +33,6 @@
       "icons": [
         {
           "src": "./assets/images/icons/projects-icon.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Research",
-      "short_name": "Research",
-      "description": "Academic research and publications",
-      "url": "/research.html",
-      "icons": [
-        {
-          "src": "./assets/images/icons/research-icon.png",
           "sizes": "192x192",
           "type": "image/png"
         }

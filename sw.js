@@ -1,6 +1,3 @@
-// Service Worker for Jack Kinney Portfolio
-// Provides basic caching and offline functionality
-
 const CACHE_NAME = 'jtk-portfolio-v1.0.0';
 const urlsToCache = [
   '/',
@@ -17,7 +14,7 @@ const urlsToCache = [
 // Install event - cache resources
 self.addEventListener('install', (event) => {
   console.log('Service Worker: Install event');
-  
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -28,7 +25,7 @@ self.addEventListener('install', (event) => {
         console.error('Service Worker: Cache installation failed:', error);
       })
   );
-  
+
   // Skip waiting to activate immediately
   self.skipWaiting();
 });
@@ -36,7 +33,7 @@ self.addEventListener('install', (event) => {
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('Service Worker: Activate event');
-  
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -49,7 +46,7 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-  
+
   // Claim all clients immediately
   self.clients.claim();
 });
@@ -60,7 +57,7 @@ self.addEventListener('fetch', (event) => {
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
-  
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -69,7 +66,7 @@ self.addEventListener('fetch', (event) => {
           console.log('Service Worker: Serving from cache:', event.request.url);
           return response;
         }
-        
+
         // Fetch from network if not in cache
         return fetch(event.request)
           .then((response) => {
@@ -77,20 +74,20 @@ self.addEventListener('fetch', (event) => {
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
-            
+
             // Clone the response for caching
             const responseToCache = response.clone();
-            
+
             caches.open(CACHE_NAME)
               .then((cache) => {
                 cache.put(event.request, responseToCache);
               });
-            
+
             return response;
           })
           .catch((error) => {
             console.error('Service Worker: Fetch failed:', error);
-            
+
             // Return offline page for navigation requests if available
             if (event.request.destination === 'document') {
               return caches.match('/offline.html');
@@ -103,7 +100,7 @@ self.addEventListener('fetch', (event) => {
 // Handle background sync (if needed in the future)
 self.addEventListener('sync', (event) => {
   console.log('Service Worker: Background sync event');
-  
+
   if (event.tag === 'background-sync') {
     event.waitUntil(
       // Handle background sync logic here
@@ -115,7 +112,7 @@ self.addEventListener('sync', (event) => {
 // Handle push notifications (if needed in the future)
 self.addEventListener('push', (event) => {
   console.log('Service Worker: Push event received');
-  
+
   const options = {
     body: event.data ? event.data.text() : 'New notification',
     icon: './assets/images/icons/icon-192x192.png',
@@ -136,7 +133,7 @@ self.addEventListener('push', (event) => {
       }
     ]
   };
-  
+
   event.waitUntil(
     self.registration.showNotification('Jack Kinney Portfolio', options)
   );
@@ -145,9 +142,9 @@ self.addEventListener('push', (event) => {
 // Handle notification click
 self.addEventListener('notificationclick', (event) => {
   console.log('Service Worker: Notification click event');
-  
+
   event.notification.close();
-  
+
   if (event.action === 'view') {
     event.waitUntil(
       clients.openWindow('/')

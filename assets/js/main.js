@@ -15,7 +15,6 @@ class Portfolio {
   getCurrentPage() {
     const path = window.location.pathname;
     if (path.includes('projects.html')) return 'projects';
-    if (path.includes('research.html')) return 'research';
     return 'home';
   }
 
@@ -27,14 +26,12 @@ class Portfolio {
     this.initForm();
     this.initPageTransitions();
     this.initServiceWorker();
-    
+
     // Page-specific initializations
     if (this.currentPage === 'projects') {
       this.initProjectsPage();
-    } else if (this.currentPage === 'research') {
-      this.initResearchPage();
     }
-    
+
     // Remove loading state
     setTimeout(() => {
       document.body.classList.remove('loading');
@@ -64,19 +61,19 @@ class Portfolio {
   initPageTransitions() {
     const links = document.querySelectorAll('a[href^="./"]');
     const transition = document.querySelector('.page-transition');
-    
+
     links.forEach(link => {
       if (link.getAttribute('target') === '_blank') return;
-      
+
       link.addEventListener('click', (e) => {
         if (this.isTransitioning) return;
-        
+
         e.preventDefault();
         const href = link.getAttribute('href');
-        
+
         this.isTransitioning = true;
         transition.classList.add('active');
-        
+
         setTimeout(() => {
           window.location.href = href;
         }, 300);
@@ -91,12 +88,6 @@ class Portfolio {
     this.initProjectFilters();
     this.initProjectHovers();
     this.initLazyLoading();
-  }
-
-  initResearchPage() {
-    this.initPublicationInteractions();
-    this.initProgressBars();
-    this.initResearchFilters();
   }
 
   initProjectFilters() {
@@ -121,7 +112,7 @@ class Portfolio {
     projectCards.forEach((card, index) => {
       const categories = card.dataset.category ? card.dataset.category.split(' ') : [];
       const shouldShow = filter === 'all' || categories.includes(filter);
-      
+
       if (shouldShow) {
         card.style.display = 'block';
         setTimeout(() => {
@@ -140,13 +131,13 @@ class Portfolio {
 
   initProjectHovers() {
     const projectCards = document.querySelectorAll('.project-card, .featured-project');
-    
+
     projectCards.forEach(card => {
       card.addEventListener('mouseenter', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
+
         card.style.setProperty('--mouse-x', `${x}px`);
         card.style.setProperty('--mouse-y', `${y}px`);
       });
@@ -155,7 +146,7 @@ class Portfolio {
 
   initLazyLoading() {
     const images = document.querySelectorAll('img[loading="lazy"]');
-    
+
     if ('IntersectionObserver' in window) {
       const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
@@ -167,81 +158,9 @@ class Portfolio {
           }
         });
       });
-      
+
       images.forEach(img => imageObserver.observe(img));
     }
-  }
-
-  initPublicationInteractions() {
-    const citeButtons = document.querySelectorAll('.cite-btn');
-    
-    citeButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        const publicationCard = button.closest('.publication-card');
-        const title = publicationCard.querySelector('h3').textContent;
-        const authors = Array.from(publicationCard.querySelectorAll('.author')).map(a => a.textContent).join(', ');
-        const venue = publicationCard.querySelector('.venue')?.textContent || '';
-        const year = new Date().getFullYear();
-        
-        const citation = `${authors}. "${title}" ${venue}, ${year}.`;
-        
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(citation).then(() => {
-            this.showToast('Citation copied to clipboard!', 'success');
-          }).catch(() => {
-            this.showToast('Failed to copy citation', 'error');
-          });
-        } else {
-          this.showToast('Clipboard not supported', 'warning');
-        }
-      });
-    });
-  }
-
-  initProgressBars() {
-    const progressBars = document.querySelectorAll('.progress-fill');
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const progressBar = entry.target;
-          const width = progressBar.dataset.progress || progressBar.style.width;
-          progressBar.style.width = '0%';
-          
-          setTimeout(() => {
-            progressBar.style.width = width;
-          }, 200);
-          
-          observer.unobserve(progressBar);
-        }
-      });
-    });
-
-    progressBars.forEach(bar => observer.observe(bar));
-  }
-
-  initResearchFilters() {
-    const filterTags = document.querySelectorAll('.research-filter');
-    const researchItems = document.querySelectorAll('.research-item');
-    
-    filterTags.forEach(tag => {
-      tag.addEventListener('click', () => {
-        const filter = tag.dataset.filter;
-        
-        filterTags.forEach(t => t.classList.remove('active'));
-        tag.classList.add('active');
-        
-        researchItems.forEach(item => {
-          const tags = item.dataset.tags?.split(',') || [];
-          if (filter === 'all' || tags.includes(filter)) {
-            item.style.display = 'block';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
-    });
   }
 
   bindEvents() {
@@ -249,10 +168,10 @@ class Portfolio {
     window.addEventListener('scroll', this.throttle(this.handleScroll.bind(this), 16));
     window.addEventListener('resize', this.debounce(this.handleResize.bind(this), 250));
     window.addEventListener('load', this.onWindowLoad.bind(this));
-    
+
     // Document events
     document.addEventListener('DOMContentLoaded', this.onDOMLoaded.bind(this));
-    
+
     // Visibility change
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
@@ -285,7 +204,7 @@ class Portfolio {
       navToggle.addEventListener('click', () => {
         nav.classList.toggle('nav-open');
         navToggle.classList.toggle('active');
-        
+
         // Prevent body scroll when menu is open
         document.body.style.overflow = nav.classList.contains('nav-open') ? 'hidden' : '';
       });
@@ -309,7 +228,7 @@ class Portfolio {
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
-        
+
         if (href.startsWith('#')) {
           e.preventDefault();
           const target = document.querySelector(href);
@@ -328,7 +247,7 @@ class Portfolio {
   closeNavigation() {
     const nav = document.getElementById('nav');
     const navToggle = document.getElementById('nav-toggle');
-    
+
     if (nav && navToggle) {
       nav.classList.remove('nav-open');
       navToggle.classList.remove('active');
@@ -339,11 +258,11 @@ class Portfolio {
   updateActiveNavLink() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-list a');
-    
+
     // Set active link based on current page
     navLinks.forEach(link => {
       const href = link.getAttribute('href');
-      if (href.includes(this.currentPage + '.html') || 
+      if (href.includes(this.currentPage + '.html') ||
           (this.currentPage === 'home' && href === './index.html')) {
         link.classList.add('active');
       }
@@ -373,7 +292,7 @@ class Portfolio {
 
   smoothScrollTo(target, offset = 0) {
     const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
-    
+
     window.scrollTo({
       top: targetPosition,
       behavior: 'smooth'
@@ -390,7 +309,7 @@ class Portfolio {
 
   handleScroll() {
     this.lastScrollY = window.scrollY;
-    
+
     if (!this.ticking) {
       window.requestAnimationFrame(() => {
         this.updateHeader(this.lastScrollY);
@@ -420,7 +339,7 @@ class Portfolio {
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const scrollPercent = Math.min((scrollTop / docHeight) * 100, 100);
-    
+
     progressBar.style.width = `${scrollPercent}%`;
   }
 
@@ -442,7 +361,7 @@ class Portfolio {
       entries.forEach(entry => {
         if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
           entry.target.classList.add('animated');
-          
+
           // Trigger counter animation
           if (entry.target.classList.contains('stat-number')) {
             this.animateCounter(entry.target);
@@ -456,18 +375,18 @@ class Portfolio {
       '.skill-category, .project-card, .contact-item, .about-content, ' +
       '.hero-content, .section-header, .publication-card, .research-project'
     );
-    
+
     elementsToAnimate.forEach(el => observer.observe(el));
   }
 
   initParallax() {
     const parallaxElements = document.querySelectorAll('[data-parallax]');
-    
+
     if (parallaxElements.length === 0) return;
-    
+
     window.addEventListener('scroll', () => {
       const scrolled = window.scrollY;
-      
+
       parallaxElements.forEach(el => {
         const speed = el.dataset.parallax || 0.5;
         const yPos = -(scrolled * speed);
@@ -478,11 +397,11 @@ class Portfolio {
 
   animateCounter(element) {
     if (element.dataset.animated === 'true') return;
-    
+
     const text = element.textContent;
     const number = parseInt(text.replace(/[^\d]/g, ''));
     const suffix = text.replace(/[\d]/g, '');
-    
+
     if (isNaN(number)) return;
 
     element.dataset.animated = 'true';
@@ -531,7 +450,7 @@ class Portfolio {
 
   updateCharCount(input) {
     if (input.tagName !== 'TEXTAREA') return;
-    
+
     const charCounter = input.parentNode.querySelector('.char-counter');
     if (charCounter) {
       const count = input.value.length;
@@ -543,15 +462,15 @@ class Portfolio {
 
   handleFormSubmit(e) {
     e.preventDefault();
-    
+
     const form = e.target;
     const formData = new FormData(form);
     const submitButton = form.querySelector('button[type="submit"]');
-    
+
     // Validate all fields
     const inputs = form.querySelectorAll('input, textarea');
     let isValid = true;
-    
+
     inputs.forEach(input => {
       if (!this.validateField(input)) {
         isValid = false;
@@ -572,16 +491,16 @@ class Portfolio {
     setTimeout(() => {
       // Here you would normally send the form data to your backend
       // For demo purposes, we'll just show a success message
-      
+
       this.showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
       form.reset();
-      
+
       // Reset character counter
       const charCounter = form.querySelector('.char-counter');
       if (charCounter) {
         charCounter.textContent = '0 / 500';
       }
-      
+
       submitButton.innerHTML = originalText;
       submitButton.disabled = false;
     }, 2000);
@@ -619,11 +538,11 @@ class Portfolio {
 
   showFieldError(field, message) {
     field.style.borderColor = 'var(--danger)';
-    
+
     const errorElement = document.createElement('div');
     errorElement.className = 'field-error';
     errorElement.textContent = message;
-    
+
     field.parentNode.appendChild(errorElement);
   }
 
@@ -644,29 +563,29 @@ class Portfolio {
     if (existingToast) {
       existingToast.remove();
     }
-    
+
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    
-    const icon = type === 'success' ? 'check-circle' : 
-                 type === 'error' ? 'exclamation-circle' : 
+
+    const icon = type === 'success' ? 'check-circle' :
+                 type === 'error' ? 'exclamation-circle' :
                  'info-circle';
-    
+
     toast.innerHTML = `
       <i class="fas fa-${icon}"></i>
       <span>${message}</span>
     `;
-    
+
     document.body.appendChild(toast);
-    
+
     // Force reflow
     toast.offsetHeight;
-    
+
     // Add animation class
     requestAnimationFrame(() => {
       toast.classList.add('show');
     });
-    
+
     // Remove after delay
     setTimeout(() => {
       toast.classList.remove('show');
@@ -700,7 +619,7 @@ class Portfolio {
   handleResize() {
     // Close navigation on resize
     this.closeNavigation();
-    
+
     // Update any responsive elements
     this.updateResponsiveElements();
   }
@@ -708,7 +627,7 @@ class Portfolio {
   updateResponsiveElements() {
     const isMobile = window.innerWidth < 768;
     const body = document.body;
-    
+
     if (isMobile) {
       body.classList.add('mobile');
     } else {
@@ -718,7 +637,7 @@ class Portfolio {
 
   onDOMLoaded() {
     console.log('Portfolio loaded successfully');
-    
+
     // Add loaded class for animations
     document.body.classList.add('dom-loaded');
   }
@@ -726,7 +645,7 @@ class Portfolio {
   onWindowLoad() {
     // Add loaded class
     document.body.classList.add('loaded');
-    
+
     // Remove page transition
     const transition = document.querySelector('.page-transition');
     if (transition) {
