@@ -663,6 +663,387 @@
       border-radius: 3px;
     }
 
+    /* Textbook Layout */
+    .textbook-container {
+      max-height: 500px;
+      overflow-y: auto;
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+
+    .textbook-header {
+      text-align: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .textbook-header h3 {
+      color: var(--primary);
+      margin-bottom: var(--space-2);
+      font-size: 1.5rem;
+    }
+
+    .textbook-subtitle {
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .textbook-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chapter-btn {
+      padding: var(--space-2) var(--space-3);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .chapter-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .chapter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .textbook-content {
+      min-height: 400px;
+    }
+
+    .chapter {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chapter.active {
+      display: block;
+    }
+
+    .chapter h4 {
+      color: var(--primary);
+      margin-bottom: var(--space-4);
+      font-size: 1.25rem;
+    }
+
+    .chapter-number {
+      background: var(--primary);
+      color: white;
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      margin-right: var(--space-2);
+    }
+
+    .section {
+      margin-bottom: var(--space-6);
+    }
+
+    .section h5 {
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+      font-size: 1.1rem;
+    }
+
+    .section h6 {
+      color: var(--primary);
+      margin-bottom: var(--space-2);
+      font-size: 1rem;
+    }
+
+    .application-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+
+    .application-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .application-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .application-card i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .application-card h6 {
+      margin-bottom: var(--space-2);
+      font-size: 0.9rem;
+    }
+
+    .application-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .interactive-demo {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+      margin: var(--space-4) 0;
+    }
+
+    .interactive-demo h6 {
+      color: var(--primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .matrix-explanation {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+      margin: var(--space-4) 0;
+    }
+
+    .matrix-type {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      text-align: center;
+    }
+
+    .matrix-type.highlight {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .matrix-visual {
+      margin-top: var(--space-3);
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      width: fit-content;
+      margin: 0 auto var(--space-2);
+    }
+
+    .matrix-cell {
+      width: 30px;
+      height: 30px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .matrix-caption {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .eigenvalue-meanings {
+      display: grid;
+      gap: var(--space-4);
+      margin: var(--space-4) 0;
+    }
+
+    .eigenvalue-meaning {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+    }
+
+    .eigenvalue-meaning.highlight {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .insight-box {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--success);
+      padding: var(--space-3);
+      margin-top: var(--space-3);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .spectral-gap-effects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+
+    .effect-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      text-align: center;
+    }
+
+    .eigenvector-explanation {
+      display: grid;
+      gap: var(--space-4);
+      margin: var(--space-4) 0;
+    }
+
+    .eigenvector-type {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+    }
+
+    .eigenvector-type.highlight {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .interpretation {
+      background: rgba(236, 72, 153, 0.1);
+      border-left: 4px solid var(--secondary);
+      padding: var(--space-3);
+      margin-top: var(--space-3);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .application-detailed {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .algorithm-steps {
+      display: grid;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+
+    .step {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-2) var(--space-3);
+      position: relative;
+      padding-left: var(--space-8);
+    }
+
+    .step::before {
+      content: counter(step);
+      counter-increment: step;
+      position: absolute;
+      left: var(--space-2);
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .algorithm-steps {
+      counter-reset: step;
+    }
+
+    .clustering-steps {
+      display: grid;
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+
+    .clustering-step {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+    }
+
+    .emerging-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-3);
+      margin-top: var(--space-3);
+    }
+
+    .emerging-app {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+    }
+
+    .laplacian-variants {
+      display: grid;
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+
+    .variant {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+    }
+
+    .research-questions {
+      display: grid;
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+
+    .question {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+    }
+
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-3);
+    }
+
+    .resource-category {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+    }
+
     /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -1094,101 +1475,464 @@
               </div>
             </div>
 
-            <!-- Educational Content -->
+            <!-- Educational Content - Interactive Textbook -->
             <div class="tab-panel" id="learn-panel">
-              <div class="learning-section">
-                <h4>What is Spectral Graph Theory?</h4>
-                <div class="concept-card">
-                  <div class="concept-header">
-                    <i class="fas fa-lightbulb"></i>
-                    <h5>The Big Idea</h5>
-                  </div>
-                  <p>
-                    Imagine your graph as a musical instrument. Just like a guitar string has natural frequencies 
-                    it vibrates at, every graph has natural "eigenvalues" and "eigenvectors" that describe how 
-                    information, energy, or influence flows through the network.
+              <div class="textbook-container">
+                <div class="textbook-header">
+                  <h3>Spectral Graph Theory: An Interactive Guide</h3>
+                  <p class="textbook-subtitle">
+                    From basic concepts to advanced applications - learn the mathematics that powers 
+                    modern network analysis, machine learning, and quantum computing.
                   </p>
                 </div>
 
-                <div class="concept-card">
-                  <div class="concept-header">
-                    <i class="fas fa-wave-square"></i>
-                    <h5>Eigenvalues: The Network's Fingerprint</h5>
-                  </div>
-                  <p>
-                    <strong>Eigenvalues</strong> are numbers that capture essential properties of your graph:
-                  </p>
-                  <ul>
-                    <li><strong>λ₁ = 0:</strong> Always zero for connected graphs (tells us about components)</li>
-                    <li><strong>λ₂ (Algebraic Connectivity):</strong> How well-connected the graph is overall</li>
-                    <li><strong>Higher λs:</strong> Reveal clustering, bottlenecks, and structural patterns</li>
-                    <li><strong>λₙ (Largest):</strong> Related to how "hub-like" the most connected nodes are</li>
-                  </ul>
+                <div class="textbook-nav">
+                  <button class="chapter-btn active" data-chapter="motivation">1. Why Spectral Theory?</button>
+                  <button class="chapter-btn" data-chapter="foundations">2. Mathematical Foundations</button>
+                  <button class="chapter-btn" data-chapter="eigenvalues">3. Understanding Eigenvalues</button>
+                  <button class="chapter-btn" data-chapter="eigenvectors">4. Eigenvectors & Flow</button>
+                  <button class="chapter-btn" data-chapter="applications">5. Real-World Applications</button>
+                  <button class="chapter-btn" data-chapter="advanced">6. Advanced Topics</button>
                 </div>
 
-                <div class="concept-card">
-                  <div class="concept-header">
-                    <i class="fas fa-broadcast-tower"></i>
-                    <h5>Eigenvectors: Vibration Patterns</h5>
-                  </div>
-                  <p>
-                    <strong>Eigenvectors</strong> show patterns of how things flow through your network:
-                  </p>
-                  <ul>
-                    <li><strong>Second eigenvector:</strong> Splits the graph into natural communities</li>
-                    <li><strong>Higher eigenvectors:</strong> Reveal more complex flow patterns and structures</li>
-                    <li><strong>Node colors:</strong> Show positive/negative values - like "hot" and "cold" regions</li>
-                    <li><strong>Zero crossings:</strong> Natural boundaries where the network wants to split</li>
-                  </ul>
-                </div>
+                <div class="textbook-content">
+                  <!-- Chapter 1: Motivation -->
+                  <div class="chapter active" id="motivation-chapter">
+                    <h4><span class="chapter-number">Chapter 1:</span> Why Spectral Graph Theory?</h4>
+                    
+                    <div class="section">
+                      <h5>The Network Revolution</h5>
+                      <p>
+                        We live in an interconnected world. Social networks connect billions of people. 
+                        Neural networks in our brains have trillions of connections. The internet links 
+                        every computer on Earth. Understanding these networks is crucial for:
+                      </p>
+                      
+                      <div class="application-grid">
+                        <div class="application-card">
+                          <i class="fas fa-search"></i>
+                          <h6>Search Engines</h6>
+                          <p>Google's PageRank uses the dominant eigenvector to rank web pages</p>
+                        </div>
+                        <div class="application-card">
+                          <i class="fas fa-users"></i>
+                          <h6>Social Networks</h6>
+                          <p>Finding communities and predicting connections in social media</p>
+                        </div>
+                        <div class="application-card">
+                          <i class="fas fa-brain"></i>
+                          <h6>Neuroscience</h6>
+                          <p>Understanding brain connectivity and information processing</p>
+                        </div>
+                        <div class="application-card">
+                          <i class="fas fa-robot"></i>
+                          <h6>Machine Learning</h6>
+                          <p>Spectral clustering and dimensionality reduction algorithms</p>
+                        </div>
+                      </div>
+                    </div>
 
-                <div class="concept-card">
-                  <div class="concept-header">
-                    <i class="fas fa-rocket"></i>
-                    <h5>Why Spectral Theory is Powerful</h5>
-                  </div>
-                  <p>
-                    Standard graph theory looks at local properties (edges, neighbors). Spectral theory reveals 
-                    <strong>global properties</strong> that emerge from the entire network structure:
-                  </p>
-                  <ul>
-                    <li><strong>Community Detection:</strong> Automatically find natural groups</li>
-                    <li><strong>Graph Clustering:</strong> Partition networks optimally</li>
-                    <li><strong>Random Walks:</strong> Predict how things spread through networks</li>
-                    <li><strong>Network Robustness:</strong> Identify critical connections and vulnerabilities</li>
-                    <li><strong>Dimensionality Reduction:</strong> Embed graphs in lower dimensions</li>
-                  </ul>
-                </div>
+                    <div class="section">
+                      <h5>The Limitation of Traditional Graph Theory</h5>
+                      <p>
+                        Traditional graph theory focuses on <strong>local properties</strong>:
+                      </p>
+                      <ul>
+                        <li>Degree of individual nodes</li>
+                        <li>Shortest paths between specific pairs</li>
+                        <li>Local clustering coefficients</li>
+                      </ul>
+                      
+                      <p>
+                        But networks have <strong>global emergent properties</strong> that can't be understood 
+                        by looking at individual parts. This is where spectral theory shines.
+                      </p>
+                    </div>
 
-                <div class="concept-card">
-                  <div class="concept-header">
-                    <i class="fas fa-cogs"></i>
-                    <h5>Real-World Applications</h5>
+                    <div class="interactive-demo">
+                      <h6>🎵 The Music Analogy</h6>
+                      <p>
+                        Think of your graph as a musical instrument. When you pluck a guitar string, 
+                        it doesn't vibrate at just any frequency - it has natural resonant frequencies 
+                        determined by its physical properties.
+                      </p>
+                      <p>
+                        Similarly, every graph has natural "frequencies" (eigenvalues) and "vibration patterns" 
+                        (eigenvectors) that reveal its fundamental structure.
+                      </p>
+                    </div>
                   </div>
-                  <p>
-                    Spectral graph theory powers algorithms you use every day:
-                  </p>
-                  <ul>
-                    <li><strong>Google's PageRank:</strong> Uses the dominant eigenvector to rank web pages</li>
-                    <li><strong>Social Media:</strong> Friend recommendations and community detection</li>
-                    <li><strong>Machine Learning:</strong> Spectral clustering for data analysis</li>
-                    <li><strong>Neuroscience:</strong> Understanding brain connectivity patterns</li>
-                    <li><strong>Computer Graphics:</strong> Mesh processing and shape analysis</li>
-                    <li><strong>Quantum Computing:</strong> Quantum walks and optimization algorithms</li>
-                  </ul>
-                </div>
 
-                <div class="concept-card highlight">
-                  <div class="concept-header">
-                    <i class="fas fa-magic"></i>
-                    <h5>The Magic of Linear Algebra</h5>
+                  <!-- Chapter 2: Foundations -->
+                  <div class="chapter" id="foundations-chapter">
+                    <h4><span class="chapter-number">Chapter 2:</span> Mathematical Foundations</h4>
+                    
+                    <div class="section">
+                      <h5>From Graphs to Matrices</h5>
+                      <p>
+                        The key insight of spectral graph theory is representing graphs as matrices, 
+                        unlocking the full power of linear algebra.
+                      </p>
+                      
+                      <div class="matrix-explanation">
+                        <div class="matrix-type">
+                          <h6>Adjacency Matrix (A)</h6>
+                          <p>A[i,j] = 1 if nodes i and j are connected, 0 otherwise</p>
+                          <div class="matrix-visual">
+                            <div class="matrix-grid">
+                              <div class="matrix-cell">0</div><div class="matrix-cell">1</div><div class="matrix-cell">0</div>
+                              <div class="matrix-cell">1</div><div class="matrix-cell">0</div><div class="matrix-cell">1</div>
+                              <div class="matrix-cell">0</div><div class="matrix-cell">1</div><div class="matrix-cell">0</div>
+                            </div>
+                            <span class="matrix-caption">3-node path graph</span>
+                          </div>
+                        </div>
+                        
+                        <div class="matrix-type">
+                          <h6>Degree Matrix (D)</h6>
+                          <p>D[i,i] = degree of node i, all other entries are 0</p>
+                          <div class="matrix-visual">
+                            <div class="matrix-grid">
+                              <div class="matrix-cell">1</div><div class="matrix-cell">0</div><div class="matrix-cell">0</div>
+                              <div class="matrix-cell">0</div><div class="matrix-cell">2</div><div class="matrix-cell">0</div>
+                              <div class="matrix-cell">0</div><div class="matrix-cell">0</div><div class="matrix-cell">1</div>
+                            </div>
+                            <span class="matrix-caption">Diagonal degree matrix</span>
+                          </div>
+                        </div>
+                        
+                        <div class="matrix-type highlight">
+                          <h6>Laplacian Matrix (L = D - A)</h6>
+                          <p>The star of spectral graph theory - encodes both connectivity and structure</p>
+                          <div class="matrix-visual">
+                            <div class="matrix-grid">
+                              <div class="matrix-cell">1</div><div class="matrix-cell">-1</div><div class="matrix-cell">0</div>
+                              <div class="matrix-cell">-1</div><div class="matrix-cell">2</div><div class="matrix-cell">-1</div>
+                              <div class="matrix-cell">0</div><div class="matrix-cell">-1</div><div class="matrix-cell">1</div>
+                            </div>
+                            <span class="matrix-caption">Laplacian = D - A</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="section">
+                      <h5>Why the Laplacian?</h5>
+                      <p>
+                        The Laplacian matrix L = D - A has remarkable properties:
+                      </p>
+                      <ul>
+                        <li><strong>Symmetric:</strong> Has real eigenvalues and orthogonal eigenvectors</li>
+                        <li><strong>Positive semidefinite:</strong> All eigenvalues ≥ 0</li>
+                        <li><strong>Encodes connectivity:</strong> Number of zero eigenvalues = number of connected components</li>
+                        <li><strong>Discrete Laplace operator:</strong> Measures "smoothness" across the graph</li>
+                      </ul>
+                    </div>
                   </div>
-                  <p>
-                    By representing graphs as matrices, we unlock the full power of linear algebra. 
-                    Properties that would require complex algorithms to compute directly can be 
-                    read off immediately from eigenvalues and eigenvectors. It's like having 
-                    X-ray vision for network structure!
-                  </p>
+
+                  <!-- Chapter 3: Eigenvalues -->
+                  <div class="chapter" id="eigenvalues-chapter">
+                    <h4><span class="chapter-number">Chapter 3:</span> Understanding Eigenvalues</h4>
+                    
+                    <div class="section">
+                      <h5>The Eigenvalue Spectrum</h5>
+                      <p>
+                        For a graph with n nodes, the Laplacian has n eigenvalues: 0 = λ₁ ≤ λ₂ ≤ ... ≤ λₙ
+                      </p>
+                      
+                      <div class="eigenvalue-meanings">
+                        <div class="eigenvalue-meaning">
+                          <h6>λ₁ = 0 (Always)</h6>
+                          <p>
+                            The smallest eigenvalue is always 0 for connected graphs. The multiplicity 
+                            of this eigenvalue equals the number of connected components.
+                          </p>
+                          <div class="insight-box">
+                            <strong>Insight:</strong> If your graph has λ₁ = λ₂ = 0, it has at least 2 disconnected parts!
+                          </div>
+                        </div>
+                        
+                        <div class="eigenvalue-meaning highlight">
+                          <h6>λ₂ - Algebraic Connectivity</h6>
+                          <p>
+                            The second smallest eigenvalue is the most important. It measures how "well-connected" 
+                            your graph is overall.
+                          </p>
+                          <ul>
+                            <li>λ₂ = 0: Graph is disconnected</li>
+                            <li>Small λ₂: Graph has bottlenecks, poor connectivity</li>
+                            <li>Large λ₂: Graph is well-connected, information flows easily</li>
+                          </ul>
+                          <div class="insight-box">
+                            <strong>Cheeger's Inequality:</strong> λ₂ bounds the conductance of the graph, 
+                            relating spectral properties to combinatorial ones.
+                          </div>
+                        </div>
+                        
+                        <div class="eigenvalue-meaning">
+                          <h6>λₙ - Maximum Eigenvalue</h6>
+                          <p>
+                            The largest eigenvalue relates to the maximum degree and overall "regularity" of the graph.
+                          </p>
+                          <ul>
+                            <li>For regular graphs: λₙ ≤ maximum degree</li>
+                            <li>Large λₙ: Graph has high-degree "hub" nodes</li>
+                            <li>λₙ ≈ average degree: Graph is roughly regular</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="section">
+                      <h5>Spectral Gap</h5>
+                      <p>
+                        The gap λ₂ - λ₁ = λ₂ (since λ₁ = 0) is called the <strong>spectral gap</strong>. 
+                        It's arguably the most important single number characterizing your graph:
+                      </p>
+                      
+                      <div class="spectral-gap-effects">
+                        <div class="effect-card">
+                          <h6>Random Walks</h6>
+                          <p>Larger gap → faster mixing time → random walks converge quickly to steady state</p>
+                        </div>
+                        <div class="effect-card">
+                          <h6>Expansion</h6>
+                          <p>Larger gap → better expansion → hard to find small cuts that disconnect the graph</p>
+                        </div>
+                        <div class="effect-card">
+                          <h6>Connectivity</h6>
+                          <p>Larger gap → more robust connectivity → graph survives random edge/node failures</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Chapter 4: Eigenvectors -->
+                  <div class="chapter" id="eigenvectors-chapter">
+                    <h4><span class="chapter-number">Chapter 4:</span> Eigenvectors & Information Flow</h4>
+                    
+                    <div class="section">
+                      <h5>Eigenvectors as Vibration Patterns</h5>
+                      <p>
+                        If eigenvalues are the "frequencies," then eigenvectors are the "vibration patterns" 
+                        that show how information, energy, or influence flows through your network.
+                      </p>
+                      
+                      <div class="eigenvector-explanation">
+                        <div class="eigenvector-type">
+                          <h6>First Eigenvector (v₁)</h6>
+                          <p>
+                            Corresponds to λ₁ = 0. For connected graphs, this is the constant vector: 
+                            v₁ = (1, 1, 1, ..., 1). All nodes have the same value.
+                          </p>
+                          <div class="interpretation">
+                            <strong>Interpretation:</strong> The "DC component" - uniform distribution across all nodes.
+                          </div>
+                        </div>
+                        
+                        <div class="eigenvector-type highlight">
+                          <h6>Second Eigenvector (v₂) - Fiedler Vector</h6>
+                          <p>
+                            The most important eigenvector! It naturally partitions your graph into communities.
+                          </p>
+                          <ul>
+                            <li><strong>Positive values:</strong> Nodes in one community</li>
+                            <li><strong>Negative values:</strong> Nodes in another community</li>
+                            <li><strong>Zero crossings:</strong> Natural boundaries between communities</li>
+                          </ul>
+                          <div class="interpretation">
+                            <strong>Application:</strong> This is the foundation of spectral clustering algorithms!
+                          </div>
+                        </div>
+                        
+                        <div class="eigenvector-type">
+                          <h6>Higher Eigenvectors (v₃, v₄, ...)</h6>
+                          <p>
+                            Reveal increasingly fine-grained structure: sub-communities, hierarchical organization, 
+                            and complex flow patterns.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="section">
+                      <h5>The Discrete Laplace Equation</h5>
+                      <p>
+                        Eigenvectors solve: <strong>L v = λ v</strong>
+                      </p>
+                      <p>
+                        This is the discrete version of the Laplace equation from physics! It describes 
+                        how "smoothly" values change across the graph. Higher eigenvalues correspond 
+                        to more "oscillatory" patterns.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Chapter 5: Applications -->
+                  <div class="chapter" id="applications-chapter">
+                    <h4><span class="chapter-number">Chapter 5:</span> Real-World Applications</h4>
+                    
+                    <div class="application-detailed">
+                      <h5>Google's PageRank Algorithm</h5>
+                      <p>
+                        The algorithm that built Google is fundamentally spectral graph theory!
+                      </p>
+                      <div class="algorithm-explanation">
+                        <p>
+                          PageRank finds the dominant eigenvector of the web graph's transition matrix. 
+                          This eigenvector represents the "steady-state" probability that a random surfer 
+                          visits each page.
+                        </p>
+                        <div class="algorithm-steps">
+                          <div class="step">1. Build web graph (pages = nodes, links = edges)</div>
+                          <div class="step">2. Create transition matrix from adjacency matrix</div>
+                          <div class="step">3. Find dominant eigenvector using power iteration</div>
+                          <div class="step">4. Eigenvector values = PageRank scores</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="application-detailed">
+                      <h5>Spectral Clustering</h5>
+                      <p>
+                        One of the most successful applications in machine learning and data science.
+                      </p>
+                      <div class="clustering-steps">
+                        <div class="clustering-step">
+                          <h6>Step 1: Build Similarity Graph</h6>
+                          <p>Connect data points that are similar (k-NN, ε-neighborhood, or full graph with weights)</p>
+                        </div>
+                        <div class="clustering-step">
+                          <h6>Step 2: Compute Laplacian</h6>
+                          <p>Usually the normalized Laplacian: L = D⁻¹/²(D-A)D⁻¹/²</p>
+                        </div>
+                        <div class="clustering-step">
+                          <h6>Step 3: Find Eigenvectors</h6>
+                          <p>Compute first k eigenvectors for k clusters</p>
+                        </div>
+                        <div class="clustering-step">
+                          <h6>Step 4: Cluster in Spectral Space</h6>
+                          <p>Use k-means on the eigenvector matrix rows</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="application-detailed">
+                      <h5>Network Analysis & Social Media</h5>
+                      <ul>
+                        <li><strong>Community Detection:</strong> Find natural groups in social networks</li>
+                        <li><strong>Influence Analysis:</strong> Identify key influencers using centrality measures</li>
+                        <li><strong>Recommendation Systems:</strong> Predict connections and content preferences</li>
+                        <li><strong>Anomaly Detection:</strong> Spot unusual patterns in network behavior</li>
+                      </ul>
+                    </div>
+
+                    <div class="application-detailed">
+                      <h5>Emerging Applications</h5>
+                      <div class="emerging-grid">
+                        <div class="emerging-app">
+                          <h6>Quantum Computing</h6>
+                          <p>Quantum walks on graphs, optimization algorithms (QAOA), and quantum machine learning</p>
+                        </div>
+                        <div class="emerging-app">
+                          <h6>Deep Learning</h6>
+                          <p>Graph Neural Networks (GNNs) use spectral concepts for learning on graph-structured data</p>
+                        </div>
+                        <div class="emerging-app">
+                          <h6>Computational Biology</h6>
+                          <p>Protein interaction networks, metabolic pathways, and gene regulatory networks</p>
+                        </div>
+                        <div class="emerging-app">
+                          <h6>Transportation</h6>
+                          <p>Route optimization, traffic flow analysis, and smart city infrastructure</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Chapter 6: Advanced Topics -->
+                  <div class="chapter" id="advanced-chapter">
+                    <h4><span class="chapter-number">Chapter 6:</span> Advanced Topics</h4>
+                    
+                    <div class="section">
+                      <h5>Variations of the Laplacian</h5>
+                      <div class="laplacian-variants">
+                        <div class="variant">
+                          <h6>Normalized Laplacian</h6>
+                          <p>L_norm = D⁻¹/²LD⁻¹/² = I - D⁻¹/²AD⁻¹/²</p>
+                          <p>Better for graphs with varying degrees. Eigenvalues in [0, 2].</p>
+                        </div>
+                        <div class="variant">
+                          <h6>Random Walk Laplacian</h6>
+                          <p>L_rw = D⁻¹L = I - D⁻¹A</p>
+                          <p>Directly related to random walks on the graph.</p>
+                        </div>
+                        <div class="variant">
+                          <h6>Signless Laplacian</h6>
+                          <p>Q = D + A</p>
+                          <p>Used when edge orientations don't matter.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="section">
+                      <h5>Graph Signal Processing</h5>
+                      <p>
+                        A modern extension where we analyze "signals" (functions) defined on graph vertices. 
+                        The eigenvectors of the Laplacian form a "Fourier basis" for the graph!
+                      </p>
+                      <ul>
+                        <li><strong>Graph Fourier Transform:</strong> Decompose signals into spectral components</li>
+                        <li><strong>Graph Filtering:</strong> Remove noise or extract features from graph signals</li>
+                        <li><strong>Applications:</strong> Sensor networks, image processing on meshes, social signal analysis</li>
+                      </ul>
+                    </div>
+
+                    <div class="section">
+                      <h5>Open Research Questions</h5>
+                      <div class="research-questions">
+                        <div class="question">
+                          <h6>Inverse Eigenvalue Problems</h6>
+                          <p>Given desired eigenvalues, can we construct a graph that realizes them? (What you're exploring in this tool!)</p>
+                        </div>
+                        <div class="question">
+                          <h6>Dynamic Graphs</h6>
+                          <p>How do spectral properties change as graphs evolve over time?</p>
+                        </div>
+                        <div class="question">
+                          <h6>Multilayer Networks</h6>
+                          <p>Extending spectral theory to graphs with multiple types of connections</p>
+                        </div>
+                        <div class="question">
+                          <h6>Quantum Graphs</h6>
+                          <p>Spectral theory on quantum mechanical graph structures</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="section">
+                      <h5>Going Deeper</h5>
+                      <p>Ready to dive into the mathematics? Here are essential resources:</p>
+                      <div class="resources">
+                        <div class="resource-category">
+                          <h6>Foundational Books</h6>
+                          <ul>
+                            <li>"Spectral Graph Theory" by Fan Chung</li>
+                            <li>"Algebraic Graph Theory" by Chris Godsil & Gordon Royle</li>
+                            <li>"Networks, Crowds, and Markets" by Easley & Kleinberg</li>
+                          </ul>
+                        </div>
+                        <div class="resource-category">
+                          <h6>Research Papers</h6>
+                          <ul>
+                            <li>Fiedler's original papers on algebraic connectivity</li>
+                            <li>Spielman & Teng on graph sparsification</li>
+                            <li>Von Luxburg's tutorial on spectral clustering</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1885,20 +2629,33 @@
       }
 
       async init() {
+        console.log('GraphLaplacianApplet.init() starting');
+        
         // Setup visualizer
         const canvas = document.getElementById('graph-canvas');
+        console.log('Canvas element:', canvas);
+        
+        if (!canvas) {
+          console.error('Canvas element not found!');
+          return;
+        }
+        
         this.visualizer = new GraphVisualizer(canvas);
         
         // Setup eigenvalue chart
         const chartCanvas = document.getElementById('eigenvalue-chart');
-        this.eigenvalueChart = new EigenvalueChart(chartCanvas);
+        console.log('Chart canvas element:', chartCanvas);
+        
+        if (chartCanvas) {
+          this.eigenvalueChart = new EigenvalueChart(chartCanvas);
+        }
         
         // Setup eigenvector visualizer
         this.eigenvectorVisualizer = new EigenvectorVisualizer(this.visualizer);
         
         // Setup intuitive property controls
+        console.log('Setting up property controls');
         this.controls = new PropertyControls(
-          document, // Pass document as the controls span multiple containers
           (eigenvalues) => this.onEigenvaluesChanged(eigenvalues)
         );
         
@@ -1911,15 +2668,22 @@
         // Setup worker for heavy computations
         this.setupWorker();
         
-        // Initial graph - start with a simple path to demonstrate
+        // Force initial graph generation for testing
         this.generateInitialGraph();
+        
+        // Initial graph - the PropertyControls will trigger this automatically
+        console.log('Initialization complete');
         
         // Handle window resize
         window.addEventListener('resize', () => {
           this.visualizer.setupCanvas();
-          this.eigenvalueChart.setupCanvas();
+          if (this.eigenvalueChart) {
+            this.eigenvalueChart.setupCanvas();
+          }
           this.visualizer.render();
-          this.eigenvalueChart.render();
+          if (this.eigenvalueChart) {
+            this.eigenvalueChart.render();
+          }
         });
       }
 
@@ -1951,6 +2715,31 @@
             }
           });
         });
+
+        // Setup textbook chapter navigation
+        this.setupTextbookNavigation();
+      }
+
+      setupTextbookNavigation() {
+        const chapterButtons = document.querySelectorAll('.chapter-btn');
+        const chapters = document.querySelectorAll('.chapter');
+        
+        chapterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const targetChapter = button.dataset.chapter;
+            
+            // Update button states
+            chapterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Update chapter visibility
+            chapters.forEach(chapter => chapter.classList.remove('active'));
+            const targetChapterEl = document.getElementById(`${targetChapter}-chapter`);
+            if (targetChapterEl) {
+              targetChapterEl.classList.add('active');
+            }
+          });
+        });
       }
 
       setupEigenvectorControls() {
@@ -1968,21 +2757,34 @@
       }
 
       setupWorker() {
-        // For this demo, we'll compute synchronously
-        // In production, use Web Workers for heavy computations
+        // For this demo, we'll compute synchronously for reliability
+        // In production, this could use Web Workers for heavy computations
         this.worker = {
           postMessage: (data) => {
-            setTimeout(() => {
+            console.log('Worker received message:', data);
+            
+            try {
               const result = this.engine.generateGraphFromEigenvalues(data.eigenvalues);
-              this.onWorkerMessage({ data: result });
-            }, 50);
+              console.log('Worker computed result:', result);
+              
+              // Call the message handler directly (simulating async worker)
+              setTimeout(() => {
+                this.onWorkerMessage({ data: result });
+              }, 10);
+            } catch (error) {
+              console.error('Worker computation error:', error);
+            }
           }
         };
+        
+        console.log('Worker setup complete');
       }
 
       onWorkerMessage(event) {
         const graph = event.data;
         this.currentGraph = graph;
+        
+        console.log('Graph generated:', graph); // Debug log
         
         // Update main graph visualization
         this.visualizer.setGraph(graph);
@@ -2068,14 +2870,16 @@
       }
 
       generateInitialGraph() {
-        // Start with moderate connectivity that matches the HTML defaults
-        // Don't call setProperties since the PropertyControls already initializes correctly
-        // Just trigger the first graph generation
+        // Force an immediate test graph to verify the system works
+        console.log('Generating initial test graph');
+        
+        const testEigenvalues = [0, 0.268, 1.000, 2.000, 3.732]; // Path graph eigenvalues
+        console.log('Test eigenvalues:', testEigenvalues);
+        
         setTimeout(() => {
-          const currentProps = this.controls.getProperties();
-          const eigenvalues = this.controls.solver.solveForProperties(currentProps, this.controls.nodeCount);
-          this.onEigenvaluesChanged(eigenvalues);
-        }, 100);
+          console.log('Triggering test graph generation');
+          this.onEigenvaluesChanged(testEigenvalues);
+        }, 500);
       }
 
       onEigenvaluesChanged(eigenvalues) {
@@ -2102,6 +2906,8 @@
           this.closePath();
         };
       }
+      
+      console.log('Starting applet initialization'); // Debug log
       
       const applet = new GraphLaplacianApplet();
       window.graphLaplacianApplet = applet; // For debugging
