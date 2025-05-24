@@ -7,39 +7,32 @@
   <meta name="keywords" content="robotics projects, quantum computing, reinforcement learning, computer vision, autonomous systems">
   <meta name="author" content="Jack Kinney">
   <meta name="theme-color" content="#6366f1">
-  
-  <!-- Open Graph -->
+
   <meta property="og:title" content="Projects - Jack Kinney">
   <meta property="og:description" content="Explore my innovative projects in robotics, AI, and quantum computing.">
   <meta property="og:type" content="website">
-  
+
   <title>Projects — Jack Kinney</title>
-  
-  <!-- Favicon -->
+
   <link rel="icon" type="image/x-icon" href="./assets/images/favicon.ico">
-  
-  <!-- Fonts -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- Icons -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Custom Styles -->
+
   <link rel="stylesheet" href="./assets/css/style.css">
-  
-  <!-- PWA Manifest -->
+
   <link rel="manifest" href="./manifest.json">
-  
-  <!-- Additional Styles for Projects Page -->
+
   <style>
     .projects-hero {
       padding: calc(var(--space-16) + 80px) 0 var(--space-12);
       background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
       text-align: center;
     }
-    
+
     .filter-container {
       display: flex;
       justify-content: center;
@@ -47,7 +40,7 @@
       margin-bottom: var(--space-12);
       flex-wrap: wrap;
     }
-    
+
     .filter-btn {
       padding: var(--space-2) var(--space-4);
       background: rgba(99, 102, 241, 0.1);
@@ -59,7 +52,7 @@
       cursor: pointer;
       transition: var(--transition);
     }
-    
+
     .filter-btn:hover,
     .filter-btn.active {
       background: var(--primary);
@@ -67,7 +60,7 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
-    
+
     .featured-project {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -81,7 +74,7 @@
       margin-bottom: var(--space-16);
       position: relative;
     }
-    
+
     .featured-badge {
       position: absolute;
       top: var(--space-4);
@@ -95,7 +88,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    
+
     .project-image-large {
       position: relative;
       height: 300px;
@@ -106,7 +99,7 @@
       justify-content: center;
       overflow: hidden;
     }
-    
+
     .project-details {
       display: flex;
       gap: var(--space-6);
@@ -114,25 +107,25 @@
       color: var(--text-muted);
       font-size: 0.875rem;
     }
-    
+
     .project-detail {
       display: flex;
       align-items: center;
       gap: var(--space-2);
     }
-    
+
     @media (max-width: 768px) {
       .featured-project {
         grid-template-columns: 1fr;
         text-align: center;
       }
-      
+
       .featured-badge {
         position: static;
         display: inline-block;
         margin-bottom: var(--space-4);
       }
-      
+
       .project-details {
         justify-content: center;
       }
@@ -140,10 +133,8 @@
   </style>
 </head>
 <body class="loading">
-  <!-- Page Transition -->
   <div class="page-transition"></div>
-  
-  <!-- Scroll Progress Bar -->
+
   <div class="scroll-progress"></div>
 
   <header class="header" id="header">
@@ -154,7 +145,6 @@
           <ul class="nav-list">
             <li><a href="./index.html">Home</a></li>
             <li><a href="./projects.html" class="active">Projects</a></li>
-            <li><a href="./research.html">Research</a></li>
             <li><a href="./index.html#about">About</a></li>
             <li><a href="./index.html#contact">Contact</a></li>
           </ul>
@@ -169,7 +159,6 @@
   </header>
 
   <main>
-    <!-- Projects Hero -->
     <section class="projects-hero">
       <div class="container">
         <h1>My Projects</h1>
@@ -179,7 +168,6 @@
       </div>
     </section>
 
-    <!-- Featured Project -->
     <section class="section">
       <div class="container">
         <div class="featured-project">
@@ -192,9 +180,9 @@
           <div class="project-content-large">
             <h2>Quantum-Enhanced Robot Navigation</h2>
             <p class="project-description">
-              A groundbreaking project that combines quantum computing with traditional pathfinding algorithms 
-              to achieve unprecedented efficiency in multi-robot coordination. Using quantum annealing and 
-              QAOA, this system can solve complex navigation problems that would take classical computers 
+              A groundbreaking project that combines quantum computing with traditional pathfinding algorithms
+              to achieve unprecedented efficiency in multi-robot coordination. Using quantum annealing and
+              QAOA, this system can solve complex navigation problems that would take classical computers
               exponentially longer to compute.
             </p>
             <div class="project-details">
@@ -233,14 +221,13 @@
       </div>
     </section>
 
-    <!-- Project Filters -->
     <section class="section section-alt">
       <div class="container">
         <div class="section-header">
           <h2>All Projects</h2>
           <p>Filter by technology or domain</p>
         </div>
-        
+
         <div class="filter-container">
           <button class="filter-btn active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="robotics">Robotics</button>
@@ -249,9 +236,8 @@
           <button class="filter-btn" data-filter="vision">Computer Vision</button>
           <button class="filter-btn" data-filter="web">Web/Apps</button>
         </div>
-        
+
         <div class="projects-grid">
-          <!-- Robotics Projects -->
           <div class="project-card" data-category="robotics ai">
             <div class="project-image">
               <div class="project-placeholder">
@@ -261,8 +247,8 @@
             <div class="project-content">
               <h3>Autonomous Navigation Drone</h3>
               <p>
-                Developed a quadcopter with reinforcement learning-based navigation that can 
-                autonomously explore unknown environments while avoiding obstacles and mapping 
+                Developed a quadcopter with reinforcement learning-based navigation that can
+                autonomously explore unknown environments while avoiding obstacles and mapping
                 the terrain in real-time.
               </p>
               <div class="project-tech">
@@ -293,8 +279,8 @@
             <div class="project-content">
               <h3>Quantum Path Optimization</h3>
               <p>
-                Implemented quantum algorithms to solve complex path planning problems for 
-                multi-robot systems, achieving significant speedups over classical methods 
+                Implemented quantum algorithms to solve complex path planning problems for
+                multi-robot systems, achieving significant speedups over classical methods
                 using quantum annealing techniques.
               </p>
               <div class="project-tech">
@@ -325,8 +311,8 @@
             <div class="project-content">
               <h3>Real-time Object Tracking</h3>
               <p>
-                Built a computer vision system that uses deep learning to track multiple 
-                objects in real-time, enabling robots to understand and interact with 
+                Built a computer vision system that uses deep learning to track multiple
+                objects in real-time, enabling robots to understand and interact with
                 dynamic environments effectively.
               </p>
               <div class="project-tech">
@@ -357,8 +343,8 @@
             <div class="project-content">
               <h3>Reinforcement Learning Arm</h3>
               <p>
-                Trained a 6-DOF robotic arm using deep Q-learning to perform precise 
-                pick-and-place tasks, with the ability to adapt to new objects and 
+                Trained a 6-DOF robotic arm using deep Q-learning to perform precise
+                pick-and-place tasks, with the ability to adapt to new objects and
                 environments without retraining.
               </p>
               <div class="project-tech">
@@ -389,8 +375,8 @@
             <div class="project-content">
               <h3>Quantum Machine Learning</h3>
               <p>
-                Explored quantum neural networks for pattern recognition tasks, achieving 
-                comparable accuracy to classical networks while using significantly fewer 
+                Explored quantum neural networks for pattern recognition tasks, achieving
+                comparable accuracy to classical networks while using significantly fewer
                 parameters on quantum simulators.
               </p>
               <div class="project-tech">
@@ -421,8 +407,8 @@
             <div class="project-content">
               <h3>Robot Control Dashboard</h3>
               <p>
-                Created a web-based dashboard for monitoring and controlling multiple robots 
-                in real-time, featuring 3D visualization, telemetry data, and mission planning 
+                Created a web-based dashboard for monitoring and controlling multiple robots
+                in real-time, featuring 3D visualization, telemetry data, and mission planning
                 capabilities.
               </p>
               <div class="project-tech">
@@ -453,8 +439,8 @@
             <div class="project-content">
               <h3>Autonomous RC Car</h3>
               <p>
-                Built a self-driving RC car using computer vision and sensor fusion, capable 
-                of lane detection, obstacle avoidance, and traffic sign recognition in 
+                Built a self-driving RC car using computer vision and sensor fusion, capable
+                of lane detection, obstacle avoidance, and traffic sign recognition in
                 real-world environments.
               </p>
               <div class="project-tech">
@@ -485,8 +471,8 @@
             <div class="project-content">
               <h3>Gesture Control System</h3>
               <p>
-                Developed a real-time hand gesture recognition system for controlling robots 
-                and drones using computer vision and deep learning, supporting over 20 
+                Developed a real-time hand gesture recognition system for controlling robots
+                and drones using computer vision and deep learning, supporting over 20
                 different commands.
               </p>
               <div class="project-tech">
@@ -511,7 +497,6 @@
       </div>
     </section>
 
-    <!-- Call to Action -->
     <section class="section">
       <div class="container">
         <div class="section-header">
@@ -531,17 +516,15 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
-        <p>&copy; 2025 Jack Kinney. Robotics Engineering Student at UC Santa Cruz.</p>
+        <p>&copy; 2025 Jack Kinney. Robotics Engineering Student.</p>
         <div class="footer-links">
           <a href="./assets/docs/resume.pdf" target="_blank" rel="noopener">Resume</a>
           <a href="./index.html">Home</a>
-          <a href="./research.html">Research</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- Main JavaScript -->
   <script src="./assets/js/main.js"></script>
 </body>
 </html>
