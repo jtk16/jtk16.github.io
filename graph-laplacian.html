@@ -426,6 +426,249 @@
       font-weight: 500;
     }
 
+    /* Analysis Tabs */
+    .analysis-tabs {
+      display: flex;
+      gap: var(--space-1);
+      margin: var(--space-6) 0 var(--space-4) 0;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .tab-btn {
+      padding: var(--space-3) var(--space-4);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--text-muted);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+      font-size: 0.875rem;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: var(--bg-secondary);
+    }
+
+    .tab-content {
+      min-height: 300px;
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      margin-bottom: var(--space-4);
+    }
+
+    .panel-header h4 {
+      margin-bottom: var(--space-2);
+      color: var(--text-primary);
+    }
+
+    .panel-header p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Eigenvalue Chart */
+    .eigenvalue-chart {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+      display: flex;
+      justify-content: center;
+    }
+
+    .eigenvalue-insights {
+      display: grid;
+      gap: var(--space-2);
+    }
+
+    .insight-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-2) var(--space-3);
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+    }
+
+    .insight-label {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .insight-value {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Eigenvector Controls */
+    .eigenvector-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+      padding: var(--space-3);
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+
+    .eigenvector-controls label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.875rem;
+    }
+
+    .eigenvector-controls select {
+      padding: var(--space-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .animation-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: var(--transition);
+    }
+
+    .animation-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .eigenvector-explanation {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* Learning Section */
+    .learning-section {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: var(--space-2);
+    }
+
+    .learning-section h4 {
+      margin-bottom: var(--space-4);
+      color: var(--text-primary);
+      text-align: center;
+      font-size: 1.25rem;
+    }
+
+    .concept-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-4);
+      transition: var(--transition);
+    }
+
+    .concept-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+    }
+
+    .concept-card.highlight {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+      border-color: var(--primary);
+    }
+
+    .concept-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .concept-header i {
+      font-size: 1.25rem;
+      color: var(--primary);
+      width: 24px;
+      text-align: center;
+    }
+
+    .concept-header h5 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .concept-card p {
+      margin-bottom: var(--space-3);
+      line-height: 1.6;
+    }
+
+    .concept-card ul {
+      margin: 0;
+      padding-left: var(--space-4);
+    }
+
+    .concept-card li {
+      margin-bottom: var(--space-2);
+      line-height: 1.5;
+    }
+
+    .concept-card li strong {
+      color: var(--primary);
+    }
+
+    /* Custom scrollbar for learning section */
+    .learning-section::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .learning-section::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+    }
+
+    .learning-section::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .eigenvalue-label {
       display: flex;
       justify-content: between;
@@ -679,7 +922,7 @@
                        min="0" max="100" value="30" data-property="connectivity">
                 <span class="slider-label">Dense</span>
               </div>
-              <div class="property-value">Moderate connectivity</div>
+              <div class="property-value">Low connectivity</div>
             </div>
 
             <div class="property-control">
@@ -690,7 +933,7 @@
               <div class="property-slider-container">
                 <span class="slider-label">Tight</span>
                 <input type="range" class="property-slider" id="expansion-slider" 
-                       min="0" max="100" value="50" data-property="expansion">
+                       min="0" max="100" value="60" data-property="expansion">
                 <span class="slider-label">Spread</span>
               </div>
               <div class="property-value">Balanced spread</div>
@@ -704,10 +947,10 @@
               <div class="property-slider-container">
                 <span class="slider-label">Uniform</span>
                 <input type="range" class="property-slider" id="clustering-slider" 
-                       min="0" max="100" value="25" data-property="clustering">
+                       min="0" max="100" value="15" data-property="clustering">
                 <span class="slider-label">Clustered</span>
               </div>
-              <div class="property-value">Low clustering</div>
+              <div class="property-value">Very low clustering</div>
             </div>
           </div>
 
@@ -795,14 +1038,168 @@
             </div>
           </div>
 
+          <div class="analysis-tabs">
+            <button class="tab-btn active" data-tab="eigenvalues">Eigenvalue Spectrum</button>
+            <button class="tab-btn" data-tab="eigenvectors">Vibration Patterns</button>
+            <button class="tab-btn" data-tab="learn">Learn Spectral Theory</button>
+          </div>
+
+          <div class="tab-content">
+            <!-- Eigenvalue Distribution Plot -->
+            <div class="tab-panel active" id="eigenvalues-panel">
+              <div class="panel-header">
+                <h4>Eigenvalue Distribution</h4>
+                <p>Each bar represents an eigenvalue - the mathematical "fingerprint" of your graph</p>
+              </div>
+              <div class="eigenvalue-chart">
+                <canvas id="eigenvalue-chart" width="500" height="200"></canvas>
+              </div>
+              <div class="eigenvalue-insights">
+                <div class="insight-item">
+                  <span class="insight-label">First eigenvalue (λ₁):</span>
+                  <span class="insight-value">Always 0 for connected graphs</span>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-label">Second eigenvalue (λ₂):</span>
+                  <span class="insight-value" id="second-eigenvalue-meaning">Shows connectivity strength</span>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-label">Largest eigenvalue:</span>
+                  <span class="insight-value" id="largest-eigenvalue-meaning">Related to maximum degree</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Eigenvector Visualization -->
+            <div class="tab-panel" id="eigenvectors-panel">
+              <div class="panel-header">
+                <h4>Vibration Patterns (Eigenvectors)</h4>
+                <p>Each pattern shows how energy or information flows through your network</p>
+              </div>
+              <div class="eigenvector-controls">
+                <label>
+                  <span>Pattern to show:</span>
+                  <select id="eigenvector-select">
+                    <option value="1">Pattern 2 (Connectivity)</option>
+                    <option value="2">Pattern 3 (Clustering)</option>
+                    <option value="3">Pattern 4 (Higher Order)</option>
+                  </select>
+                </label>
+                <button id="animate-pattern" class="animation-btn">
+                  <i class="fas fa-play"></i> Animate Flow
+                </button>
+              </div>
+              <div class="eigenvector-explanation" id="eigenvector-explanation">
+                Select a pattern above to see how it divides and connects your network
+              </div>
+            </div>
+
+            <!-- Educational Content -->
+            <div class="tab-panel" id="learn-panel">
+              <div class="learning-section">
+                <h4>What is Spectral Graph Theory?</h4>
+                <div class="concept-card">
+                  <div class="concept-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h5>The Big Idea</h5>
+                  </div>
+                  <p>
+                    Imagine your graph as a musical instrument. Just like a guitar string has natural frequencies 
+                    it vibrates at, every graph has natural "eigenvalues" and "eigenvectors" that describe how 
+                    information, energy, or influence flows through the network.
+                  </p>
+                </div>
+
+                <div class="concept-card">
+                  <div class="concept-header">
+                    <i class="fas fa-wave-square"></i>
+                    <h5>Eigenvalues: The Network's Fingerprint</h5>
+                  </div>
+                  <p>
+                    <strong>Eigenvalues</strong> are numbers that capture essential properties of your graph:
+                  </p>
+                  <ul>
+                    <li><strong>λ₁ = 0:</strong> Always zero for connected graphs (tells us about components)</li>
+                    <li><strong>λ₂ (Algebraic Connectivity):</strong> How well-connected the graph is overall</li>
+                    <li><strong>Higher λs:</strong> Reveal clustering, bottlenecks, and structural patterns</li>
+                    <li><strong>λₙ (Largest):</strong> Related to how "hub-like" the most connected nodes are</li>
+                  </ul>
+                </div>
+
+                <div class="concept-card">
+                  <div class="concept-header">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <h5>Eigenvectors: Vibration Patterns</h5>
+                  </div>
+                  <p>
+                    <strong>Eigenvectors</strong> show patterns of how things flow through your network:
+                  </p>
+                  <ul>
+                    <li><strong>Second eigenvector:</strong> Splits the graph into natural communities</li>
+                    <li><strong>Higher eigenvectors:</strong> Reveal more complex flow patterns and structures</li>
+                    <li><strong>Node colors:</strong> Show positive/negative values - like "hot" and "cold" regions</li>
+                    <li><strong>Zero crossings:</strong> Natural boundaries where the network wants to split</li>
+                  </ul>
+                </div>
+
+                <div class="concept-card">
+                  <div class="concept-header">
+                    <i class="fas fa-rocket"></i>
+                    <h5>Why Spectral Theory is Powerful</h5>
+                  </div>
+                  <p>
+                    Standard graph theory looks at local properties (edges, neighbors). Spectral theory reveals 
+                    <strong>global properties</strong> that emerge from the entire network structure:
+                  </p>
+                  <ul>
+                    <li><strong>Community Detection:</strong> Automatically find natural groups</li>
+                    <li><strong>Graph Clustering:</strong> Partition networks optimally</li>
+                    <li><strong>Random Walks:</strong> Predict how things spread through networks</li>
+                    <li><strong>Network Robustness:</strong> Identify critical connections and vulnerabilities</li>
+                    <li><strong>Dimensionality Reduction:</strong> Embed graphs in lower dimensions</li>
+                  </ul>
+                </div>
+
+                <div class="concept-card">
+                  <div class="concept-header">
+                    <i class="fas fa-cogs"></i>
+                    <h5>Real-World Applications</h5>
+                  </div>
+                  <p>
+                    Spectral graph theory powers algorithms you use every day:
+                  </p>
+                  <ul>
+                    <li><strong>Google's PageRank:</strong> Uses the dominant eigenvector to rank web pages</li>
+                    <li><strong>Social Media:</strong> Friend recommendations and community detection</li>
+                    <li><strong>Machine Learning:</strong> Spectral clustering for data analysis</li>
+                    <li><strong>Neuroscience:</strong> Understanding brain connectivity patterns</li>
+                    <li><strong>Computer Graphics:</strong> Mesh processing and shape analysis</li>
+                    <li><strong>Quantum Computing:</strong> Quantum walks and optimization algorithms</li>
+                  </ul>
+                </div>
+
+                <div class="concept-card highlight">
+                  <div class="concept-header">
+                    <i class="fas fa-magic"></i>
+                    <h5>The Magic of Linear Algebra</h5>
+                  </div>
+                  <p>
+                    By representing graphs as matrices, we unlock the full power of linear algebra. 
+                    Properties that would require complex algorithms to compute directly can be 
+                    read off immediately from eigenvalues and eigenvectors. It's like having 
+                    X-ray vision for network structure!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="info-panel">
-            <div class="info-title">How This Works</div>
+            <div class="info-title">Experiment and Explore!</div>
             <div class="info-text">
-              Behind the scenes, this tool uses <strong>spectral graph theory</strong> - a branch of mathematics 
-              that connects graph structure to eigenvalues. When you adjust properties like connectivity, 
-              the tool automatically finds valid eigenvalue sets that create those graph characteristics. 
-              You can explore advanced details using the checkbox above, but it's designed to be intuitive 
-              without needing mathematical background.
+              Try adjusting the properties above and watch how the eigenvalue spectrum changes. 
+              Notice how different network types have characteristic "fingerprints" in their eigenvalues.
+              Switch to the vibration patterns to see how information naturally flows through your network.
             </div>
           </div>
         </div>
@@ -1479,6 +1876,8 @@
         this.engine = new GraphLaplacianEngine();
         this.visualizer = null;
         this.controls = null;
+        this.eigenvalueChart = null;
+        this.eigenvectorVisualizer = null;
         this.currentGraph = null;
         this.worker = null;
         
@@ -1490,11 +1889,24 @@
         const canvas = document.getElementById('graph-canvas');
         this.visualizer = new GraphVisualizer(canvas);
         
-        // Setup intuitive property controls instead of raw eigenvalue controls
+        // Setup eigenvalue chart
+        const chartCanvas = document.getElementById('eigenvalue-chart');
+        this.eigenvalueChart = new EigenvalueChart(chartCanvas);
+        
+        // Setup eigenvector visualizer
+        this.eigenvectorVisualizer = new EigenvectorVisualizer(this.visualizer);
+        
+        // Setup intuitive property controls
         this.controls = new PropertyControls(
-          document.querySelector('.controls-panel'), 
+          document, // Pass document as the controls span multiple containers
           (eigenvalues) => this.onEigenvaluesChanged(eigenvalues)
         );
+        
+        // Setup tabs
+        this.setupTabs();
+        
+        // Setup eigenvector controls
+        this.setupEigenvectorControls();
         
         // Setup worker for heavy computations
         this.setupWorker();
@@ -1505,7 +1917,53 @@
         // Handle window resize
         window.addEventListener('resize', () => {
           this.visualizer.setupCanvas();
+          this.eigenvalueChart.setupCanvas();
           this.visualizer.render();
+          this.eigenvalueChart.render();
+        });
+      }
+
+      setupTabs() {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        
+        tabButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const targetTab = button.dataset.tab;
+            
+            // Update button states
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Update panel visibility
+            tabPanels.forEach(panel => panel.classList.remove('active'));
+            const targetPanel = document.getElementById(`${targetTab}-panel`);
+            if (targetPanel) {
+              targetPanel.classList.add('active');
+            }
+            
+            // Clear eigenvector colors when switching away from eigenvectors tab
+            if (targetTab !== 'eigenvectors') {
+              this.visualizer.clearEigenvectorColors();
+            } else {
+              // Update eigenvector visualization when switching to it
+              this.eigenvectorVisualizer.updateVisualization();
+            }
+          });
+        });
+      }
+
+      setupEigenvectorControls() {
+        const eigenvectorSelect = document.getElementById('eigenvector-select');
+        const animateButton = document.getElementById('animate-pattern');
+        
+        eigenvectorSelect.addEventListener('change', (e) => {
+          const selectedIndex = parseInt(e.target.value);
+          this.eigenvectorVisualizer.setSelectedVector(selectedIndex);
+        });
+        
+        animateButton.addEventListener('click', () => {
+          this.eigenvectorVisualizer.animatePattern();
         });
       }
 
@@ -1525,11 +1983,49 @@
       onWorkerMessage(event) {
         const graph = event.data;
         this.currentGraph = graph;
+        
+        // Update main graph visualization
         this.visualizer.setGraph(graph);
         this.visualizer.updateProperties(graph.properties);
         
+        // Update eigenvalue chart
+        this.eigenvalueChart.updateEigenvalues(graph.eigenvalues);
+        
+        // Update eigenvector visualization
+        this.eigenvectorVisualizer.updateEigenvectors(graph.eigenvalues, graph);
+        
+        // Update insights
+        this.updateEigenvalueInsights(graph.eigenvalues, graph.properties);
+        
         // Update the explanation based on what we're showing
         this.updateDynamicExplanation(graph);
+      }
+
+      updateEigenvalueInsights(eigenvalues, properties) {
+        // Update second eigenvalue meaning
+        const secondEl = document.getElementById('second-eigenvalue-meaning');
+        if (eigenvalues[1] > 2.0) {
+          secondEl.textContent = "Strong connectivity - information flows quickly";
+        } else if (eigenvalues[1] > 1.0) {
+          secondEl.textContent = "Good connectivity - well-connected network";
+        } else if (eigenvalues[1] > 0.3) {
+          secondEl.textContent = "Moderate connectivity - some bottlenecks";
+        } else {
+          secondEl.textContent = "Weak connectivity - fragmented network";
+        }
+        
+        // Update largest eigenvalue meaning
+        const largestEl = document.getElementById('largest-eigenvalue-meaning');
+        const largest = eigenvalues[eigenvalues.length - 1];
+        const n = eigenvalues.length;
+        
+        if (largest > n) {
+          largestEl.textContent = "High maximum degree - hub-like structure";
+        } else if (largest > n * 0.7) {
+          largestEl.textContent = "Moderate hubs present";
+        } else {
+          largestEl.textContent = "Uniform degree distribution";
+        }
       }
 
       updateDynamicExplanation(graph) {
@@ -1549,8 +2045,9 @@
           explanation += "limited connectivity - the graph may have weak points. ";
         }
         
-        explanation += `The spectral gap of ${spectralGap.toFixed(2)} indicates ${
-          spectralGap > 1.0 ? "rapid mixing and strong connectivity" : "slower information propagation"
+        explanation += `The network health score of ${spectralGap.toFixed(2)} indicates ${
+          spectralGap > 1.0 ? "rapid information propagation and strong structural integrity" : 
+          "slower information flow and potential structural weaknesses"
         }.`;
         
         explanationEl.innerHTML = explanation;
@@ -1571,8 +2068,14 @@
       }
 
       generateInitialGraph() {
-        // Start with a path graph with moderate connectivity
-        this.controls.setProperties({ connectivity: 25, expansion: 60, clustering: 10 });
+        // Start with moderate connectivity that matches the HTML defaults
+        // Don't call setProperties since the PropertyControls already initializes correctly
+        // Just trigger the first graph generation
+        setTimeout(() => {
+          const currentProps = this.controls.getProperties();
+          const eigenvalues = this.controls.solver.solveForProperties(currentProps, this.controls.nodeCount);
+          this.onEigenvaluesChanged(eigenvalues);
+        }, 100);
       }
 
       onEigenvaluesChanged(eigenvalues) {
@@ -1581,8 +2084,25 @@
       }
     }
 
-    // Initialize the applet
+    // Initialize the applet when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
+      // Add canvas round rect polyfill for older browsers
+      if (!CanvasRenderingContext2D.prototype.roundRect) {
+        CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+          this.beginPath();
+          this.moveTo(x + radius, y);
+          this.lineTo(x + width - radius, y);
+          this.quadraticCurveTo(x + width, y, x + width, y + radius);
+          this.lineTo(x + width, y + height - radius);
+          this.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+          this.lineTo(x + radius, y + height);
+          this.quadraticCurveTo(x, y + height, x, y + height - radius);
+          this.lineTo(x, y + radius);
+          this.quadraticCurveTo(x, y, x + radius, y);
+          this.closePath();
+        };
+      }
+      
       const applet = new GraphLaplacianApplet();
       window.graphLaplacianApplet = applet; // For debugging
     });
