@@ -232,10 +232,198 @@
       20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
 
-    .eigenvalue-control {
-      margin-bottom: var(--space-4);
-      position: relative;
+    /* Property Controls */
+    .property-control {
+      margin-bottom: var(--space-6);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-4);
       transition: var(--transition);
+    }
+
+    .property-control:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+    }
+
+    .property-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-3);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .property-label i {
+      color: var(--text-muted);
+      cursor: help;
+    }
+
+    .property-slider-container {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-2);
+    }
+
+    .property-slider {
+      flex: 1;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--bg-tertiary);
+      outline: none;
+      transition: var(--transition);
+      -webkit-appearance: none;
+    }
+
+    .property-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+    }
+
+    .property-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .property-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .slider-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .property-value {
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--primary);
+      font-weight: 500;
+      background: rgba(99, 102, 241, 0.1);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius);
+    }
+
+    .help-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: var(--space-4);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .setting-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-3);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .setting-label select {
+      padding: var(--space-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+    }
+
+    .advanced-toggle {
+      margin-top: var(--space-4);
+    }
+
+    .advanced-toggle label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .advanced-toggle input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: var(--primary);
+    }
+
+    .advanced-section {
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-6);
+      margin-top: var(--space-6);
+    }
+
+    .explanation {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: var(--radius);
+      padding: var(--space-4);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .explanation::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--primary), var(--secondary));
+    }
+
+    #eigenvalue-display {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .eigenvalue-item {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-1) 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eigenvalue-item:last-child {
+      border-bottom: none;
+    }
+
+    .eigenvalue-item .label {
+      color: var(--text-muted);
+    }
+
+    .eigenvalue-item .value {
+      color: var(--primary);
+      font-weight: 500;
     }
 
     .eigenvalue-label {
@@ -282,7 +470,7 @@
     .preset-buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: var(--space-2);
+      gap: var(--space-3);
     }
 
     .preset-btn.active {
@@ -322,31 +510,7 @@
       left: 100%;
     }
 
-    .status-display {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-3);
-      font-size: 0.875rem;
-    }
-
-    .status-valid {
-      color: var(--success);
-      border-color: var(--success);
-      background: rgba(16, 185, 129, 0.1);
-    }
-
-    .status-approximate {
-      color: var(--warning);
-      border-color: var(--warning);
-      background: rgba(245, 158, 11, 0.1);
-    }
-
-    .status-invalid {
-      color: var(--danger);
-      border-color: var(--danger);
-      background: rgba(239, 68, 68, 0.1);
-    }
+    /* Remove old status display styles - replaced with integrated explanations */
 
     /* Canvas */
     .canvas-container {
@@ -487,8 +651,9 @@
       <div class="app-header">
         <h1 class="app-title">Graph Laplacian Eigenvalue Visualizer</h1>
         <p class="app-description">
-          Explore how eigenvalues of the graph Laplacian matrix influence graph structure and connectivity. 
-          Adjust eigenvalues interactively to see how they constrain the possible graph configurations.
+          Discover how graph connectivity, clustering, and spread affect network structure! 
+          Adjust intuitive properties and watch as the mathematical eigenvalues automatically 
+          update to create valid graph configurations. No spectral graph theory knowledge required.
         </p>
       </div>
 
@@ -496,26 +661,77 @@
         <div class="controls-panel">
           <div class="control-section">
             <h3 class="section-title">
-              <i class="fas fa-sliders-h"></i>
-              Eigenvalue Controls
+              <i class="fas fa-network-wired"></i>
+              Graph Properties
             </h3>
-            <div id="eigenvalue-controls">
-              <!-- Dynamically generated eigenvalue sliders -->
+            <div class="help-text">
+              Adjust how connected and clustered your graph is. The math happens automatically!
+            </div>
+            
+            <div class="property-control">
+              <div class="property-label">
+                <span>How Connected?</span>
+                <i class="fas fa-question-circle" title="Higher values create more tightly connected graphs"></i>
+              </div>
+              <div class="property-slider-container">
+                <span class="slider-label">Sparse</span>
+                <input type="range" class="property-slider" id="connectivity-slider" 
+                       min="0" max="100" value="30" data-property="connectivity">
+                <span class="slider-label">Dense</span>
+              </div>
+              <div class="property-value">Moderate connectivity</div>
+            </div>
+
+            <div class="property-control">
+              <div class="property-label">
+                <span>How Spread Out?</span>
+                <i class="fas fa-question-circle" title="Controls how far apart different parts of the graph are"></i>
+              </div>
+              <div class="property-slider-container">
+                <span class="slider-label">Tight</span>
+                <input type="range" class="property-slider" id="expansion-slider" 
+                       min="0" max="100" value="50" data-property="expansion">
+                <span class="slider-label">Spread</span>
+              </div>
+              <div class="property-value">Balanced spread</div>
+            </div>
+
+            <div class="property-control">
+              <div class="property-label">
+                <span>How Clustered?</span>
+                <i class="fas fa-question-circle" title="Higher values create more distinct groups or clusters"></i>
+              </div>
+              <div class="property-slider-container">
+                <span class="slider-label">Uniform</span>
+                <input type="range" class="property-slider" id="clustering-slider" 
+                       min="0" max="100" value="25" data-property="clustering">
+                <span class="slider-label">Clustered</span>
+              </div>
+              <div class="property-value">Low clustering</div>
             </div>
           </div>
 
           <div class="control-section">
             <h3 class="section-title">
               <i class="fas fa-shapes"></i>
-              Graph Presets
+              Common Examples
             </h3>
+            <div class="help-text">
+              Try these classic graph types to see how properties change
+            </div>
             <div class="preset-buttons">
-              <button class="preset-btn" data-preset="path">Path Graph</button>
-              <button class="preset-btn" data-preset="cycle">Cycle Graph</button>
-              <button class="preset-btn" data-preset="complete">Complete Graph</button>
-              <button class="preset-btn" data-preset="star">Star Graph</button>
-              <button class="preset-btn" data-preset="wheel">Wheel Graph</button>
-              <button class="preset-btn" data-preset="random">Random Graph</button>
+              <button class="preset-btn" data-preset="path" title="Nodes in a line">
+                <i class="fas fa-minus"></i> Chain
+              </button>
+              <button class="preset-btn" data-preset="cycle" title="Nodes in a circle">
+                <i class="fas fa-circle-notch"></i> Ring
+              </button>
+              <button class="preset-btn" data-preset="star" title="One center, many spokes">
+                <i class="fas fa-star"></i> Star
+              </button>
+              <button class="preset-btn" data-preset="complete" title="Everyone connected to everyone">
+                <i class="fas fa-project-diagram"></i> Complete
+              </button>
             </div>
           </div>
 
@@ -524,7 +740,7 @@
               <i class="fas fa-cog"></i>
               Settings
             </h3>
-            <label class="eigenvalue-label">
+            <label class="setting-label">
               <span>Number of nodes:</span>
               <select id="node-count">
                 <option value="4">4 nodes</option>
@@ -534,15 +750,35 @@
                 <option value="8">8 nodes</option>
               </select>
             </label>
+            
+            <div class="advanced-toggle">
+              <label>
+                <input type="checkbox" id="show-advanced"> 
+                Show eigenvalue details
+              </label>
+            </div>
+          </div>
+
+          <div class="control-section advanced-section" style="display: none;">
+            <h3 class="section-title">
+              <i class="fas fa-calculator"></i>
+              Mathematical Details
+            </h3>
+            <div class="help-text">
+              The eigenvalues that make your graph possible (auto-calculated)
+            </div>
+            <div id="eigenvalue-display">
+              <!-- Eigenvalues shown as read-only information -->
+            </div>
           </div>
 
           <div class="control-section">
             <h3 class="section-title">
-              <i class="fas fa-info-circle"></i>
-              Status
+              <i class="fas fa-lightbulb"></i>
+              What You're Seeing
             </h3>
-            <div id="validity-status" class="status-display">
-              <div class="status-text">Initializing...</div>
+            <div id="explanation-text" class="explanation">
+              Drag the sliders above to see how different properties affect your graph's structure!
             </div>
           </div>
         </div>
@@ -551,19 +787,22 @@
           <div class="canvas-container">
             <canvas id="graph-canvas"></canvas>
             <div class="canvas-overlay">
-              <div><strong>Spectral Gap:</strong> <span id="spectral-gap">0.00</span></div>
-              <div><strong>Algebraic Connectivity:</strong> <span id="algebraic-connectivity">0.00</span></div>
+              <div><strong>Network Health:</strong> <span id="spectral-gap">0.00</span></div>
+              <div><strong>Connection Strength:</strong> <span id="algebraic-connectivity">0.00</span></div>
+              <div style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">
+                Higher values = better connectivity
+              </div>
             </div>
           </div>
 
           <div class="info-panel">
-            <div class="info-title">Understanding the Visualization</div>
+            <div class="info-title">How This Works</div>
             <div class="info-text">
-              The graph structure is determined by the eigenvalues of its Laplacian matrix. 
-              <strong>Node positions</strong> reflect the graph's spectral properties, while 
-              <strong>edge weights</strong> are derived from eigenvector components. The 
-              <strong>spectral gap</strong> (difference between first two eigenvalues) indicates 
-              how well-connected the graph is.
+              Behind the scenes, this tool uses <strong>spectral graph theory</strong> - a branch of mathematics 
+              that connects graph structure to eigenvalues. When you adjust properties like connectivity, 
+              the tool automatically finds valid eigenvalue sets that create those graph characteristics. 
+              You can explore advanced details using the checkbox above, but it's designed to be intuitive 
+              without needing mathematical background.
             </div>
           </div>
         </div>
@@ -1167,7 +1406,7 @@
           
           controlDiv.innerHTML = `
             <div class="eigenvalue-label">
-              <span>λ${index + 1}: </span>
+              <span>λ${index + 1}</span>
               <span class="eigenvalue-value">${value.toFixed(3)}</span>
             </div>
             <input type="range" 
@@ -1251,15 +1490,16 @@
         const canvas = document.getElementById('graph-canvas');
         this.visualizer = new GraphVisualizer(canvas);
         
-        // Setup controls
-        const controlsContainer = document.getElementById('eigenvalue-controls');
-        this.controls = new EigenvalueControls(controlsContainer, 
-          (eigenvalues) => this.onEigenvaluesChanged(eigenvalues));
+        // Setup intuitive property controls instead of raw eigenvalue controls
+        this.controls = new PropertyControls(
+          document.querySelector('.controls-panel'), 
+          (eigenvalues) => this.onEigenvaluesChanged(eigenvalues)
+        );
         
         // Setup worker for heavy computations
         this.setupWorker();
         
-        // Initial graph
+        // Initial graph - start with a simple path to demonstrate
         this.generateInitialGraph();
         
         // Handle window resize
@@ -1287,98 +1527,57 @@
         this.currentGraph = graph;
         this.visualizer.setGraph(graph);
         this.visualizer.updateProperties(graph.properties);
-        this.updateValidityStatus(graph.eigenvalues);
+        
+        // Update the explanation based on what we're showing
+        this.updateDynamicExplanation(graph);
+      }
+
+      updateDynamicExplanation(graph) {
+        const explanationEl = document.getElementById('explanation-text');
+        const properties = this.controls.getProperties();
+        const { spectralGap, algebraicConnectivity } = graph.properties;
+        
+        let explanation = `Your ${this.getGraphDescription(graph)} has `;
+        
+        if (algebraicConnectivity > 2.0) {
+          explanation += "excellent connectivity - information flows quickly between all nodes. ";
+        } else if (algebraicConnectivity > 1.0) {
+          explanation += "good connectivity - most nodes can communicate efficiently. ";
+        } else if (algebraicConnectivity > 0.3) {
+          explanation += "moderate connectivity - some bottlenecks may exist. ";
+        } else {
+          explanation += "limited connectivity - the graph may have weak points. ";
+        }
+        
+        explanation += `The spectral gap of ${spectralGap.toFixed(2)} indicates ${
+          spectralGap > 1.0 ? "rapid mixing and strong connectivity" : "slower information propagation"
+        }.`;
+        
+        explanationEl.innerHTML = explanation;
+      }
+
+      getGraphDescription(graph) {
+        const validation = this.engine.validateEigenvalues(graph.eigenvalues);
+        if (validation.valid && validation.graphType && validation.confidence > 0.9) {
+          const typeNames = {
+            path: "chain of connected nodes",
+            cycle: "circular ring network", 
+            complete: "fully connected network",
+            star: "hub-and-spoke network"
+          };
+          return typeNames[validation.graphType] || "network";
+        }
+        return "network";
       }
 
       generateInitialGraph() {
-        // Start with a path graph for clear demonstration
-        const initialEigenvalues = this.engine.getPresetEigenvalues('path', 5);
-        this.controls.setEigenvalues(initialEigenvalues);
-        this.onEigenvaluesChanged(initialEigenvalues);
-        
-        // Highlight the path graph button initially
-        const pathButton = document.querySelector('.preset-btn[data-preset="path"]');
-        if (pathButton) {
-          pathButton.style.background = 'var(--primary)';
-          pathButton.style.color = 'white';
-          setTimeout(() => {
-            pathButton.style.background = '';
-            pathButton.style.color = '';
-          }, 2000);
-        }
+        // Start with a path graph with moderate connectivity
+        this.controls.setProperties({ connectivity: 25, expansion: 60, clustering: 10 });
       }
 
       onEigenvaluesChanged(eigenvalues) {
-        // Validate eigenvalues
-        const validation = this.engine.validateEigenvalues(eigenvalues);
-        
-        let processedEigenvalues = eigenvalues;
-        if (!validation.valid) {
-          processedEigenvalues = this.engine.projectToValidEigenvalues(eigenvalues);
-        }
-        
-        // Update active preset button
-        this.updateActivePreset(validation);
-        
         // Generate graph (via worker in production)
-        this.worker.postMessage({ eigenvalues: processedEigenvalues });
-        
-        // Update status
-        this.updateValidityStatus(eigenvalues, validation);
-      }
-
-      updateActivePreset(validation) {
-        // Remove active class from all buttons
-        const allButtons = document.querySelectorAll('.preset-btn');
-        allButtons.forEach(btn => btn.classList.remove('active'));
-        
-        // If we have a perfect match to a known graph type, highlight that button
-        if (validation.valid && validation.confidence > 0.9 && validation.graphType) {
-          const activeButton = document.querySelector(`.preset-btn[data-preset="${validation.graphType}"]`);
-          if (activeButton) {
-            activeButton.classList.add('active');
-          }
-        }
-      }
-
-      updateValidityStatus(eigenvalues, validation = null) {
-        if (!validation) {
-          validation = this.engine.validateEigenvalues(eigenvalues);
-        }
-        
-        const statusEl = document.getElementById('validity-status');
-        const textEl = statusEl.querySelector('.status-text');
-        
-        statusEl.className = 'status-display';
-        
-        if (validation.valid) {
-          if (validation.confidence > 0.9 && validation.graphType) {
-            statusEl.classList.add('status-valid');
-            const graphTypeDisplay = validation.graphType.charAt(0).toUpperCase() + validation.graphType.slice(1);
-            textEl.innerHTML = `
-              <div><strong>Valid ${graphTypeDisplay} Graph</strong></div>
-              <div style="font-size: 0.8em; opacity: 0.8;">Perfect eigenvalue match</div>
-            `;
-          } else if (validation.confidence > 0.7) {
-            statusEl.classList.add('status-valid');
-            textEl.innerHTML = `
-              <div><strong>Valid Graph Eigenvalues</strong></div>
-              <div style="font-size: 0.8em; opacity: 0.8;">Confidence: ${(validation.confidence * 100).toFixed(0)}%</div>
-            `;
-          } else {
-            statusEl.classList.add('status-approximate');
-            textEl.innerHTML = `
-              <div><strong>Approximate Graph</strong></div>
-              <div style="font-size: 0.8em; opacity: 0.8;">Confidence: ${(validation.confidence * 100).toFixed(0)}%</div>
-            `;
-          }
-        } else {
-          statusEl.classList.add('status-invalid');
-          textEl.innerHTML = `
-            <div><strong>Invalid Eigenvalues</strong></div>
-            <div style="font-size: 0.8em; opacity: 0.8;">${validation.reason}</div>
-          `;
-        }
+        this.worker.postMessage({ eigenvalues });
       }
     }
 
