@@ -265,17 +265,31 @@ class Portfolio {
 
     const observer = new IntersectionObserver(
       (entries) => {
+        let sectionIsActive = false;
         entries.forEach(entry => {
           const link = document.querySelector(`.nav-list a[href="#${entry.target.id}"]`);
           if (entry.isIntersecting && link) {
-            navLinks.forEach(l => {
-              if (l.getAttribute('href').startsWith('#')) {
-                l.classList.remove('active');
-              }
-            });
+            // Remove active from ALL links first
+            navLinks.forEach(l => l.classList.remove('active'));
+            // Add active to the current section link
             link.classList.add('active');
+            sectionIsActive = true;
           }
         });
+
+        // If no section link is currently intersecting/active,
+        // re-activate the main page link.
+        if (!sectionIsActive) {
+            navLinks.forEach(l => l.classList.remove('active')); // Clear all first
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if ((href.includes(this.currentPage + '.html') ||
+                    (this.currentPage === 'home' && href === './index.html')) &&
+                    !href.includes('#')) { // Ensure it's the main page link
+                  link.classList.add('active');
+                }
+            });
+        }
       },
       { threshold: 0.3, rootMargin: '-100px 0px -100px 0px' }
     );
@@ -520,7 +534,7 @@ class Portfolio {
     this.clearFieldError(field);
 
     // Basic validation
-    if (field.required && value.length === 0) {
+    if (field.required && value.length === 0) { 
       isValid = false;
       errorMessage = 'This field is required';
     } else if (field.type === 'email' && value.length > 0) {

@@ -281,28 +281,35 @@ a:hover {
 }
 
 .nav-list a {
+  /* Ensure these are present */
+  position: relative;
+  overflow: hidden;
+  z-index: 1; /* Make sure 'a' establishes a stacking context */
+  /* ... other existing styles for a ... */
   color: var(--text-secondary);
   font-weight: 500;
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius);
   transition: var(--transition);
-  position: relative;
-  overflow: hidden;
+  text-decoration: none; /* Ensure no default underline interferes */
 }
 
 .nav-list a::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0; /* Start at left: 0 */
   width: 100%;
   height: 100%;
-  background: rgba(99, 102, 241, 0.1);
-  transition: left 0.3s ease;
+  background: rgba(99, 102, 241, 0.1); /* The hover backdrop color */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transition transform */
+  transform: scaleX(0); /* Start scaled to zero width */
+  transform-origin: left; /* Scale from the left edge */
+  z-index: -1; /* Place it *behind* the text */
 }
 
 .nav-list a:hover::before {
-  left: 0;
+  transform: scaleX(1); /* Scale to full width on hover */
 }
 
 .nav-list a::after {
