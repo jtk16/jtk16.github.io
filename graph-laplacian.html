@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Interactive visualization of graph Laplacian eigenvalues and their effect on graph structure">
-  <title>Graph Laplacian Eigenvalue Visualizer — Jack Kinney</title>
+  <title>Interactive Spectral Graph Theory — Jack Kinney</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    /* CSS Variables matching your existing theme */
+    /* CSS Variables */
     :root {
       --primary: #6366f1;
       --primary-dark: #4f46e5;
@@ -77,7 +77,7 @@
 
     .container {
       width: 100%;
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
       padding: 0 var(--space-6);
     }
@@ -144,16 +144,16 @@
     .app-description {
       font-size: 1.125rem;
       color: var(--text-secondary);
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
     }
 
-    /* App Layout */
+    /* App Layout - New 3-column design */
     .app-container {
       display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: var(--space-8);
-      min-height: 600px;
+      grid-template-columns: 320px 1fr 320px;
+      gap: var(--space-6);
+      min-height: 800px;
     }
 
     .controls-panel {
@@ -167,11 +167,25 @@
       box-shadow: var(--shadow-lg);
     }
 
-    .visualization-panel {
+    .main-visualization {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-xl);
       padding: var(--space-6);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .analysis-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      height: fit-content;
+      position: sticky;
+      top: 120px;
       box-shadow: var(--shadow-lg);
     }
 
@@ -196,11 +210,11 @@
 
     /* Property Controls */
     .property-control {
-      margin-bottom: var(--space-6);
+      margin-bottom: var(--space-4);
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: var(--space-4);
+      padding: var(--space-3);
       transition: var(--transition);
     }
 
@@ -213,9 +227,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--space-3);
+      margin-bottom: var(--space-2);
       font-weight: 600;
       color: var(--text-primary);
+      font-size: 0.9rem;
     }
 
     .property-label i {
@@ -226,14 +241,14 @@
     .property-slider-container {
       display: flex;
       align-items: center;
-      gap: var(--space-3);
-      margin-bottom: var(--space-2);
+      gap: var(--space-2);
+      margin-bottom: var(--space-1);
     }
 
     .property-slider {
       flex: 1;
-      height: 8px;
-      border-radius: 4px;
+      height: 6px;
+      border-radius: 3px;
       background: var(--bg-tertiary);
       outline: none;
       transition: var(--transition);
@@ -243,33 +258,33 @@
     .property-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: var(--primary);
       cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: var(--transition);
     }
 
     .property-slider::-webkit-slider-thumb:hover {
       transform: scale(1.1);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 3px 8px rgba(99, 102, 241, 0.4);
     }
 
     .property-slider::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: var(--primary);
       cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .slider-label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       white-space: nowrap;
       font-weight: 500;
@@ -277,7 +292,7 @@
 
     .property-value {
       text-align: center;
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       color: var(--primary);
       font-weight: 500;
       background: rgba(99, 102, 241, 0.1);
@@ -286,10 +301,10 @@
     }
 
     .help-text {
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-bottom: var(--space-4);
-      line-height: 1.5;
+      margin-bottom: var(--space-3);
+      line-height: 1.4;
       font-style: italic;
     }
 
@@ -298,7 +313,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: var(--space-3);
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
     }
 
@@ -309,39 +324,40 @@
       background: var(--bg-primary);
       color: var(--text-primary);
       font-family: inherit;
+      font-size: 0.85rem;
     }
 
     .advanced-toggle {
-      margin-top: var(--space-4);
+      margin-top: var(--space-3);
     }
 
     .advanced-toggle label {
       display: flex;
       align-items: center;
       gap: var(--space-2);
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
       cursor: pointer;
     }
 
     .advanced-toggle input[type="checkbox"] {
-      transform: scale(1.2);
+      transform: scale(1.1);
       accent-color: var(--primary);
     }
 
     .advanced-section {
       border-top: 1px solid var(--border);
-      padding-top: var(--space-6);
-      margin-top: var(--space-6);
+      padding-top: var(--space-4);
+      margin-top: var(--space-4);
     }
 
     .explanation {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
       border: 1px solid rgba(99, 102, 241, 0.2);
       border-radius: var(--radius);
-      padding: var(--space-4);
-      font-size: 0.875rem;
-      line-height: 1.6;
+      padding: var(--space-3);
+      font-size: 0.85rem;
+      line-height: 1.5;
       color: var(--text-secondary);
       position: relative;
       overflow: hidden;
@@ -352,7 +368,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 4px;
+      width: 3px;
       height: 100%;
       background: linear-gradient(180deg, var(--primary), var(--secondary));
     }
@@ -361,10 +377,10 @@
       background: var(--bg-primary);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: var(--space-3);
+      padding: var(--space-2);
       font-family: var(--font-mono);
-      font-size: 0.8rem;
-      max-height: 150px;
+      font-size: 0.75rem;
+      max-height: 120px;
       overflow-y: auto;
     }
 
@@ -388,114 +404,19 @@
       font-weight: 500;
     }
 
-    /* Analysis Tabs */
-    .analysis-tabs {
-      display: flex;
-      gap: var(--space-1);
-      margin: var(--space-6) 0 var(--space-4) 0;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .tab-btn {
-      padding: var(--space-3) var(--space-4);
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--text-muted);
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-      font-family: inherit;
-      font-size: 0.875rem;
-    }
-
-    .tab-btn:hover {
-      color: var(--text-primary);
-      background: var(--bg-secondary);
-    }
-
-    .tab-btn.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      background: var(--bg-secondary);
-    }
-
-    .tab-content {
-      min-height: 300px;
-    }
-
-    .tab-panel {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .tab-panel.active {
-      display: block;
-    }
-
-    .panel-header {
-      margin-bottom: var(--space-4);
-    }
-
-    .panel-header h4 {
-      margin-bottom: var(--space-2);
-      color: var(--text-primary);
-    }
-
-    .panel-header p {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    /* Eigenvalue Chart */
-    .eigenvalue-chart {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: var(--space-4);
-      margin-bottom: var(--space-4);
-      display: flex;
-      justify-content: center;
-    }
-
-    .eigenvalue-insights {
-      display: grid;
-      gap: var(--space-2);
-    }
-
-    .insight-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--space-2) var(--space-3);
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      font-size: 0.875rem;
-    }
-
-    .insight-label {
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    .insight-value {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
     .preset-buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: var(--space-3);
+      gap: var(--space-2);
     }
 
     .preset-btn {
-      padding: var(--space-2) var(--space-3);
+      padding: var(--space-2);
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       color: var(--text-primary);
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: var(--transition);
       font-family: inherit;
@@ -522,23 +443,23 @@
       background: var(--primary);
       color: white;
       border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(99, 102, 241, 0.3);
     }
 
     .preset-btn.active {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(99, 102, 241, 0.3);
     }
 
-    /* Canvas */
-    .canvas-container {
+    /* Main Visualization - Graph and Chart Together */
+    .graph-container {
+      flex: 1;
       position: relative;
-      width: 100%;
-      height: 600px;
+      min-height: 400px;
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       overflow: hidden;
@@ -561,28 +482,260 @@
       cursor: grabbing;
     }
 
-    .canvas-overlay {
+    .graph-overlay {
       position: absolute;
-      top: var(--space-4);
-      right: var(--space-4);
+      top: var(--space-3);
+      right: var(--space-3);
       background: rgba(255, 255, 255, 0.95);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: var(--space-3);
-      font-size: 0.875rem;
+      padding: var(--space-2);
+      font-size: 0.8rem;
       backdrop-filter: blur(10px);
     }
 
+    .editing-mode {
+      position: absolute;
+      top: var(--space-3);
+      left: var(--space-3);
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-2);
+      font-size: 0.8rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .edit-toggle {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .edit-toggle:hover {
+      background: var(--primary-dark);
+    }
+
+    .edit-toggle.active {
+      background: var(--secondary);
+    }
+
+    /* Eigenvalue Chart */
+    .chart-container {
+      height: 200px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-header {
+      margin-bottom: var(--space-2);
+    }
+
+    .chart-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+
+    .chart-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .chart-canvas-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Analysis Panel */
+    .analysis-tabs {
+      display: flex;
+      gap: var(--space-1);
+      margin-bottom: var(--space-4);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .tab-btn {
+      padding: var(--space-2) var(--space-3);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+      font-size: 0.8rem;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: var(--bg-secondary);
+    }
+
+    .tab-content {
+      min-height: 400px;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      margin-bottom: var(--space-3);
+    }
+
+    .panel-header h4 {
+      margin-bottom: var(--space-1);
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .panel-header p {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .insight-grid {
+      display: grid;
+      gap: var(--space-2);
+    }
+
+    .insight-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-2);
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+    }
+
+    .insight-label {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .insight-value {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Vibration Controls */
+    .vibration-controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .vibration-selector {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .vibration-selector select {
+      flex: 1;
+      padding: var(--space-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+    }
+
+    .animate-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-2) var(--space-3);
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+
+    .animate-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .animate-btn.playing {
+      background: var(--secondary);
+    }
+
+    /* Learning Content */
+    .learning-content {
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .learning-content h5 {
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+      font-size: 0.9rem;
+    }
+
+    .learning-content ul {
+      margin: var(--space-2) 0;
+      padding-left: var(--space-4);
+    }
+
+    .learning-content li {
+      margin-bottom: var(--space-1);
+    }
+
     /* Responsive */
+    @media (max-width: 1200px) {
+      .app-container {
+        grid-template-columns: 280px 1fr 280px;
+        gap: var(--space-4);
+      }
+    }
+
     @media (max-width: 1024px) {
       .app-container {
         grid-template-columns: 1fr;
-        gap: var(--space-6);
+        gap: var(--space-4);
       }
 
-      .controls-panel {
+      .controls-panel,
+      .analysis-panel {
         position: static;
         order: 2;
+      }
+
+      .main-visualization {
+        order: 1;
       }
 
       .preset-buttons {
@@ -599,8 +752,12 @@
         font-size: 2rem;
       }
 
-      .canvas-container {
-        height: 400px;
+      .graph-container {
+        min-height: 300px;
+      }
+
+      .chart-container {
+        height: 150px;
       }
 
       .preset-buttons {
@@ -612,6 +769,31 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .pulsing {
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    /* Edge hover effects */
+    .edge-hover {
+      cursor: pointer;
+      stroke-width: 4;
+      stroke: var(--primary);
+      opacity: 0.7;
+    }
+
+    .edge-potential {
+      cursor: pointer;
+      stroke: var(--success);
+      stroke-width: 2;
+      stroke-dasharray: 5,5;
+      opacity: 0.5;
     }
   </style>
 </head>
@@ -633,27 +815,28 @@
       <div class="app-header">
         <h1 class="app-title">Interactive Spectral Graph Theory</h1>
         <p class="app-description">
-          🎯 <strong>Learn by doing!</strong> Adjust intuitive properties like "how connected" your network is, 
-          and watch the math update automatically. No equations needed - just explore and discover 
-          the beautiful patterns that emerge from spectral graph theory.
+          🎯 <strong>Discover how networks really work!</strong> Adjust intuitive properties and watch the mathematics 
+          update in real-time. See both your graph structure and its mathematical "fingerprint" simultaneously. 
+          Click and drag nodes, edit connections, and explore vibration patterns that reveal hidden network dynamics.
         </p>
       </div>
 
       <div class="app-container">
+        <!-- Left Panel: Controls -->
         <div class="controls-panel">
           <div class="control-section">
             <h3 class="section-title">
               <i class="fas fa-sliders-h"></i>
-              Graph Properties
+              Network Properties
             </h3>
             <div class="help-text">
-              🚀 Start here! These intuitive controls automatically calculate the mathematical eigenvalues for you.
+              🚀 Adjust these to shape your network! Watch the eigenvalues update automatically.
             </div>
             
             <div class="property-control">
               <div class="property-label">
-                <span>How Connected?</span>
-                <i class="fas fa-question-circle" title="Higher values create more tightly connected graphs"></i>
+                <span>Connectivity</span>
+                <i class="fas fa-question-circle" title="How well-connected the overall network is"></i>
               </div>
               <div class="property-slider-container">
                 <span class="slider-label">Sparse</span>
@@ -661,27 +844,13 @@
                        min="0" max="100" value="50" data-property="connectivity">
                 <span class="slider-label">Dense</span>
               </div>
-              <div class="property-value" id="connectivity-value">Moderate connectivity</div>
+              <div class="property-value" id="connectivity-value">Moderate</div>
             </div>
 
             <div class="property-control">
               <div class="property-label">
-                <span>How Spread Out?</span>
-                <i class="fas fa-question-circle" title="Controls how far apart different parts of the graph are"></i>
-              </div>
-              <div class="property-slider-container">
-                <span class="slider-label">Tight</span>
-                <input type="range" class="property-slider" id="expansion-slider" 
-                       min="0" max="100" value="60" data-property="expansion">
-                <span class="slider-label">Spread</span>
-              </div>
-              <div class="property-value" id="expansion-value">Balanced spread</div>
-            </div>
-
-            <div class="property-control">
-              <div class="property-label">
-                <span>How Clustered?</span>
-                <i class="fas fa-question-circle" title="Higher values create more distinct groups or clusters"></i>
+                <span>Clustering</span>
+                <i class="fas fa-question-circle" title="How much nodes form tight-knit groups"></i>
               </div>
               <div class="property-slider-container">
                 <span class="slider-label">Uniform</span>
@@ -691,15 +860,57 @@
               </div>
               <div class="property-value" id="clustering-value">Low clustering</div>
             </div>
+
+            <div class="property-control">
+              <div class="property-label">
+                <span>Regularity</span>
+                <i class="fas fa-question-circle" title="How uniform the node degrees are (star vs balanced)"></i>
+              </div>
+              <div class="property-slider-container">
+                <span class="slider-label">Star-like</span>
+                <input type="range" class="property-slider" id="regularity-slider" 
+                       min="0" max="100" value="60" data-property="regularity">
+                <span class="slider-label">Uniform</span>
+              </div>
+              <div class="property-value" id="regularity-value">Balanced</div>
+            </div>
+
+            <div class="property-control">
+              <div class="property-label">
+                <span>Locality</span>
+                <i class="fas fa-question-circle" title="Whether connections favor nearby nodes or span long distances"></i>
+              </div>
+              <div class="property-slider-container">
+                <span class="slider-label">Long-range</span>
+                <input type="range" class="property-slider" id="locality-slider" 
+                       min="0" max="100" value="70" data-property="locality">
+                <span class="slider-label">Local</span>
+              </div>
+              <div class="property-value" id="locality-value">Mostly local</div>
+            </div>
+
+            <div class="property-control">
+              <div class="property-label">
+                <span>Symmetry</span>
+                <i class="fas fa-question-circle" title="How symmetric and organized the structure is"></i>
+              </div>
+              <div class="property-slider-container">
+                <span class="slider-label">Random</span>
+                <input type="range" class="property-slider" id="symmetry-slider" 
+                       min="0" max="100" value="50" data-property="symmetry">
+                <span class="slider-label">Symmetric</span>
+              </div>
+              <div class="property-value" id="symmetry-value">Balanced</div>
+            </div>
           </div>
 
           <div class="control-section">
             <h3 class="section-title">
               <i class="fas fa-shapes"></i>
-              Try These Examples
+              Classic Examples
             </h3>
             <div class="help-text">
-              🎪 Click to see classic network patterns!
+              🎪 Try these famous network patterns!
             </div>
             <div class="preset-buttons">
               <button class="preset-btn" data-preset="path" title="Nodes in a line">
@@ -723,13 +934,15 @@
               Settings
             </h3>
             <label class="setting-label">
-              <span>Number of nodes:</span>
+              <span>Nodes:</span>
               <select id="node-count">
-                <option value="4">4 nodes</option>
-                <option value="5" selected>5 nodes</option>
-                <option value="6">6 nodes</option>
-                <option value="7">7 nodes</option>
-                <option value="8">8 nodes</option>
+                <option value="4">4</option>
+                <option value="5" selected>5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
               </select>
             </label>
             
@@ -744,10 +957,10 @@
           <div class="control-section advanced-section" id="advanced-section" style="display: none;">
             <h3 class="section-title">
               <i class="fas fa-calculator"></i>
-              The Math Behind It
+              Mathematical Details
             </h3>
             <div class="help-text">
-              🧮 These are the eigenvalues that make your graph possible!
+              🧮 The eigenvalues that create your network!
             </div>
             <div id="eigenvalue-display">
               <!-- Eigenvalues will be displayed here -->
@@ -760,149 +973,183 @@
               What You're Seeing
             </h3>
             <div id="explanation-text" class="explanation">
-              👋 Welcome! Drag the sliders above to see how different properties affect your network's structure. 
-              Each change updates the mathematical "fingerprint" of your graph automatically!
+              👋 Welcome! Use the sliders above to shape your network. Watch how the graph structure 
+              and eigenvalue spectrum change together. Try the editing mode to manually add or remove connections!
             </div>
           </div>
         </div>
 
-        <div class="visualization-panel">
-          <div class="canvas-container">
+        <!-- Center Panel: Graph and Eigenvalue Chart -->
+        <div class="main-visualization">
+          <div class="graph-container">
             <canvas id="graph-canvas"></canvas>
-            <div class="canvas-overlay">
-              <div><strong>Network Health:</strong> <span id="spectral-gap">0.00</span></div>
-              <div><strong>Connection Strength:</strong> <span id="algebraic-connectivity">0.00</span></div>
-              <div style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">
-                💡 Higher values = better connectivity
+            <div class="graph-overlay">
+              <div><strong>Connectivity:</strong> <span id="algebraic-connectivity">0.00</span></div>
+              <div style="font-size: 0.7rem; margin-top: 0.25rem; opacity: 0.8;">
+                💡 Higher = better connected
+              </div>
+            </div>
+            <div class="editing-mode">
+              <button class="edit-toggle" id="edit-toggle">
+                <i class="fas fa-edit"></i> Edit Edges
+              </button>
+              <div id="edit-instructions" style="display: none; margin-top: 0.5rem; font-size: 0.7rem;">
+                Click between nodes to add/remove edges
               </div>
             </div>
           </div>
 
+          <div class="chart-container">
+            <div class="chart-header">
+              <div class="chart-title">📊 Eigenvalue Spectrum</div>
+              <div class="chart-subtitle">Your network's mathematical "fingerprint" - each bar is a natural frequency</div>
+            </div>
+            <div class="chart-canvas-container">
+              <canvas id="eigenvalue-chart" width="400" height="120"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Panel: Analysis -->
+        <div class="analysis-panel">
           <div class="analysis-tabs">
-            <button class="tab-btn active" data-tab="eigenvalues">📊 Eigenvalue Spectrum</button>
-            <button class="tab-btn" data-tab="eigenvectors">🌊 Vibration Patterns</button>
-            <button class="tab-btn" data-tab="learn">📚 Learn Spectral Theory</button>
+            <button class="tab-btn active" data-tab="insights">📈 Insights</button>
+            <button class="tab-btn" data-tab="vibrations">🌊 Vibrations</button>
+            <button class="tab-btn" data-tab="learn">📚 Learn</button>
           </div>
 
           <div class="tab-content">
-            <!-- Eigenvalue Distribution Plot -->
-            <div class="tab-panel active" id="eigenvalues-panel">
+            <!-- Insights Panel -->
+            <div class="tab-panel active" id="insights-panel">
               <div class="panel-header">
-                <h4>📊 Your Graph's Mathematical Fingerprint</h4>
-                <p>Each bar shows an eigenvalue - think of them as the "natural frequencies" of your network!</p>
-              </div>
-              <div class="eigenvalue-chart">
-                <canvas id="eigenvalue-chart" width="500" height="200"></canvas>
-              </div>
-              <div class="eigenvalue-insights">
-                <div class="insight-item">
-                  <span class="insight-label">🔑 First eigenvalue (λ₁):</span>
-                  <span class="insight-value">Always 0 for connected graphs</span>
-                </div>
-                <div class="insight-item">
-                  <span class="insight-label">💪 Second eigenvalue (λ₂):</span>
-                  <span class="insight-value" id="second-eigenvalue-meaning">Shows how well-connected your network is</span>
-                </div>
-                <div class="insight-item">
-                  <span class="insight-label">📈 Largest eigenvalue:</span>
-                  <span class="insight-value" id="largest-eigenvalue-meaning">Related to hub nodes and max connections</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Eigenvector Visualization -->
-            <div class="tab-panel" id="eigenvectors-panel">
-              <div class="panel-header">
-                <h4>🌊 How Information Flows Through Your Network</h4>
-                <p>Each pattern shows a different "vibration mode" - like how energy or information naturally moves through your graph!</p>
-              </div>
-              <div id="eigenvector-explanation" class="explanation">
-                🎵 <strong>Think of it like music!</strong> Just like a guitar string has different vibration patterns that create different notes, 
-                your network has different "information flow patterns" that reveal hidden structure. 
-                
-                <br><br>
-                
-                The <strong>red and blue colors</strong> show nodes that are "in phase" (same color) or "out of phase" (different colors) 
-                with each other. This reveals natural community boundaries and information bottlenecks!
-              </div>
-            </div>
-
-            <!-- Educational Content -->
-            <div class="tab-panel" id="learn-panel">
-              <div class="panel-header">
-                <h4>📚 Spectral Graph Theory: A Beginner's Guide</h4>
-                <p>Welcome to the fascinating world where mathematics meets networks! Let's explore together.</p>
+                <h4>📈 Network Analysis</h4>
+                <p>Key insights about your graph's structure and properties</p>
               </div>
               
-              <div id="textbook-content">
-                <div class="explanation">
-                  <h5>🌟 Why Should You Care About Spectral Graph Theory?</h5>
-                  
-                  <p><strong>You're using it right now!</strong> Every time you search Google, use GPS navigation, or scroll through social media, 
-                  you're benefiting from spectral graph theory. Here's why it's amazing:</p>
-                  
-                  <ul style="margin: 1rem 0; padding-left: 2rem;">
-                    <li><strong>🔍 Google Search:</strong> PageRank uses the dominant eigenvector to rank web pages</li>
-                    <li><strong>🗺️ GPS Navigation:</strong> Finds optimal routes through road networks</li>
-                    <li><strong>👥 Social Networks:</strong> Detects communities and suggests friends</li>
-                    <li><strong>🧠 Brain Research:</strong> Maps how neurons connect and communicate</li>
-                    <li><strong>🤖 Machine Learning:</strong> Powers clustering and dimensionality reduction</li>
-                  </ul>
-                  
-                  <h5>🎵 The Musical Analogy</h5>
-                  
-                  <p>Imagine your network is like a guitar string. When you pluck it, it doesn't vibrate randomly - 
-                  it has natural "resonant frequencies" that depend on its physical properties.</p>
-                  
-                  <p><strong>Your graph works the same way!</strong> It has natural "frequencies" (eigenvalues) and 
-                  "vibration patterns" (eigenvectors) that reveal its fundamental structure:</p>
-                  
-                  <ul style="margin: 1rem 0; padding-left: 2rem;">
-                    <li><strong>🎼 Low frequencies (small eigenvalues):</strong> Reveal large-scale structure and communities</li>
-                    <li><strong>🎵 High frequencies (large eigenvalues):</strong> Show local details and connections</li>
-                    <li><strong>🌊 Vibration patterns:</strong> Indicate how information flows through the network</li>
-                  </ul>
-                  
-                  <h5>🔧 What Are You Actually Controlling?</h5>
-                  
-                  <p>When you move the sliders above, you're intuitively controlling mathematical properties:</p>
-                  
-                  <ul style="margin: 1rem 0; padding-left: 2rem;">
-                    <li><strong>📡 "How Connected"</strong> → Controls the <em>algebraic connectivity</em> (λ₂)</li>
-                    <li><strong>📏 "How Spread Out"</strong> → Influences the <em>spectral gap</em> and expansion properties</li>
-                    <li><strong>🏘️ "How Clustered"</strong> → Affects higher eigenvalues and community structure</li>
-                  </ul>
-                  
-                  <p><strong>The magic?</strong> The app automatically calculates the exact eigenvalues that create a graph 
-                  with your desired properties. No complex math required - just intuitive exploration!</p>
-                  
-                  <h5>🧮 The Mathematical Connection</h5>
-                  
-                  <p>Behind the scenes, we're working with the <strong>graph Laplacian matrix</strong> - a mathematical 
-                  representation that encodes your network's structure. Its eigenvalues and eigenvectors contain a wealth 
-                  of information:</p>
-                  
-                  <ul style="margin: 1rem 0; padding-left: 2rem;">
-                    <li><strong>λ₁ = 0:</strong> Always zero for connected graphs (fundamental theorem!)</li>
-                    <li><strong>λ₂:</strong> The "algebraic connectivity" - measures how well-connected the graph is</li>
-                    <li><strong>λ₃, λ₄, ...:</strong> Reveal increasingly fine-grained structural details</li>
-                    <li><strong>Eigenvectors:</strong> Show natural partitions and flow patterns</li>
-                  </ul>
-                  
-                  <h5>🚀 Keep Exploring!</h5>
-                  
-                  <p>Try these experiments to deepen your understanding:</p>
-                  
-                  <ol style="margin: 1rem 0; padding-left: 2rem;">
-                    <li><strong>Compare the presets:</strong> Notice how different graph types have distinct eigenvalue "fingerprints"</li>
-                    <li><strong>Watch the vibration patterns:</strong> See how information naturally wants to flow</li>
-                    <li><strong>Change connectivity:</strong> Observe how the second eigenvalue (λ₂) responds</li>
-                    <li><strong>Create bottlenecks:</strong> Lower the expansion to see network vulnerabilities</li>
-                  </ol>
-                  
-                  <p><em>Remember: You're not just playing with pretty pictures - you're exploring the mathematical 
-                  foundations that power modern technology!</em> 🌟</p>
+              <div class="insight-grid">
+                <div class="insight-item">
+                  <span class="insight-label">🔑 λ₁ (Connectivity):</span>
+                  <span class="insight-value">Always 0</span>
                 </div>
+                <div class="insight-item">
+                  <span class="insight-label">💪 λ₂ (Robustness):</span>
+                  <span class="insight-value" id="second-eigenvalue-meaning">Strong</span>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-label">📈 λₙ (Max degree):</span>
+                  <span class="insight-value" id="largest-eigenvalue-meaning">Balanced</span>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-label">🌊 Spectral gap:</span>
+                  <span class="insight-value" id="spectral-gap">0.00</span>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-label">🔗 Edge count:</span>
+                  <span class="insight-value" id="edge-count">0</span>
+                </div>
+                <div class="insight-item">
+                  <span class="insight-label">📊 Avg degree:</span>
+                  <span class="insight-value" id="avg-degree">0.0</span>
+                </div>
+              </div>
+
+              <div style="margin-top: var(--space-4);">
+                <h5 style="margin-bottom: var(--space-2); color: var(--text-primary);">🧠 Interpretation</h5>
+                <div id="detailed-analysis" class="explanation">
+                  Your network analysis will appear here as you adjust the controls...
+                </div>
+              </div>
+            </div>
+
+            <!-- Vibrations Panel -->
+            <div class="tab-panel" id="vibrations-panel">
+              <div class="panel-header">
+                <h4>🌊 Information Flow Patterns</h4>
+                <p>See how information naturally "vibrates" through your network</p>
+              </div>
+
+              <div class="vibration-controls">
+                <div class="vibration-selector">
+                  <label style="font-size: 0.8rem; color: var(--text-secondary);">Pattern:</label>
+                  <select id="vibration-select">
+                    <option value="1">2nd Mode (Communities)</option>
+                    <option value="2">3rd Mode (Sub-groups)</option>
+                    <option value="3">4th Mode (Fine Structure)</option>
+                  </select>
+                </div>
+                
+                <button id="animate-vibration" class="animate-btn">
+                  <i class="fas fa-play"></i> Animate Flow
+                </button>
+              </div>
+
+              <div class="explanation">
+                <h5>🎵 <strong>Music Analogy:</strong></h5>
+                <p>Think of your network like a guitar string! Each "vibration mode" shows a different way 
+                information can flow through your network:</p>
+                
+                <ul style="margin: var(--space-2) 0; padding-left: var(--space-3); font-size: 0.8rem;">
+                  <li><strong>🔴 Red nodes:</strong> Information "peaks" here</li>
+                  <li><strong>🔵 Blue nodes:</strong> Information "valleys" here</li>
+                  <li><strong>⚪ White nodes:</strong> Neutral crossing points</li>
+                </ul>
+                
+                <p><strong>Real-world meaning:</strong> Red and blue nodes form natural "communities" - 
+                they're more similar to nodes of the same color than opposite colors!</p>
+                
+                <div id="vibration-explanation" style="margin-top: var(--space-3); padding: var(--space-2); 
+                     background: rgba(99, 102, 241, 0.05); border-radius: var(--radius); border-left: 3px solid var(--primary);">
+                  Select a vibration pattern above to see detailed analysis...
+                </div>
+              </div>
+            </div>
+
+            <!-- Learning Panel -->
+            <div class="tab-panel" id="learn-panel">
+              <div class="panel-header">
+                <h4>📚 Understanding the Math</h4>
+                <p>From intuition to equations - learn at your own pace</p>
+              </div>
+              
+              <div class="learning-content">
+                <h5>🌟 Why This Matters</h5>
+                <p>You're exploring the mathematics that powers:</p>
+                <ul>
+                  <li><strong>🔍 Google Search</strong> - PageRank uses eigenvalues</li>
+                  <li><strong>🧠 Brain Networks</strong> - Understanding neural connectivity</li>
+                  <li><strong>👥 Social Media</strong> - Finding communities and influencers</li>
+                  <li><strong>🤖 AI Systems</strong> - Spectral clustering and graph neural networks</li>
+                </ul>
+
+                <h5>🎵 The Guitar String Analogy</h5>
+                <p>Your network has "natural frequencies" just like a musical instrument:</p>
+                <ul>
+                  <li><strong>Eigenvalues</strong> = The frequencies (pitch)</li>
+                  <li><strong>Eigenvectors</strong> = The vibration patterns (shape)</li>
+                  <li><strong>λ₁ = 0</strong> = The fundamental "drone" note</li>
+                  <li><strong>λ₂</strong> = How quickly information spreads</li>
+                </ul>
+
+                <h5>🔧 What Your Sliders Control</h5>
+                <ul>
+                  <li><strong>Connectivity</strong> → Algebraic connectivity (λ₂)</li>
+                  <li><strong>Clustering</strong> → Higher eigenvalue gaps</li>
+                  <li><strong>Regularity</strong> → Maximum eigenvalue shape</li>
+                  <li><strong>Locality</strong> → Spectral decay rate</li>
+                  <li><strong>Symmetry</strong> → Eigenvalue multiplicity</li>
+                </ul>
+
+                <h5>🧪 Try These Experiments</h5>
+                <ol>
+                  <li>Move <strong>Connectivity</strong> to see λ₂ change</li>
+                  <li>Try the <strong>Star</strong> preset - notice the eigenvalue pattern</li>
+                  <li>Use <strong>Edit Mode</strong> to create bottlenecks</li>
+                  <li>Watch <strong>vibration patterns</strong> reveal communities</li>
+                  <li>Compare eigenvalue "fingerprints" of different structures</li>
+                </ol>
+
+                <p><em>💡 Remember: Every adjustment you make has deep mathematical meaning, 
+                but you don't need to know the equations to understand the patterns!</em></p>
               </div>
             </div>
           </div>
@@ -912,7 +1159,7 @@
   </main>
 
   <script>
-    // Graph Laplacian Engine - Core mathematical operations
+    // Enhanced Graph Laplacian Engine
     class GraphLaplacianEngine {
       constructor() {
         this.tolerance = 1e-10;
@@ -930,7 +1177,7 @@
           case 'star':
             return this.starGraphEigenvalues(n);
           default:
-            return new Array(n).fill(0).map((_, i) => i * 0.5);
+            return new Array(n).fill(0).map((_, i) => i * 0.8);
         }
       }
 
@@ -967,25 +1214,48 @@
         return eigenvals.sort((a, b) => a - b);
       }
 
-      // Convert intuitive properties to eigenvalues
-      propertiesToEigenvalues(connectivity, expansion, clustering, n) {
+      // Enhanced property-to-eigenvalue conversion with more parameters
+      propertiesToEigenvalues(connectivity, clustering, regularity, locality, symmetry, n) {
         const eigenvals = [0]; // First eigenvalue is always 0
         
-        // Second eigenvalue (algebraic connectivity)
-        const secondEigenval = 0.1 + (connectivity / 100) * 3;
-        eigenvals.push(secondEigenval);
+        // Second eigenvalue (algebraic connectivity) - most important
+        const baseConnectivity = 0.05 + (connectivity / 100) * 4;
+        eigenvals.push(baseConnectivity);
         
-        // Generate remaining eigenvalues based on properties
+        // Generate remaining eigenvalues with enhanced control
         for (let i = 2; i < n; i++) {
-          const baseValue = secondEigenval + (i - 1) * (expansion / 100) * 2;
-          const clusteringVariation = (clustering / 100) * Math.sin(i * Math.PI / n) * 0.5;
-          eigenvals.push(Math.max(eigenvals[i-1] + 0.1, baseValue + clusteringVariation));
+          const progress = (i - 1) / (n - 2); // 0 to 1 progression
+          
+          // Base value increases with position
+          let baseValue = baseConnectivity * (1 + progress * 2);
+          
+          // Clustering effect - creates gaps
+          const clusteringGap = (clustering / 100) * Math.sin(progress * Math.PI) * 1.5;
+          baseValue += clusteringGap;
+          
+          // Regularity effect - affects eigenvalue spread
+          const regularityFactor = 1 + (regularity / 100) * 0.5;
+          baseValue *= regularityFactor;
+          
+          // Locality effect - affects higher eigenvalues more
+          const localityBoost = progress * (locality / 100) * 1.2;
+          baseValue += localityBoost;
+          
+          // Symmetry effect - creates multiplicity patterns
+          if (symmetry > 50) {
+            const symPattern = Math.cos(progress * Math.PI * 2) * (symmetry / 100) * 0.3;
+            baseValue += symPattern;
+          }
+          
+          // Ensure monotonic increase with some minimum gap
+          baseValue = Math.max(eigenvals[i-1] + 0.05, baseValue);
+          eigenvals.push(baseValue);
         }
         
         return eigenvals;
       }
 
-      // Generate graph from eigenvalues
+      // Enhanced graph generation
       generateGraphFromEigenvalues(eigenvals) {
         const n = eigenvals.length;
         const positions = this.generatePositions(eigenvals);
@@ -995,7 +1265,7 @@
           positions,
           adjacency,
           eigenvalues: eigenvals,
-          properties: this.computeGraphProperties(eigenvals)
+          properties: this.computeGraphProperties(eigenvals, adjacency)
         };
       }
 
@@ -1003,13 +1273,17 @@
         const n = eigenvals.length;
         const positions = [];
         
+        // More sophisticated positioning based on eigenvalue structure
         for (let i = 0; i < n; i++) {
           const angle = (2 * Math.PI * i) / n;
-          const radius = 120 + 30 * Math.sin(eigenvals[Math.min(i + 1, eigenvals.length - 1)] || 1);
+          
+          // Vary radius based on eigenvalue structure
+          const eigenInfluence = eigenvals[Math.min(i + 1, eigenvals.length - 1)] || 1;
+          const radius = 100 + 40 * Math.log(1 + eigenInfluence);
           
           positions.push({
             x: 300 + radius * Math.cos(angle),
-            y: 300 + radius * Math.sin(angle)
+            y: 250 + radius * Math.sin(angle)
           });
         }
         
@@ -1020,23 +1294,23 @@
         const n = eigenvals.length;
         const adjacency = Array(n).fill().map(() => Array(n).fill(0));
         
-        // Simple heuristic based on eigenvalue structure
-        const connectivity = eigenvals[1] || 0.5; // Use second eigenvalue
-        const threshold = 0.3 + connectivity * 0.3;
+        const connectivity = eigenvals[1] || 0.5;
+        const threshold = 0.2 + connectivity * 0.4;
         
+        // Create edges based on eigenvalue-derived probabilities
         for (let i = 0; i < n; i++) {
           for (let j = i + 1; j < n; j++) {
             const distance = Math.abs(i - j);
-            const normalizedDistance = distance / n;
+            const normalizedDistance = Math.min(distance, n - distance) / n;
             const probability = Math.exp(-normalizedDistance / threshold);
             
-            if (probability > 0.4 || (distance === 1 && Math.random() > 0.2)) {
+            if (probability > 0.3 + Math.random() * 0.3) {
               adjacency[i][j] = adjacency[j][i] = 1;
             }
           }
         }
         
-        // Ensure connectivity
+        // Ensure basic connectivity
         for (let i = 0; i < n - 1; i++) {
           if (Math.random() > 0.7) {
             adjacency[i][i + 1] = adjacency[i + 1][i] = 1;
@@ -1046,18 +1320,62 @@
         return adjacency;
       }
 
-      computeGraphProperties(eigenvals) {
+      computeGraphProperties(eigenvals, adjacency) {
         const n = eigenvals.length;
+        
+        // Count edges
+        let edgeCount = 0;
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            if (adjacency[i][j]) edgeCount++;
+          }
+        }
+        
         return {
           spectralGap: eigenvals[1] - eigenvals[0],
           algebraicConnectivity: eigenvals[1],
           maxEigenvalue: eigenvals[n - 1],
-          eigenvalueSum: eigenvals.reduce((a, b) => a + b, 0)
+          eigenvalueSum: eigenvals.reduce((a, b) => a + b, 0),
+          edgeCount,
+          avgDegree: (2 * edgeCount) / n
         };
+      }
+
+      // Generate eigenvectors for visualization
+      generateEigenvector(eigenvals, mode) {
+        const n = eigenvals.length;
+        const eigenvector = [];
+        
+        // Simple approximation of eigenvectors based on mode
+        switch(mode) {
+          case 1: // Second eigenvector - shows main division
+            for (let i = 0; i < n; i++) {
+              eigenvector.push(Math.cos(2 * Math.PI * i / n));
+            }
+            break;
+          case 2: // Third eigenvector - shows finer structure
+            for (let i = 0; i < n; i++) {
+              eigenvector.push(Math.cos(4 * Math.PI * i / n) * Math.exp(-i * 0.1));
+            }
+            break;
+          case 3: // Fourth eigenvector - shows complex patterns
+            for (let i = 0; i < n; i++) {
+              eigenvector.push(Math.sin(6 * Math.PI * i / n) * Math.cos(2 * Math.PI * i / n));
+            }
+            break;
+          default:
+            for (let i = 0; i < n; i++) {
+              eigenvector.push(Math.cos((mode + 1) * 2 * Math.PI * i / n));
+            }
+        }
+        
+        // Normalize to [-1, 1]
+        const maxAbs = Math.max(...eigenvector.map(Math.abs), 0.001);
+        return eigenvector.map(v => v / maxAbs);
       }
     }
 
-    // Graph Visualizer - Canvas-based rendering
+    // Enhanced Graph Visualizer with edge editing
     class GraphVisualizer {
       constructor(canvas) {
         this.canvas = canvas;
@@ -1065,13 +1383,16 @@
         this.setupCanvas();
         this.graph = null;
         this.eigenvectorColors = null;
+        this.isAnimating = false;
+        this.editMode = false;
+        this.hoveredEdge = null;
         
         // Visual settings
-        this.nodeRadius = 15;
+        this.nodeRadius = 18;
         this.nodeColor = '#6366f1';
         this.nodeStroke = '#ffffff';
         this.edgeColor = '#cbd5e1';
-        this.edgeWidth = 2;
+        this.edgeWidth = 3;
         
         this.setupInteraction();
       }
@@ -1098,11 +1419,25 @@
           const y = e.clientY - rect.top;
           
           if (this.graph) {
-            const nodeIndex = this.getNodeAt(x, y);
-            if (nodeIndex !== -1) {
-              isDragging = true;
-              dragNode = nodeIndex;
-              this.canvas.style.cursor = 'grabbing';
+            if (this.editMode) {
+              // Check for edge click or node click for edge creation
+              const clickedNode = this.getNodeAt(x, y);
+              if (clickedNode !== -1) {
+                this.handleNodeClickForEditing(clickedNode);
+              } else {
+                const edge = this.getEdgeAt(x, y);
+                if (edge) {
+                  this.toggleEdge(edge.i, edge.j);
+                }
+              }
+            } else {
+              // Normal dragging mode
+              const nodeIndex = this.getNodeAt(x, y);
+              if (nodeIndex !== -1) {
+                isDragging = true;
+                dragNode = nodeIndex;
+                this.canvas.style.cursor = 'grabbing';
+              }
             }
           }
         });
@@ -1116,16 +1451,67 @@
             this.graph.positions[dragNode] = { x, y };
             this.render();
           } else if (this.graph) {
-            const nodeIndex = this.getNodeAt(x, y);
-            this.canvas.style.cursor = nodeIndex !== -1 ? 'grab' : 'default';
+            if (this.editMode) {
+              // Show potential edges or highlight existing ones
+              this.updateEditModeHover(x, y);
+            } else {
+              const nodeIndex = this.getNodeAt(x, y);
+              this.canvas.style.cursor = nodeIndex !== -1 ? 'grab' : 'default';
+            }
           }
         });
         
         this.canvas.addEventListener('mouseup', () => {
           isDragging = false;
           dragNode = null;
-          this.canvas.style.cursor = 'default';
+          if (!this.editMode) {
+            this.canvas.style.cursor = 'default';
+          }
         });
+
+        this.selectedNodeForEdge = null;
+      }
+
+      handleNodeClickForEditing(nodeIndex) {
+        if (this.selectedNodeForEdge === null) {
+          this.selectedNodeForEdge = nodeIndex;
+        } else if (this.selectedNodeForEdge !== nodeIndex) {
+          // Toggle edge between selected nodes
+          this.toggleEdge(this.selectedNodeForEdge, nodeIndex);
+          this.selectedNodeForEdge = null;
+        } else {
+          this.selectedNodeForEdge = null;
+        }
+        this.render();
+      }
+
+      toggleEdge(i, j) {
+        if (i === j) return; // No self-loops
+        
+        // Toggle the edge
+        this.graph.adjacency[i][j] = this.graph.adjacency[i][j] ? 0 : 1;
+        this.graph.adjacency[j][i] = this.graph.adjacency[i][j];
+        
+        // Trigger update
+        if (window.spectralGraphApp) {
+          window.spectralGraphApp.onGraphEdited();
+        }
+      }
+
+      updateEditModeHover(x, y) {
+        const nodeIndex = this.getNodeAt(x, y);
+        const edge = this.getEdgeAt(x, y);
+        
+        if (nodeIndex !== -1) {
+          this.canvas.style.cursor = 'pointer';
+        } else if (edge) {
+          this.canvas.style.cursor = 'pointer';
+        } else {
+          this.canvas.style.cursor = 'crosshair';
+        }
+        
+        this.hoveredEdge = edge;
+        this.render();
       }
 
       getNodeAt(x, y) {
@@ -1145,6 +1531,66 @@
         return -1;
       }
 
+      getEdgeAt(x, y) {
+        if (!this.graph) return null;
+        
+        const threshold = 8;
+        const positions = this.graph.positions;
+        
+        for (let i = 0; i < positions.length; i++) {
+          for (let j = i + 1; j < positions.length; j++) {
+            if (this.graph.adjacency[i][j]) {
+              const dist = this.pointToLineDistance(x, y, positions[i], positions[j]);
+              if (dist < threshold) {
+                return { i, j };
+              }
+            }
+          }
+        }
+        
+        return null;
+      }
+
+      pointToLineDistance(px, py, p1, p2) {
+        const A = px - p1.x;
+        const B = py - p1.y;
+        const C = p2.x - p1.x;
+        const D = p2.y - p1.y;
+        
+        const dot = A * C + B * D;
+        const lenSq = C * C + D * D;
+        let param = -1;
+        
+        if (lenSq !== 0) {
+          param = dot / lenSq;
+        }
+        
+        let xx, yy;
+        
+        if (param < 0) {
+          xx = p1.x;
+          yy = p1.y;
+        } else if (param > 1) {
+          xx = p2.x;
+          yy = p2.y;
+        } else {
+          xx = p1.x + param * C;
+          yy = p1.y + param * D;
+        }
+        
+        const dx = px - xx;
+        const dy = py - yy;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+
+      setEditMode(enabled) {
+        this.editMode = enabled;
+        this.selectedNodeForEdge = null;
+        this.hoveredEdge = null;
+        this.canvas.style.cursor = enabled ? 'crosshair' : 'default';
+        this.render();
+      }
+
       setGraph(graph) {
         this.graph = graph;
         this.render();
@@ -1160,6 +1606,33 @@
         this.render();
       }
 
+      animateVibration(colors, duration = 2000) {
+        if (this.isAnimating) return;
+        
+        this.isAnimating = true;
+        const startTime = Date.now();
+        
+        const animate = () => {
+          const elapsed = Date.now() - startTime;
+          const progress = (elapsed % duration) / duration;
+          const phase = Math.sin(progress * Math.PI * 2);
+          
+          // Modulate colors with phase
+          const animatedColors = colors.map(color => color * phase);
+          this.setEigenvectorColors(animatedColors);
+          
+          if (this.isAnimating) {
+            requestAnimationFrame(animate);
+          }
+        };
+        
+        animate();
+      }
+
+      stopAnimation() {
+        this.isAnimating = false;
+      }
+
       render() {
         if (!this.graph) return;
 
@@ -1169,7 +1642,7 @@
         // Clear canvas
         ctx.clearRect(0, 0, rect.width, rect.height);
         
-        // Draw edges
+        // Draw edges first
         this.drawEdges();
         
         // Draw nodes
@@ -1177,14 +1650,17 @@
         
         // Draw labels
         this.drawLabels();
+        
+        // Draw edit mode indicators
+        if (this.editMode) {
+          this.drawEditModeIndicators();
+        }
       }
 
       drawEdges() {
         const ctx = this.ctx;
         const { positions, adjacency } = this.graph;
         
-        ctx.strokeStyle = this.edgeColor;
-        ctx.lineWidth = this.edgeWidth;
         ctx.lineCap = 'round';
         
         for (let i = 0; i < positions.length; i++) {
@@ -1193,6 +1669,18 @@
               ctx.beginPath();
               ctx.moveTo(positions[i].x, positions[i].y);
               ctx.lineTo(positions[j].x, positions[j].y);
+              
+              // Highlight hovered edge in edit mode
+              if (this.editMode && this.hoveredEdge && 
+                  ((this.hoveredEdge.i === i && this.hoveredEdge.j === j) ||
+                   (this.hoveredEdge.i === j && this.hoveredEdge.j === i))) {
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = this.edgeWidth + 2;
+              } else {
+                ctx.strokeStyle = this.edgeColor;
+                ctx.lineWidth = this.edgeWidth;
+              }
+              
               ctx.stroke();
             }
           }
@@ -1206,19 +1694,29 @@
         positions.forEach((pos, i) => {
           // Determine node color
           let fillColor = this.nodeColor;
+          let strokeColor = this.nodeStroke;
+          let strokeWidth = 3;
+          
           if (this.eigenvectorColors && this.eigenvectorColors[i] !== undefined) {
             const value = this.eigenvectorColors[i];
+            const intensity = Math.abs(value);
             if (value > 0) {
-              fillColor = `rgba(239, 68, 68, ${0.3 + 0.7 * value})`;  // Red for positive
+              fillColor = `rgba(239, 68, 68, ${0.4 + 0.6 * intensity})`;  // Red for positive
             } else {
-              fillColor = `rgba(59, 130, 246, ${0.3 + 0.7 * Math.abs(value)})`;  // Blue for negative
+              fillColor = `rgba(59, 130, 246, ${0.4 + 0.6 * intensity})`;  // Blue for negative
             }
+          }
+          
+          // Highlight selected node in edit mode
+          if (this.editMode && this.selectedNodeForEdge === i) {
+            strokeColor = '#10b981';
+            strokeWidth = 5;
           }
           
           // Node shadow
           ctx.beginPath();
           ctx.arc(pos.x + 2, pos.y + 2, this.nodeRadius, 0, 2 * Math.PI);
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
           ctx.fill();
           
           // Node body
@@ -1228,8 +1726,8 @@
           ctx.fill();
           
           // Node border
-          ctx.strokeStyle = this.nodeStroke;
-          ctx.lineWidth = 3;
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = strokeWidth;
           ctx.stroke();
         });
       }
@@ -1239,24 +1737,56 @@
         const { positions } = this.graph;
         
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 12px Inter';
+        ctx.font = 'bold 14px Inter';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 2;
         
         positions.forEach((pos, i) => {
           ctx.fillText(i.toString(), pos.x, pos.y);
         });
+        
+        ctx.shadowColor = 'transparent';
+      }
+
+      drawEditModeIndicators() {
+        // Draw potential edges when in edit mode
+        if (this.selectedNodeForEdge !== null && this.graph) {
+          const ctx = this.ctx;
+          const selectedPos = this.graph.positions[this.selectedNodeForEdge];
+          
+          // Draw potential edges to other nodes
+          this.graph.positions.forEach((pos, i) => {
+            if (i !== this.selectedNodeForEdge && !this.graph.adjacency[this.selectedNodeForEdge][i]) {
+              ctx.beginPath();
+              ctx.moveTo(selectedPos.x, selectedPos.y);
+              ctx.lineTo(pos.x, pos.y);
+              ctx.strokeStyle = '#10b981';
+              ctx.lineWidth = 2;
+              ctx.setLineDash([5, 5]);
+              ctx.globalAlpha = 0.5;
+              ctx.stroke();
+              ctx.setLineDash([]);
+              ctx.globalAlpha = 1;
+            }
+          });
+        }
       }
 
       updateProperties(properties) {
-        document.getElementById('spectral-gap').textContent = 
-          properties.spectralGap.toFixed(3);
         document.getElementById('algebraic-connectivity').textContent = 
           properties.algebraicConnectivity.toFixed(3);
+        document.getElementById('spectral-gap').textContent = 
+          properties.spectralGap.toFixed(3);
+        document.getElementById('edge-count').textContent = 
+          properties.edgeCount.toString();
+        document.getElementById('avg-degree').textContent = 
+          properties.avgDegree.toFixed(1);
       }
     }
 
-    // Eigenvalue Chart Visualizer
+    // Enhanced Eigenvalue Chart
     class EigenvalueChart {
       constructor(canvas) {
         this.canvas = canvas;
@@ -1287,7 +1817,7 @@
 
         const ctx = this.ctx;
         const rect = this.canvas.getBoundingClientRect();
-        const padding = 40;
+        const padding = 20;
         const chartWidth = rect.width - 2 * padding;
         const chartHeight = rect.height - 2 * padding;
         
@@ -1298,13 +1828,13 @@
         const barWidth = chartWidth / this.eigenvalues.length;
         const maxValue = Math.max(...this.eigenvalues, 1);
         
-        // Draw bars
+        // Draw bars with enhanced styling
         this.eigenvalues.forEach((value, i) => {
           const barHeight = (value / maxValue) * chartHeight;
           const x = padding + i * barWidth;
           const y = rect.height - padding - barHeight;
           
-          // Gradient for each bar
+          // Enhanced gradient for each bar
           const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
           if (i === 0) {
             gradient.addColorStop(0, '#10b981');
@@ -1317,26 +1847,32 @@
             gradient.addColorStop(1, '#db2777');
           }
           
-          // Draw bar
+          // Draw bar with rounded top
           ctx.fillStyle = gradient;
-          ctx.fillRect(x + 2, y, barWidth - 4, barHeight);
+          ctx.beginPath();
+          ctx.roundRect(x + 2, y, barWidth - 4, barHeight, [0, 0, 4, 4]);
+          ctx.fill();
           
-          // Draw value label
+          // Draw value label on top
           ctx.fillStyle = '#64748b';
-          ctx.font = '10px Inter';
+          ctx.font = '8px Inter';
           ctx.textAlign = 'center';
-          ctx.fillText(`λ${i + 1}`, x + barWidth / 2, rect.height - 15);
           ctx.fillText(value.toFixed(2), x + barWidth / 2, y - 5);
+          
+          // Draw eigenvalue label at bottom
+          ctx.fillText(`λ${i + 1}`, x + barWidth / 2, rect.height - 5);
         });
         
-        // Draw axes
-        ctx.strokeStyle = '#e2e8f0';
+        // Draw subtle grid lines
+        ctx.strokeStyle = '#f1f5f9';
         ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(padding, padding);
-        ctx.lineTo(padding, rect.height - padding);
-        ctx.lineTo(rect.width - padding, rect.height - padding);
-        ctx.stroke();
+        for (let i = 0; i <= 4; i++) {
+          const y = padding + (i / 4) * chartHeight;
+          ctx.beginPath();
+          ctx.moveTo(padding, y);
+          ctx.lineTo(rect.width - padding, y);
+          ctx.stroke();
+        }
       }
     }
 
@@ -1348,6 +1884,7 @@
         this.chart = null;
         this.currentGraph = null;
         this.nodeCount = 5;
+        this.animationId = null;
         
         this.init();
       }
@@ -1365,12 +1902,14 @@
           this.chart = new EigenvalueChart(chartCanvas);
         }
 
-        // Setup controls
+        // Setup all controls
         this.setupPropertyControls();
         this.setupPresetButtons();
         this.setupNodeCountControl();
         this.setupAdvancedToggle();
         this.setupTabs();
+        this.setupEditMode();
+        this.setupVibrationControls();
 
         // Generate initial graph
         this.updateGraph();
@@ -1386,10 +1925,19 @@
             this.chart.render();
           }
         });
+
+        // Make app globally available
+        window.spectralGraphApp = this;
       }
 
       setupPropertyControls() {
-        const sliders = ['connectivity-slider', 'expansion-slider', 'clustering-slider'];
+        const sliders = [
+          'connectivity-slider', 
+          'clustering-slider', 
+          'regularity-slider', 
+          'locality-slider', 
+          'symmetry-slider'
+        ];
         
         sliders.forEach(sliderId => {
           const slider = document.getElementById(sliderId);
@@ -1415,26 +1963,47 @@
         switch(sliderId) {
           case 'connectivity-slider':
             valueId = 'connectivity-value';
-            if (value < 25) displayText = 'Very sparse';
-            else if (value < 50) displayText = 'Sparse';
-            else if (value < 75) displayText = 'Moderate';
+            if (value < 20) displayText = 'Very sparse';
+            else if (value < 40) displayText = 'Sparse';
+            else if (value < 60) displayText = 'Moderate';
+            else if (value < 80) displayText = 'Well connected';
             else displayText = 'Highly connected';
-            break;
-            
-          case 'expansion-slider':
-            valueId = 'expansion-value';
-            if (value < 25) displayText = 'Very tight';
-            else if (value < 50) displayText = 'Compact';
-            else if (value < 75) displayText = 'Balanced';
-            else displayText = 'Highly spread';
             break;
             
           case 'clustering-slider':
             valueId = 'clustering-value';
-            if (value < 25) displayText = 'Uniform';
-            else if (value < 50) displayText = 'Some clusters';
-            else if (value < 75) displayText = 'Clustered';
+            if (value < 20) displayText = 'Uniform';
+            else if (value < 40) displayText = 'Some clusters';
+            else if (value < 60) displayText = 'Moderate clustering';
+            else if (value < 80) displayText = 'Strong clusters';
             else displayText = 'Highly clustered';
+            break;
+            
+          case 'regularity-slider':
+            valueId = 'regularity-value';
+            if (value < 20) displayText = 'Star-like hubs';
+            else if (value < 40) displayText = 'Some hubs';
+            else if (value < 60) displayText = 'Balanced';
+            else if (value < 80) displayText = 'Regular';
+            else displayText = 'Very uniform';
+            break;
+            
+          case 'locality-slider':
+            valueId = 'locality-value';
+            if (value < 20) displayText = 'Long-range';
+            else if (value < 40) displayText = 'Mixed range';
+            else if (value < 60) displayText = 'Moderate local';
+            else if (value < 80) displayText = 'Mostly local';
+            else displayText = 'Highly local';
+            break;
+            
+          case 'symmetry-slider':
+            valueId = 'symmetry-value';
+            if (value < 20) displayText = 'Random';
+            else if (value < 40) displayText = 'Somewhat random';
+            else if (value < 60) displayText = 'Balanced';
+            else if (value < 80) displayText = 'Organized';
+            else displayText = 'Highly symmetric';
             break;
         }
         
@@ -1466,26 +2035,34 @@
         
         // Update sliders to reflect preset properties
         if (preset === 'path') {
-          this.setSliderValues(30, 70, 20);
+          this.setSliderValues(30, 20, 70, 85, 70);
         } else if (preset === 'cycle') {
-          this.setSliderValues(40, 60, 30);
+          this.setSliderValues(40, 30, 80, 60, 90);
         } else if (preset === 'star') {
-          this.setSliderValues(60, 40, 80);
+          this.setSliderValues(60, 80, 10, 40, 50);
         } else if (preset === 'complete') {
-          this.setSliderValues(100, 30, 10);
+          this.setSliderValues(100, 10, 90, 20, 95);
         }
         
         this.updateGraphFromEigenvalues(eigenvalues);
       }
 
-      setSliderValues(connectivity, expansion, clustering) {
-        document.getElementById('connectivity-slider').value = connectivity;
-        document.getElementById('expansion-slider').value = expansion;
-        document.getElementById('clustering-slider').value = clustering;
+      setSliderValues(connectivity, clustering, regularity, locality, symmetry) {
+        const sliders = {
+          'connectivity-slider': connectivity,
+          'clustering-slider': clustering,
+          'regularity-slider': regularity,
+          'locality-slider': locality,
+          'symmetry-slider': symmetry
+        };
         
-        this.updatePropertyValue('connectivity-slider');
-        this.updatePropertyValue('expansion-slider');
-        this.updatePropertyValue('clustering-slider');
+        Object.entries(sliders).forEach(([id, value]) => {
+          const slider = document.getElementById(id);
+          if (slider) {
+            slider.value = value;
+            this.updatePropertyValue(id);
+          }
+        });
       }
 
       setupNodeCountControl() {
@@ -1529,24 +2106,75 @@
             }
             
             // Handle special tab logic
-            if (targetTab === 'eigenvectors') {
-              this.showEigenvectorVisualization();
+            if (targetTab === 'vibrations') {
+              this.showVibrationVisualization();
             } else {
               if (this.visualizer) {
                 this.visualizer.clearEigenvectorColors();
+                this.visualizer.stopAnimation();
               }
             }
           });
         });
       }
 
+      setupEditMode() {
+        const editToggle = document.getElementById('edit-toggle');
+        const editInstructions = document.getElementById('edit-instructions');
+        
+        if (editToggle) {
+          editToggle.addEventListener('click', () => {
+            const isActive = editToggle.classList.toggle('active');
+            
+            if (isActive) {
+              editToggle.innerHTML = '<i class="fas fa-times"></i> Exit Edit';
+              editInstructions.style.display = 'block';
+            } else {
+              editToggle.innerHTML = '<i class="fas fa-edit"></i> Edit Edges';
+              editInstructions.style.display = 'none';
+            }
+            
+            if (this.visualizer) {
+              this.visualizer.setEditMode(isActive);
+            }
+          });
+        }
+      }
+
+      setupVibrationControls() {
+        const vibrationSelect = document.getElementById('vibration-select');
+        const animateBtn = document.getElementById('animate-vibration');
+        
+        if (vibrationSelect) {
+          vibrationSelect.addEventListener('change', () => {
+            this.showVibrationVisualization();
+          });
+        }
+        
+        if (animateBtn) {
+          animateBtn.addEventListener('click', () => {
+            const isPlaying = animateBtn.classList.toggle('playing');
+            
+            if (isPlaying) {
+              animateBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Flow';
+              this.startVibrationAnimation();
+            } else {
+              animateBtn.innerHTML = '<i class="fas fa-play"></i> Animate Flow';
+              this.stopVibrationAnimation();
+            }
+          });
+        }
+      }
+
       updateGraph() {
         const connectivity = parseInt(document.getElementById('connectivity-slider').value);
-        const expansion = parseInt(document.getElementById('expansion-slider').value);
         const clustering = parseInt(document.getElementById('clustering-slider').value);
+        const regularity = parseInt(document.getElementById('regularity-slider').value);
+        const locality = parseInt(document.getElementById('locality-slider').value);
+        const symmetry = parseInt(document.getElementById('symmetry-slider').value);
         
         const eigenvalues = this.engine.propertiesToEigenvalues(
-          connectivity, expansion, clustering, this.nodeCount
+          connectivity, clustering, regularity, locality, symmetry, this.nodeCount
         );
         
         this.updateGraphFromEigenvalues(eigenvalues);
@@ -1556,7 +2184,7 @@
         const graph = this.engine.generateGraphFromEigenvalues(eigenvalues);
         this.currentGraph = graph;
         
-        // Update visualizations
+        // Update all visualizations
         if (this.visualizer) {
           this.visualizer.setGraph(graph);
           this.visualizer.updateProperties(graph.properties);
@@ -1566,14 +2194,33 @@
           this.chart.updateEigenvalues(graph.eigenvalues);
         }
         
-        // Update eigenvalue display
+        // Update displays
         this.updateEigenvalueDisplay(graph.eigenvalues);
-        
-        // Update insights
         this.updateInsights(graph.eigenvalues, graph.properties);
-        
-        // Update explanation
         this.updateExplanation(graph);
+        
+        // Update vibration if currently showing
+        const currentTab = document.querySelector('.tab-btn.active');
+        if (currentTab && currentTab.dataset.tab === 'vibrations') {
+          this.showVibrationVisualization();
+        }
+      }
+
+      onGraphEdited() {
+        // Recalculate properties when graph is manually edited
+        if (this.currentGraph) {
+          const newProperties = this.engine.computeGraphProperties(
+            this.currentGraph.eigenvalues, 
+            this.currentGraph.adjacency
+          );
+          this.currentGraph.properties = newProperties;
+          
+          if (this.visualizer) {
+            this.visualizer.updateProperties(newProperties);
+          }
+          
+          this.updateInsights(this.currentGraph.eigenvalues, newProperties);
+        }
       }
 
       updateEigenvalueDisplay(eigenvalues) {
@@ -1593,14 +2240,16 @@
         const secondEl = document.getElementById('second-eigenvalue-meaning');
         if (secondEl) {
           const λ2 = eigenvalues[1];
-          if (λ2 > 2.0) {
-            secondEl.textContent = '🚀 Excellent connectivity - information flows rapidly!';
+          if (λ2 > 3.0) {
+            secondEl.textContent = '🚀 Excellent';
+          } else if (λ2 > 2.0) {
+            secondEl.textContent = '✅ Very good';
           } else if (λ2 > 1.0) {
-            secondEl.textContent = '✅ Good connectivity - well-connected network';
-          } else if (λ2 > 0.3) {
-            secondEl.textContent = '⚠️ Moderate connectivity - some bottlenecks exist';
+            secondEl.textContent = '👍 Good';
+          } else if (λ2 > 0.5) {
+            secondEl.textContent = '⚠️ Moderate';
           } else {
-            secondEl.textContent = '🔴 Weak connectivity - fragmented network';
+            secondEl.textContent = '🔴 Weak';
           }
         }
         
@@ -1610,14 +2259,52 @@
           const largest = eigenvalues[eigenvalues.length - 1];
           const n = eigenvalues.length;
           
-          if (largest > n) {
-            largestEl.textContent = '🌟 High degree nodes - hub-like structure detected';
-          } else if (largest > n * 0.7) {
-            largestEl.textContent = '📊 Some hub nodes present';
+          if (largest > n * 1.5) {
+            largestEl.textContent = '🌟 High degree hubs';
+          } else if (largest > n) {
+            largestEl.textContent = '📊 Some hubs';
           } else {
-            largestEl.textContent = '🟰 Uniform degree distribution';
+            largestEl.textContent = '🟰 Uniform degrees';
           }
         }
+
+        // Update detailed analysis
+        this.updateDetailedAnalysis(eigenvalues, properties);
+      }
+
+      updateDetailedAnalysis(eigenvalues, properties) {
+        const analysisEl = document.getElementById('detailed-analysis');
+        if (!analysisEl) return;
+        
+        const { spectralGap, algebraicConnectivity, edgeCount, avgDegree } = properties;
+        
+        let analysis = `<strong>🔍 Network Analysis:</strong><br><br>`;
+        
+        analysis += `Your ${this.nodeCount}-node network with ${edgeCount} edges has `;
+        
+        if (algebraicConnectivity > 2.0) {
+          analysis += '<strong>excellent robustness</strong> 🚀. Information spreads quickly and the network can withstand node failures well. ';
+        } else if (algebraicConnectivity > 1.0) {
+          analysis += '<strong>good connectivity</strong> ✅. Most paths between nodes are reasonably short. ';
+        } else if (algebraicConnectivity > 0.3) {
+          analysis += '<strong>moderate connectivity</strong> ⚠️. Some bottlenecks may slow information flow. ';
+        } else {
+          analysis += '<strong>limited connectivity</strong> 🔴. The network may fragment easily. ';
+        }
+        
+        analysis += `<br><br>With an average degree of ${avgDegree.toFixed(1)}, this network is `;
+        
+        if (avgDegree > this.nodeCount * 0.6) {
+          analysis += 'quite dense with many interconnections.';
+        } else if (avgDegree > this.nodeCount * 0.3) {
+          analysis += 'moderately connected.';
+        } else {
+          analysis += 'relatively sparse.';
+        }
+        
+        analysis += `<br><br>💡 <strong>Tip:</strong> Try adjusting the connectivity slider to see how λ₂ responds!`;
+        
+        analysisEl.innerHTML = analysis;
       }
 
       updateExplanation(graph) {
@@ -1626,51 +2313,110 @@
         
         const { spectralGap, algebraicConnectivity } = graph.properties;
         
-        let explanation = `🎯 <strong>Your ${this.nodeCount}-node network</strong> has `;
+        let explanation = `🎯 <strong>Live Network Analysis</strong><br><br>`;
         
-        if (algebraicConnectivity > 2.0) {
-          explanation += '<strong>excellent connectivity</strong> 🚀 - information flows quickly between all nodes! ';
-        } else if (algebraicConnectivity > 1.0) {
-          explanation += '<strong>good connectivity</strong> ✅ - most nodes can communicate efficiently. ';
-        } else if (algebraicConnectivity > 0.3) {
-          explanation += '<strong>moderate connectivity</strong> ⚠️ - some bottlenecks may slow information flow. ';
+        explanation += `Your graph shows ${algebraicConnectivity > 1.5 ? 'strong' : 'moderate'} connectivity `;
+        explanation += `with a spectral gap of ${spectralGap.toFixed(2)}. `;
+        
+        if (spectralGap > 1.0) {
+          explanation += 'This indicates robust structural integrity! 💪';
         } else {
-          explanation += '<strong>limited connectivity</strong> 🔴 - the network has weak points. ';
+          explanation += 'Consider increasing connectivity for better resilience. 🔧';
         }
         
-        explanation += `<br><br>💪 <strong>Network health score:</strong> ${spectralGap.toFixed(2)} `;
-        explanation += spectralGap > 1.0 
-          ? '(Strong structural integrity!)' 
-          : '(Consider increasing connectivity for better resilience)';
-          
+        explanation += `<br><br>🎪 Try the presets above or use edit mode to manually add/remove connections!`;
+        
         explanationEl.innerHTML = explanation;
       }
 
-      showEigenvectorVisualization() {
+      showVibrationVisualization() {
         if (!this.currentGraph || !this.visualizer) return;
         
-        // Generate simple eigenvector visualization
-        // For demo purposes, we'll use the second eigenvector approximation
-        const n = this.currentGraph.eigenvalues.length;
-        const eigenvector = [];
+        const modeSelect = document.getElementById('vibration-select');
+        const mode = parseInt(modeSelect.value);
         
-        // Simple approximation of second eigenvector
-        for (let i = 0; i < n; i++) {
-          eigenvector.push(Math.cos(2 * Math.PI * i / n) * Math.exp(-i * 0.1));
+        const eigenvector = this.engine.generateEigenvector(this.currentGraph.eigenvalues, mode);
+        this.visualizer.setEigenvectorColors(eigenvector);
+        
+        this.updateVibrationExplanation(mode, eigenvector);
+      }
+
+      updateVibrationExplanation(mode, eigenvector) {
+        const explanationEl = document.getElementById('vibration-explanation');
+        if (!explanationEl) return;
+        
+        const modeNames = {
+          1: 'Community Detection',
+          2: 'Sub-group Structure', 
+          3: 'Fine-scale Patterns'
+        };
+        
+        const explanations = {
+          1: 'This pattern reveals the main division in your network. Red and blue nodes naturally form separate communities!',
+          2: 'This shows finer community structure. Notice how the pattern creates multiple groups within the main communities.',
+          3: 'This reveals complex, higher-order patterns that show detailed structural relationships between nodes.'
+        };
+        
+        let content = `<strong>🌊 ${modeNames[mode]}:</strong><br><br>`;
+        content += explanations[mode];
+        
+        // Add some statistics
+        const positiveCount = eigenvector.filter(v => v > 0.1).length;
+        const negativeCount = eigenvector.filter(v => v < -0.1).length;
+        const neutralCount = eigenvector.filter(v => Math.abs(v) <= 0.1).length;
+        
+        content += `<br><br><strong>Pattern Analysis:</strong><br>`;
+        content += `🔴 Red community: ${positiveCount} nodes<br>`;
+        content += `🔵 Blue community: ${negativeCount} nodes<br>`;
+        content += `⚪ Neutral nodes: ${neutralCount} nodes`;
+        
+        explanationEl.innerHTML = content;
+      }
+
+      startVibrationAnimation() {
+        if (!this.currentGraph || !this.visualizer) return;
+        
+        const modeSelect = document.getElementById('vibration-select');
+        const mode = parseInt(modeSelect.value);
+        
+        const eigenvector = this.engine.generateEigenvector(this.currentGraph.eigenvalues, mode);
+        this.visualizer.animateVibration(eigenvector, 3000);
+      }
+
+      stopVibrationAnimation() {
+        if (this.visualizer) {
+          this.visualizer.stopAnimation();
         }
         
-        // Normalize to [-1, 1]
-        const maxAbs = Math.max(...eigenvector.map(Math.abs));
-        const normalizedEigenvector = eigenvector.map(v => v / maxAbs);
-        
-        this.visualizer.setEigenvectorColors(normalizedEigenvector);
+        // Reset button
+        const animateBtn = document.getElementById('animate-vibration');
+        if (animateBtn) {
+          animateBtn.classList.remove('playing');
+          animateBtn.innerHTML = '<i class="fas fa-play"></i> Animate Flow';
+        }
       }
     }
 
     // Initialize the application
     document.addEventListener('DOMContentLoaded', () => {
+      // Add polyfill for roundRect if needed
+      if (!CanvasRenderingContext2D.prototype.roundRect) {
+        CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radii) {
+          this.beginPath();
+          this.moveTo(x + radii, y);
+          this.lineTo(x + width - radii, y);
+          this.quadraticCurveTo(x + width, y, x + width, y + radii);
+          this.lineTo(x + width, y + height - radii);
+          this.quadraticCurveTo(x + width, y + height, x + width - radii, y + height);
+          this.lineTo(x + radii, y + height);
+          this.quadraticCurveTo(x, y + height, x, y + height - radii);
+          this.lineTo(x, y + radii);
+          this.quadraticCurveTo(x, y, x + radii, y);
+          this.closePath();
+        };
+      }
+      
       const app = new SpectralGraphApp();
-      window.spectralGraphApp = app; // For debugging
     });
   </script>
 </body>
