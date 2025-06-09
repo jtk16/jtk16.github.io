@@ -85,6 +85,8 @@
       padding: 3rem 2rem;
       max-width: 800px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
     
     .intro-section h1 {
@@ -95,6 +97,12 @@
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+    
+    @keyframes titleGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.2); }
     }
     
     .intro-section p {
@@ -105,29 +113,53 @@
     }
     
     .instructions {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.9) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 1rem;
       padding: 2rem;
       margin: 2rem auto;
       max-width: 600px;
       color: #f8fafc;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .instructions::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
     
     .instructions h3 {
       margin-top: 0;
       margin-bottom: 1rem;
-      color: #6366f1;
+      color: #a5b4fc;
       font-size: 1.25rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      position: relative;
+      z-index: 1;
     }
     
     .instructions ul {
       margin: 0;
       padding-left: 1.5rem;
+      position: relative;
+      z-index: 1;
     }
     
     .instructions li {
@@ -138,18 +170,20 @@
     
     .instructions strong {
       color: #f8fafc;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
     
     .controls-hint {
       background: rgba(99, 102, 241, 0.1);
       border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: 8px;
+      border-radius: 0.75rem;
       padding: 1rem;
       margin: 1rem auto;
       max-width: 600px;
       font-size: 0.875rem;
       color: #cbd5e1;
       line-height: 1.5;
+      backdrop-filter: blur(10px);
     }
     
     @media (max-width: 768px) {
@@ -199,13 +233,14 @@
           <li><strong>3D Mode:</strong> Toggle between grid slices and interactive 3D cube view</li>
           <li><strong>Higher Dimensions:</strong> See all slices arranged in grids</li>
           <li><strong>Numbers</strong> count neighboring mines across ALL dimensions</li>
+          <li><strong>Touch Support:</strong> Tap to reveal, long-press to flag on mobile</li>
         </ul>
       </div>
       
       <div class="controls-hint">
-        <strong>Navigation:</strong> 
+        <strong>Keyboard Shortcuts:</strong> 
         Press '3' to toggle 3D views, 'N' for new game, 'H' for hints. In 3D cube mode, 
-        use the slice selector to view different layers with transparency. 
+        use arrow keys or mouse drag to rotate. Hold Shift+R to auto-rotate.
         Changing dimensions automatically starts a new game.
       </div>
     </div>

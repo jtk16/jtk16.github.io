@@ -8,26 +8,58 @@ class NDMinesweeper {
     this.dimensions = 2;
     this.sizes = [12, 12];
     this.mineCount = 20;
+    this.customMineCount = null; // Track if user set custom mine count
     this.game = null;
     this.gameState = 'ready';
     this.firstClick = true;
     this.view3D = false;
     this.selectedSlice = 0;
     this.cubeRotation = { x: -15, y: 25 };
+    this.autoRotate = false;
+    this.particles = [];
     
     this.init();
   }
 
   init() {
     this.createUI();
+    this.createParticles();
     this.newGame();
     this.setupKeyboardControls();
+    this.animateParticles();
+  }
+
+  createParticles() {
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'particles';
+    document.body.appendChild(particlesContainer);
+
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 20 + 's';
+      particle.style.animationDuration = (20 + Math.random() * 10) + 's';
+      particle.style.width = particle.style.height = (2 + Math.random() * 4) + 'px';
+      particle.style.background = `rgba(${Math.random() > 0.5 ? '99, 102, 241' : '236, 72, 153'}, ${0.3 + Math.random() * 0.4})`;
+      particlesContainer.appendChild(particle);
+      this.particles.push(particle);
+    }
+  }
+
+  animateParticles() {
+    this.particles.forEach((particle, i) => {
+      if (Math.random() > 0.98) {
+        particle.style.background = `rgba(${Math.random() > 0.5 ? '99, 102, 241' : '236, 72, 153'}, ${0.3 + Math.random() * 0.4})`;
+      }
+    });
+    requestAnimationFrame(() => this.animateParticles());
   }
 
   createUI() {
     this.root.innerHTML = `
       <div class="nd-minesweeper">
-        <!-- Clean Top Controls -->
+        <!-- Enhanced Controls -->
         <div class="controls-header">
           <div class="control-group">
             <label>Dimensions</label>
@@ -91,7 +123,7 @@ class NDMinesweeper {
           <p id="subtitle">12×12 grid</p>
         </div>
 
-        <!-- 3D Cube Slice Selector -->
+        <!-- Enhanced 3D Cube Slice Selector -->
         <div class="slice-controls" id="slice-controls" style="display: none;">
           <label>Layer</label>
           <div class="slice-selector">
@@ -141,6 +173,7 @@ class NDMinesweeper {
     document.getElementById('dimensions').addEventListener('change', (e) => {
       this.dimensions = parseInt(e.target.value);
       this.updateControls();
+      this.customMineCount = null; // Reset custom mine count on dimension change
       this.newGame();
     });
 
@@ -154,12 +187,14 @@ class NDMinesweeper {
 
     // Settings
     document.getElementById('difficulty').addEventListener('change', () => {
+      this.customMineCount = null; // Reset custom mine count on difficulty change
       this.updateDifficulty();
       this.newGame();
     });
 
     document.getElementById('mine-count').addEventListener('change', (e) => {
       this.mineCount = parseInt(e.target.value);
+      this.customMineCount = this.mineCount; // Mark as custom set
     });
 
     // Slice controls
@@ -168,6 +203,7 @@ class NDMinesweeper {
     document.getElementById('slice-slider')?.addEventListener('input', (e) => {
       this.selectedSlice = parseInt(e.target.value);
       this.updateSliceDisplay();
+      this.updateSliderProgress();
       this.render3DCube();
     });
 
@@ -180,6 +216,43 @@ class NDMinesweeper {
         this.rotateView(axis, dir);
       });
     });
+
+    // Auto-rotate with mouse
+    const cubeContainer = document.querySelector('.cube-container');
+    if (cubeContainer) {
+      let isDragging = false;
+      let startX, startY;
+      let startRotationX, startRotationY;
+
+      cubeContainer.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startRotationX = this.cubeRotation.x;
+        startRotationY = this.cubeRotation.y;
+        cubeContainer.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        this.cubeRotation.y = startRotationY + deltaX * 0.5;
+        this.cubeRotation.x = clamp(startRotationX + deltaY * 0.5, -90, 90);
+        this.updateCubeRotation();
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        if (cubeContainer) cubeContainer.style.cursor = 'grab';
+      });
+    }
+  }
+
+  updateSliderProgress() {
+    const slider = document.getElementById('slice-slider');
+    const percent = (this.selectedSlice / (this.sizes[2] - 1)) * 100;
+    slider.style.setProperty('--progress', percent + '%');
   }
 
   updateControls() {
@@ -268,6 +341,7 @@ class NDMinesweeper {
     slider.value = Math.min(this.selectedSlice, this.sizes[2] - 1);
     this.selectedSlice = parseInt(slider.value);
     this.updateSliceDisplay();
+    this.updateSliderProgress();
   }
 
   updateSliceDisplay() {
@@ -278,6 +352,7 @@ class NDMinesweeper {
     this.selectedSlice = clamp(this.selectedSlice + direction, 0, this.sizes[2] - 1);
     document.getElementById('slice-slider').value = this.selectedSlice;
     this.updateSliceDisplay();
+    this.updateSliderProgress();
     this.render3DCube();
   }
 
@@ -303,21 +378,43 @@ class NDMinesweeper {
         case 'arrowright':
           if (this.view3D) this.changeSlice(1);
           break;
+        case 'r':
+          if (this.view3D && e.shiftKey) {
+            this.autoRotate = !this.autoRotate;
+            if (this.autoRotate) this.startAutoRotate();
+          }
+          break;
       }
     });
   }
 
+  startAutoRotate() {
+    if (!this.autoRotate) return;
+    this.cubeRotation.y += 1;
+    this.updateCubeRotation();
+    requestAnimationFrame(() => this.startAutoRotate());
+  }
+
   updateDifficulty() {
-    const difficulty = document.getElementById('difficulty').value;
-    const totalCells = this.sizes.slice(0, this.dimensions).reduce((a, b) => a * b, 1);
-    const ratios = { easy: 0.1, medium: 0.15, hard: 0.2, expert: 0.25 };
-    
-    this.mineCount = Math.max(1, Math.floor(totalCells * ratios[difficulty]));
-    document.getElementById('mine-count').value = this.mineCount;
+    // Only update mine count if user hasn't set a custom value
+    if (this.customMineCount === null) {
+      const difficulty = document.getElementById('difficulty').value;
+      const totalCells = this.sizes.slice(0, this.dimensions).reduce((a, b) => a * b, 1);
+      const ratios = { easy: 0.1, medium: 0.15, hard: 0.2, expert: 0.25 };
+      
+      this.mineCount = Math.max(1, Math.floor(totalCells * ratios[difficulty]));
+      document.getElementById('mine-count').value = this.mineCount;
+    }
   }
 
   newGame() {
-    this.updateDifficulty();
+    // Preserve custom mine count if set
+    if (this.customMineCount === null) {
+      this.updateDifficulty();
+    } else {
+      this.mineCount = this.customMineCount;
+    }
+    
     this.game = new NDMinesweeperGame(this.dimensions, this.sizes.slice(0, this.dimensions), this.mineCount);
     this.gameState = 'ready';
     this.firstClick = true;
@@ -355,7 +452,6 @@ class NDMinesweeper {
       const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
       board.className += ` board-${this.getBoardSize()}`;
       
-      // Add subtle label
       const label = document.createElement('div');
       label.className = 'board-label';
       label.textContent = this.getSliceLabel(sliceCoords);
@@ -364,6 +460,10 @@ class NDMinesweeper {
       wrapper.className = 'board-wrapper';
       wrapper.appendChild(label);
       wrapper.appendChild(board);
+      
+      // Add entrance animation
+      wrapper.style.animationDelay = `${index * 50}ms`;
+      wrapper.style.animation = 'fadeInUp 0.5s ease forwards';
       
       container.appendChild(wrapper);
     });
@@ -413,20 +513,45 @@ class NDMinesweeper {
     const cube = document.getElementById('cube');
     cube.innerHTML = '';
     
-    // Create all 6 faces of the cube, each showing a different Z layer
+    // Create enhanced 3D cube faces
     for (let z = 0; z < this.sizes[2]; z++) {
       const face = document.createElement('div');
       face.className = `cube-face face-${z}`;
       
-      // Make non-selected layers transparent
-      if (z !== this.selectedSlice) {
-        face.style.opacity = '0.3';
-      } else {
+      // Enhanced opacity and effects for selected layer
+      if (z === this.selectedSlice) {
         face.style.opacity = '1';
+        face.style.filter = 'brightness(1)';
+        face.classList.add('selected');
+      } else {
+        const distance = Math.abs(z - this.selectedSlice);
+        face.style.opacity = Math.max(0.2, 0.8 - distance * 0.2);
+        face.style.filter = `brightness(${0.7 - distance * 0.1})`;
       }
       
       const board = this.createBoard([this.sizes[0], this.sizes[1]], [z]);
       board.className += ' cube-board';
+      
+      // Add layer indicator
+      const layerIndicator = document.createElement('div');
+      layerIndicator.className = 'layer-indicator';
+      layerIndicator.textContent = `Layer ${z}`;
+      layerIndicator.style.cssText = `
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(99, 102, 241, 0.8);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: ${z === this.selectedSlice ? 1 : 0.5};
+      `;
+      
+      face.appendChild(layerIndicator);
       face.appendChild(board);
       
       cube.appendChild(face);
@@ -489,6 +614,18 @@ class NDMinesweeper {
     cellEl.addEventListener('click', (e) => this.handleCellClick(e, coords));
     cellEl.addEventListener('contextmenu', (e) => this.handleCellRightClick(e, coords));
     
+    // Add touch support
+    let touchTimer;
+    cellEl.addEventListener('touchstart', (e) => {
+      touchTimer = setTimeout(() => {
+        this.handleCellRightClick(e, coords);
+      }, 500);
+    });
+    
+    cellEl.addEventListener('touchend', () => {
+      clearTimeout(touchTimer);
+    });
+    
     return cellEl;
   }
 
@@ -510,8 +647,10 @@ class NDMinesweeper {
     if (result.gameOver) {
       this.gameState = 'lost';
       this.revealAllMines();
+      this.showGameEndAnimation('lost');
     } else if (result.won) {
       this.gameState = 'won';
+      this.showGameEndAnimation('won');
     }
     
     this.renderView();
@@ -564,15 +703,59 @@ class NDMinesweeper {
     if (safeCells.length > 0) {
       const hintCoords = safeCells[Math.floor(Math.random() * safeCells.length)];
       
-      setTimeout(() => {
-        const cellEl = document.querySelector(`[data-coords='${JSON.stringify(hintCoords)}']`);
-        if (cellEl) {
+      // Visual hint effect
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(cellEl => {
+        const coords = JSON.parse(cellEl.dataset.coords);
+        if (JSON.stringify(coords) === JSON.stringify(hintCoords)) {
           cellEl.classList.add('hint');
           cellEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
           setTimeout(() => cellEl.classList.remove('hint'), 3000);
         }
-      }, 100);
+      });
     }
+  }
+
+  showGameEndAnimation(result) {
+    const overlay = document.createElement('div');
+    overlay.className = 'game-end-overlay';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease;
+    `;
+    
+    const message = document.createElement('div');
+    message.className = 'game-end-message';
+    message.style.cssText = `
+      background: ${result === 'won' ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #ef4444, #dc2626)'};
+      color: white;
+      padding: 2rem 4rem;
+      border-radius: 1rem;
+      font-size: 2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      animation: bounceIn 0.6s ease;
+    `;
+    message.textContent = result === 'won' ? 'Victory!' : 'Game Over';
+    
+    overlay.appendChild(message);
+    document.body.appendChild(overlay);
+    
+    setTimeout(() => {
+      overlay.style.animation = 'fadeOut 0.5s ease';
+      setTimeout(() => overlay.remove(), 500);
+    }, 2000);
   }
 }
 
@@ -622,13 +805,21 @@ class NDMinesweeperGame {
     const safeArea = new Set();
     safeArea.add(this.coordsToKey(safeCoords));
     
+    // Create larger safe area for better first click experience
     for (const neighborCoords of this.getNeighbors(safeCoords)) {
       safeArea.add(this.coordsToKey(neighborCoords));
+      // Add second layer of safety
+      for (const secondNeighbor of this.getNeighbors(neighborCoords)) {
+        safeArea.add(this.coordsToKey(secondNeighbor));
+      }
     }
     
     const availableCoords = allCoords.filter(coords => !safeArea.has(this.coordsToKey(coords)));
     
-    for (let i = 0; i < this.mineCount && availableCoords.length > 0; i++) {
+    // Ensure we don't try to place more mines than available cells
+    const actualMineCount = Math.min(this.mineCount, availableCoords.length);
+    
+    for (let i = 0; i < actualMineCount && availableCoords.length > 0; i++) {
       const randomIndex = Math.floor(Math.random() * availableCoords.length);
       const mineCoords = availableCoords.splice(randomIndex, 1)[0];
       this.getCell(mineCoords).isMine = true;
@@ -725,6 +916,39 @@ class NDMinesweeperGame {
     return unrevealed;
   }
 }
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  
+  @keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+document.head.appendChild(style);
 
 // Initialize
 new NDMinesweeper(document.getElementById('game-root'));
