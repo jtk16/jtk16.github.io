@@ -76,11 +76,11 @@ body {
 
 /* ===== MAIN LAYOUT ===== */
 .nd-minesweeper {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 2rem;
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 350px 1fr;
   gap: 2rem;
   min-height: calc(100vh - 200px);
 }
@@ -139,6 +139,36 @@ input[type="number"]:focus {
   margin-top: 1rem;
 }
 
+/* ===== TOGGLE BUTTONS ===== */
+.toggle-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.toggle-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+}
+
+.toggle-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
 /* ===== GAME CONTROLS ===== */
 .game-controls {
   display: flex;
@@ -157,6 +187,10 @@ input[type="number"]:focus {
   transition: var(--transition);
   text-align: center;
   font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .btn-primary {
@@ -187,6 +221,7 @@ input[type="number"]:focus {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .info-item {
@@ -216,11 +251,52 @@ input[type="number"]:focus {
 .status-won { color: var(--success); }
 .status-lost { color: var(--danger); }
 
+/* ===== LEGEND ===== */
+.legend {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.legend h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.legend-icon {
+  font-size: 1rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+.legend-icon.number {
+  background: var(--mines-1);
+  color: white;
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
 /* ===== GAME PANEL ===== */
 .game-panel {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
 /* ===== DIMENSIONAL VIEW ===== */
@@ -229,6 +305,7 @@ input[type="number"]:focus {
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: 2rem;
+  overflow: hidden;
 }
 
 .view-header {
@@ -251,6 +328,12 @@ input[type="number"]:focus {
   color: var(--text-muted);
 }
 
+/* ===== VIEW CONTAINER ===== */
+.view-container {
+  position: relative;
+  min-height: 400px;
+}
+
 /* ===== SLICES CONTAINER ===== */
 .slices-container {
   display: grid;
@@ -258,28 +341,24 @@ input[type="number"]:focus {
   justify-content: center;
 }
 
-/* 2D: Single slice */
 .slices-container.dim-2 {
   grid-template-columns: 1fr;
-  max-width: 400px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-/* 3D: Grid of Z slices */
 .slices-container.dim-3 {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
-/* 4D: Grid of W hyperslices */
 .slices-container.dim-4 {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
 }
 
-/* 5D: Compact grid */
 .slices-container.dim-5 {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1fr;
 }
 
 /* ===== SLICE WRAPPER ===== */
@@ -307,42 +386,134 @@ input[type="number"]:focus {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0 0 0.25rem 0;
-}
-
-.slice-coords {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
   margin: 0;
 }
 
-/* ===== GAME BOARD ===== */
+/* ===== HYPERSLICE WRAPPERS ===== */
+.hyperslice-wrapper,
+.pentaslice-wrapper {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.hyperslice-header,
+.pentaslice-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.hyperslice-header h3,
+.pentaslice-header h3 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.slices-grid,
+.hyperslices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.nested-hyperslice {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.nested-header {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.nested-slices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 0.5rem;
+}
+
+/* ===== GAME BOARD SIZES ===== */
 .board {
   display: grid;
-  gap: 1px;
+  gap: 2px;
   background: var(--border);
-  padding: 1px;
+  padding: 2px;
   border-radius: var(--radius);
   justify-content: center;
+  margin: 0 auto;
+}
+
+.board-large {
+  gap: 3px;
+  padding: 3px;
+}
+
+.board-medium {
+  gap: 2px;
+  padding: 2px;
+}
+
+.board-small {
+  gap: 1px;
+  padding: 1px;
+}
+
+.board-tiny {
+  gap: 0.5px;
+  padding: 0.5px;
 }
 
 /* ===== CELLS ===== */
 .cell {
-  width: 24px;
-  height: 24px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-light);
-  border-radius: 2px;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 0.7rem;
   cursor: pointer;
   transition: var(--transition-fast);
   position: relative;
   user-select: none;
+}
+
+/* Cell sizes */
+.cell-large {
+  width: 32px;
+  height: 32px;
+  font-size: 0.875rem;
+  border-radius: 4px;
+}
+
+.cell-medium {
+  width: 24px;
+  height: 24px;
+  font-size: 0.75rem;
+  border-radius: 3px;
+}
+
+.cell-small {
+  width: 18px;
+  height: 18px;
+  font-size: 0.6rem;
+  border-radius: 2px;
+}
+
+.cell-tiny {
+  width: 12px;
+  height: 12px;
+  font-size: 0.5rem;
+  border-radius: 1px;
 }
 
 .cell:hover {
@@ -390,47 +561,98 @@ input[type="number"]:focus {
 .cell.mines-7 { color: var(--mines-7); }
 .cell.mines-8 { color: var(--mines-8); }
 
-/* ===== CONNECTED CELL INDICATORS ===== */
-.cell.has-connected-mines::after {
-  content: '';
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 6px;
-  height: 6px;
-  background: var(--mine-red);
-  border-radius: 50%;
-  border: 1px solid var(--bg-primary);
+/* ===== 3D CUBE ===== */
+.cube-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  perspective: 1000px;
+  min-height: 500px;
+  padding: 2rem;
 }
 
-.cell.has-connected-revealed::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  width: 6px;
-  height: 6px;
-  background: var(--success);
-  border-radius: 50%;
-  border: 1px solid var(--bg-primary);
+.cube {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  margin: 50px auto;
 }
 
-/* ===== EMPTY STATE ===== */
-.empty-state {
+.cube-face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.cube-face-front  { transform: rotateY(0deg) translateZ(100px); }
+.cube-face-back   { transform: rotateY(180deg) translateZ(100px); }
+.cube-face-right  { transform: rotateY(90deg) translateZ(100px); }
+.cube-face-left   { transform: rotateY(-90deg) translateZ(100px); }
+.cube-face-top    { transform: rotateX(90deg) translateZ(100px); }
+.cube-face-bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+.cube-face .board {
+  transform: scale(0.8);
+}
+
+.cube-controls {
   text-align: center;
-  padding: 4rem 2rem;
-  color: var(--text-muted);
 }
 
-.empty-state i {
-  font-size: 3rem;
+.cube-control-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
-  color: var(--primary);
 }
 
-.empty-state h3 {
-  margin: 0 0 0.5rem 0;
+.cube-control-group label {
+  margin-right: 0.5rem;
+  font-weight: 600;
   color: var(--text-primary);
+}
+
+.cube-control-btn {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.cube-control-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.cube-info {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+.cube-info p {
+  margin-bottom: 0.5rem;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -454,6 +676,12 @@ input[type="number"]:focus {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1400px) {
+  .nd-minesweeper {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
 @media (max-width: 1200px) {
   .nd-minesweeper {
     grid-template-columns: 1fr;
@@ -463,6 +691,10 @@ input[type="number"]:focus {
   
   .controls-panel {
     position: static;
+  }
+  
+  .slices-container.dim-3 {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 }
 
@@ -480,36 +712,70 @@ input[type="number"]:focus {
     flex-direction: column;
   }
   
-  .slices-container.dim-3,
-  .slices-container.dim-4,
-  .slices-container.dim-5 {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  .toggle-buttons {
+    flex-direction: column;
   }
   
-  .cell {
-    width: 20px;
-    height: 20px;
-    font-size: 0.65rem;
+  .slices-container.dim-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .slices-grid,
+  .hyperslices-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cube {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .cube-face {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .cube-face-front,
+  .cube-face-back,
+  .cube-face-right,
+  .cube-face-left,
+  .cube-face-top,
+  .cube-face-bottom {
+    transform: scale(0.75);
   }
 }
 
 @media (max-width: 480px) {
+  .cell-large {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+  
+  .cell-medium {
+    width: 20px;
+    height: 20px;
+    font-size: 0.65rem;
+  }
+  
+  .cell-small {
+    width: 16px;
+    height: 16px;
+    font-size: 0.55rem;
+  }
+  
+  .cell-tiny {
+    width: 10px;
+    height: 10px;
+    font-size: 0.45rem;
+  }
+  
   .slices-container {
     gap: 1rem;
   }
   
   .slice-wrapper {
     padding: 0.75rem;
-  }
-  
-  .cell {
-    width: 18px;
-    height: 18px;
-    font-size: 0.6rem;
-  }
-  
-  .board {
-    gap: 0.5px;
   }
 }
 
@@ -519,13 +785,14 @@ input[type="number"]:focus {
   outline-offset: 2px;
 }
 
-.btn:focus {
+.btn:focus,
+.toggle-btn:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
 /* ===== LOADING STATE ===== */
-.loading .slices-container {
+.loading .view-container {
   opacity: 0.5;
   pointer-events: none;
 }

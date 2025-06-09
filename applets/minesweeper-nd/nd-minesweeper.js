@@ -6,11 +6,12 @@ class NDMinesweeper {
   constructor(root) {
     this.root = root;
     this.dimensions = 3; // Start with 3D
-    this.sizes = [5, 5, 5]; // Size in each dimension
-    this.mineCount = 8;
+    this.sizes = [6, 6, 6]; // Bigger default sizes for better visibility
+    this.mineCount = 15;
     this.game = null;
     this.gameState = 'ready'; // ready, playing, won, lost
     this.firstClick = true;
+    this.view3D = false; // Toggle for 3D cube view
     
     this.init();
   }
@@ -34,14 +35,22 @@ class NDMinesweeper {
               <option value="5">5D (Hyperspace)</option>
             </select>
           </div>
+
+          <div class="control-group" id="view-toggle-group" style="display: none;">
+            <label>3D View:</label>
+            <div class="toggle-buttons">
+              <button id="view-slices" class="toggle-btn active">Slices</button>
+              <button id="view-cube" class="toggle-btn">3D Cube</button>
+            </div>
+          </div>
           
           <div class="control-group">
             <label for="difficulty">Difficulty:</label>
             <select id="difficulty" class="control-select">
-              <option value="easy">Easy</option>
-              <option value="medium" selected>Medium</option>
-              <option value="hard">Hard</option>
-              <option value="expert">Expert</option>
+              <option value="easy">Easy (10%)</option>
+              <option value="medium" selected>Medium (15%)</option>
+              <option value="hard">Hard (20%)</option>
+              <option value="expert">Expert (25%)</option>
             </select>
           </div>
 
@@ -51,7 +60,7 @@ class NDMinesweeper {
 
           <div class="control-group">
             <label for="mine-count">Mines:</label>
-            <input type="number" id="mine-count" value="8" min="1" max="200">
+            <input type="number" id="mine-count" value="15" min="1" max="200">
           </div>
 
           <div class="game-controls">
@@ -70,15 +79,31 @@ class NDMinesweeper {
             </div>
             <div class="info-item">
               <span class="info-label">Mines Left:</span>
-              <span id="mines-left" class="info-value">8</span>
+              <span id="mines-left" class="info-value">15</span>
             </div>
             <div class="info-item">
-              <span class="info-label">Cells Left:</span>
+              <span class="info-label">Safe Cells:</span>
               <span id="cells-left" class="info-value">0</span>
             </div>
             <div class="info-item">
               <span class="info-label">Total Volume:</span>
-              <span id="total-volume" class="info-value">125</span>
+              <span id="total-volume" class="info-value">216</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <h4>Legend:</h4>
+            <div class="legend-item">
+              <span class="legend-icon mine">💣</span>
+              <span>Mine</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-icon flag">🚩</span>
+              <span>Flagged</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-icon number">1-8</span>
+              <span>Mine count</span>
             </div>
           </div>
         </div>
@@ -88,11 +113,16 @@ class NDMinesweeper {
             <div class="view-header">
               <h2 id="view-title">3D Cube View</h2>
               <div class="dimension-info" id="dimension-info">
-                Viewing all slices of 5×5×5 cube
+                Viewing 6×6×6 cube
               </div>
             </div>
-            <div class="slices-container" id="slices-container">
-              <!-- Slices will be rendered here -->
+            <div class="view-container" id="view-container">
+              <div class="slices-container" id="slices-container">
+                <!-- Slices will be rendered here -->
+              </div>
+              <div class="cube-container" id="cube-container" style="display: none;">
+                <!-- 3D cube will be rendered here -->
+              </div>
             </div>
           </div>
         </div>
@@ -108,10 +138,15 @@ class NDMinesweeper {
     document.getElementById('new-game').addEventListener('click', () => this.newGame());
     document.getElementById('hint').addEventListener('click', () => this.showHint());
     
+    // View toggle
+    document.getElementById('view-slices')?.addEventListener('click', () => this.setView('slices'));
+    document.getElementById('view-cube')?.addEventListener('click', () => this.setView('cube'));
+    
     // Settings
     document.getElementById('dimensions').addEventListener('change', (e) => {
       this.dimensions = parseInt(e.target.value);
       this.updateSizeControls();
+      this.updateViewToggle();
       this.newGame();
     });
 
@@ -125,28 +160,52 @@ class NDMinesweeper {
     });
   }
 
+  updateViewToggle() {
+    const viewToggleGroup = document.getElementById('view-toggle-group');
+    if (this.dimensions === 3) {
+      viewToggleGroup.style.display = 'block';
+    } else {
+      viewToggleGroup.style.display = 'none';
+      this.setView('slices');
+    }
+  }
+
+  setView(viewType) {
+    this.view3D = (viewType === 'cube');
+    
+    // Update toggle buttons
+    document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`view-${viewType}`).classList.add('active');
+    
+    // Show/hide containers
+    document.getElementById('slices-container').style.display = this.view3D ? 'none' : 'block';
+    document.getElementById('cube-container').style.display = this.view3D ? 'block' : 'none';
+    
+    this.renderView();
+  }
+
   updateSizeControls() {
     const container = document.getElementById('size-controls');
     container.innerHTML = '';
     
-    // Default sizes based on dimension
+    // Better default sizes for visibility
     const defaultSizes = {
-      2: [12, 12],
-      3: [5, 5, 5],
-      4: [4, 4, 4, 4],
-      5: [3, 3, 3, 3, 3]
+      2: [16, 16],
+      3: [6, 6, 6],
+      4: [5, 5, 5, 5],
+      5: [4, 4, 4, 4, 4]
     };
     
-    this.sizes = defaultSizes[this.dimensions] || new Array(this.dimensions).fill(3);
+    this.sizes = defaultSizes[this.dimensions] || new Array(this.dimensions).fill(4);
 
-    const dimLabels = ['X', 'Y', 'Z', 'W', 'V'];
+    const dimLabels = ['Width', 'Height', 'Depth', 'Ana', 'Kata'];
     
     for (let i = 0; i < this.dimensions; i++) {
       const controlDiv = document.createElement('div');
       controlDiv.className = 'control-group';
       controlDiv.innerHTML = `
-        <label for="size-${i}">${dimLabels[i]} Size:</label>
-        <input type="number" id="size-${i}" value="${this.sizes[i]}" min="2" max="15" class="size-input">
+        <label for="size-${i}">${dimLabels[i]}:</label>
+        <input type="number" id="size-${i}" value="${this.sizes[i]}" min="3" max="12" class="size-input">
       `;
       container.appendChild(controlDiv);
       
@@ -158,14 +217,13 @@ class NDMinesweeper {
   }
 
   updateDimensionInfo() {
-    const dimLabels = ['X', 'Y', 'Z', 'W', 'V'];
-    const dimNames = ['2D Grid', '3D Cube', '4D Tesseract', '5D Hyperspace', '6D+ Spacetime'];
-    
+    const dimNames = ['Grid', 'Cube', 'Tesseract', 'Hyperspace', 'Spacetime'];
     const sizeStr = this.sizes.slice(0, this.dimensions).join('×');
     const totalVolume = this.sizes.slice(0, this.dimensions).reduce((a, b) => a * b, 1);
     
-    document.getElementById('view-title').textContent = `${dimNames[this.dimensions - 2]} View`;
-    document.getElementById('dimension-info').textContent = `Viewing all slices of ${sizeStr} ${dimNames[this.dimensions - 2].toLowerCase()}`;
+    document.getElementById('view-title').textContent = 
+      this.dimensions === 3 && this.view3D ? '3D Cube View' : `${this.dimensions}D ${dimNames[this.dimensions - 1]} View`;
+    document.getElementById('dimension-info').textContent = `${sizeStr} ${dimNames[this.dimensions - 1].toLowerCase()}`;
     document.getElementById('total-volume').textContent = totalVolume.toLocaleString();
   }
 
@@ -182,8 +240,12 @@ class NDMinesweeper {
         case 'H':
           this.showHint();
           break;
+        case '3':
+          if (this.dimensions === 3) {
+            this.setView(this.view3D ? 'slices' : 'cube');
+          }
+          break;
         case 'Escape':
-          // Reset any highlights
           document.querySelectorAll('.cell.hint').forEach(cell => {
             cell.classList.remove('hint');
           });
@@ -213,11 +275,19 @@ class NDMinesweeper {
     this.game = new NDMinesweeperGame(this.dimensions, this.sizes.slice(0, this.dimensions), this.mineCount);
     this.gameState = 'ready';
     this.firstClick = true;
-    this.renderAllSlices();
+    this.renderView();
     this.updateGameInfo();
   }
 
-  renderAllSlices() {
+  renderView() {
+    if (this.dimensions === 3 && this.view3D) {
+      this.render3DCube();
+    } else {
+      this.renderSlices();
+    }
+  }
+
+  renderSlices() {
     const container = document.getElementById('slices-container');
     container.innerHTML = '';
     container.className = `slices-container dim-${this.dimensions}`;
@@ -225,7 +295,7 @@ class NDMinesweeper {
     if (this.dimensions === 2) {
       this.render2D(container);
     } else if (this.dimensions === 3) {
-      this.render3D(container);
+      this.render3DSlices(container);
     } else if (this.dimensions === 4) {
       this.render4D(container);
     } else if (this.dimensions === 5) {
@@ -234,61 +304,120 @@ class NDMinesweeper {
   }
 
   render2D(container) {
-    const sliceWrapper = this.createSliceWrapper('2D Grid', []);
-    const board = this.createBoard([this.sizes[0], this.sizes[1]], []);
-    sliceWrapper.appendChild(board);
-    container.appendChild(sliceWrapper);
+    const board = this.createBoard([this.sizes[0], this.sizes[1]], [], false, 'large');
+    container.appendChild(board);
   }
 
-  render3D(container) {
+  render3DSlices(container) {
     for (let z = 0; z < this.sizes[2]; z++) {
-      const sliceWrapper = this.createSliceWrapper(`Z Slice ${z}`, [z]);
-      const board = this.createBoard([this.sizes[0], this.sizes[1]], [z]);
+      const sliceWrapper = this.createSliceWrapper(`Layer ${z}`, [z]);
+      const board = this.createBoard([this.sizes[0], this.sizes[1]], [z], false, 'medium');
       sliceWrapper.appendChild(board);
       container.appendChild(sliceWrapper);
     }
   }
 
+  render3DCube() {
+    const container = document.getElementById('cube-container');
+    container.innerHTML = '';
+    
+    const cubeWrapper = document.createElement('div');
+    cubeWrapper.className = 'cube-wrapper';
+    
+    // Create 3D cube visualization
+    const cube = document.createElement('div');
+    cube.className = 'cube';
+    
+    // Create 6 faces of the cube
+    const faces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+    const faceBoards = [];
+    
+    for (let i = 0; i < faces.length; i++) {
+      const face = document.createElement('div');
+      face.className = `cube-face cube-face-${faces[i]}`;
+      
+      // Determine which slice to show on each face
+      let coords = [];
+      switch(faces[i]) {
+        case 'front': coords = [0]; break;
+        case 'back': coords = [this.sizes[2] - 1]; break;
+        case 'right': coords = [Math.floor(this.sizes[2] / 2)]; break;
+        case 'left': coords = [Math.floor(this.sizes[2] / 2) - 1]; break;
+        case 'top': coords = [Math.floor(this.sizes[2] / 3)]; break;
+        case 'bottom': coords = [Math.floor(this.sizes[2] * 2 / 3)]; break;
+      }
+      
+      const board = this.createBoard([this.sizes[0], this.sizes[1]], coords, false, 'small');
+      face.appendChild(board);
+      cube.appendChild(face);
+    }
+    
+    // Add controls for rotating the cube
+    const controls = document.createElement('div');
+    controls.className = 'cube-controls';
+    controls.innerHTML = `
+      <div class="cube-control-group">
+        <label>Rotate:</label>
+        <button class="cube-control-btn" data-axis="x" data-dir="1">↑</button>
+        <button class="cube-control-btn" data-axis="x" data-dir="-1">↓</button>
+        <button class="cube-control-btn" data-axis="y" data-dir="1">←</button>
+        <button class="cube-control-btn" data-axis="y" data-dir="-1">→</button>
+      </div>
+      <div class="cube-info">
+        <p>3D visualization showing different layers on each face</p>
+        <p>Press '3' to toggle between 2D slices and 3D cube</p>
+      </div>
+    `;
+    
+    cubeWrapper.appendChild(cube);
+    cubeWrapper.appendChild(controls);
+    container.appendChild(cubeWrapper);
+    
+    // Add cube rotation controls
+    let rotationX = -15;
+    let rotationY = 15;
+    
+    const updateRotation = () => {
+      cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+    };
+    
+    controls.querySelectorAll('.cube-control-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const axis = btn.dataset.axis;
+        const dir = parseInt(btn.dataset.dir);
+        
+        if (axis === 'x') {
+          rotationX += dir * 15;
+        } else {
+          rotationY += dir * 15;
+        }
+        updateRotation();
+      });
+    });
+    
+    updateRotation();
+  }
+
   render4D(container) {
     for (let w = 0; w < this.sizes[3]; w++) {
-      const hypersliceDiv = document.createElement('div');
-      hypersliceDiv.className = 'hyperslice';
+      const hypersliceWrapper = document.createElement('div');
+      hypersliceWrapper.className = 'hyperslice-wrapper';
       
       const header = document.createElement('div');
       header.className = 'hyperslice-header';
-      header.innerHTML = `
-        <h3>W=${w} Hyperslice</h3>
-        <div class="hyperslice-slices">
-      `;
+      header.innerHTML = `<h3>Ana Slice ${w}</h3>`;
       
       const slicesGrid = document.createElement('div');
       slicesGrid.className = 'slices-grid';
-      slicesGrid.style.display = 'grid';
-      slicesGrid.style.gridTemplateColumns = `repeat(auto-fit, minmax(150px, 1fr))`;
-      slicesGrid.style.gap = '1rem';
       
       for (let z = 0; z < this.sizes[2]; z++) {
-        const sliceWrapper = this.createSliceWrapper(`Z=${z}`, [z, w]);
-        const board = this.createBoard([this.sizes[0], this.sizes[1]], [z, w]);
+        const sliceWrapper = this.createSliceWrapper(`Layer ${z}`, [z, w]);
+        const board = this.createBoard([this.sizes[0], this.sizes[1]], [z, w], false, 'small');
         sliceWrapper.appendChild(board);
         slicesGrid.appendChild(sliceWrapper);
       }
       
-      const hypersliceWrapper = document.createElement('div');
-      hypersliceWrapper.className = 'slice-wrapper';
-      hypersliceWrapper.style.background = 'var(--bg-secondary)';
-      hypersliceWrapper.style.border = '2px solid var(--border)';
-      hypersliceWrapper.style.borderRadius = 'var(--radius-lg)';
-      hypersliceWrapper.style.padding = '1.5rem';
-      
-      const headerDiv = document.createElement('div');
-      headerDiv.className = 'slice-header';
-      headerDiv.innerHTML = `
-        <h3 class="slice-title">W=${w} Hyperslice</h3>
-        <p class="slice-coords">[*, *, Z, ${w}]</p>
-      `;
-      
-      hypersliceWrapper.appendChild(headerDiv);
+      hypersliceWrapper.appendChild(header);
       hypersliceWrapper.appendChild(slicesGrid);
       container.appendChild(hypersliceWrapper);
     }
@@ -296,68 +425,40 @@ class NDMinesweeper {
 
   render5D(container) {
     for (let v = 0; v < this.sizes[4]; v++) {
-      const hypersliceDiv = document.createElement('div');
-      hypersliceDiv.className = 'slice-wrapper';
-      hypersliceDiv.style.background = 'var(--bg-secondary)';
-      hypersliceDiv.style.border = '2px solid var(--border)';
-      hypersliceDiv.style.borderRadius = 'var(--radius-lg)';
-      hypersliceDiv.style.padding = '1.5rem';
+      const pentasliceWrapper = document.createElement('div');
+      pentasliceWrapper.className = 'pentaslice-wrapper';
       
-      const headerDiv = document.createElement('div');
-      headerDiv.className = 'slice-header';
-      headerDiv.innerHTML = `
-        <h3 class="slice-title">V=${v} Hyperslice</h3>
-        <p class="slice-coords">[*, *, *, *, ${v}]</p>
-      `;
+      const header = document.createElement('div');
+      header.className = 'pentaslice-header';
+      header.innerHTML = `<h3>Kata Slice ${v}</h3>`;
       
-      const wSlicesGrid = document.createElement('div');
-      wSlicesGrid.style.display = 'grid';
-      wSlicesGrid.style.gridTemplateColumns = `repeat(auto-fit, minmax(200px, 1fr))`;
-      wSlicesGrid.style.gap = '1rem';
-      wSlicesGrid.style.marginTop = '1rem';
+      const hyperslicesGrid = document.createElement('div');
+      hyperslicesGrid.className = 'hyperslices-grid';
       
       for (let w = 0; w < this.sizes[3]; w++) {
-        const wWrapper = document.createElement('div');
-        wWrapper.className = 'w-slice-wrapper';
-        wWrapper.style.background = 'var(--bg-tertiary)';
-        wWrapper.style.border = '1px solid var(--border)';
-        wWrapper.style.borderRadius = 'var(--radius)';
-        wWrapper.style.padding = '1rem';
+        const hypersliceDiv = document.createElement('div');
+        hypersliceDiv.className = 'nested-hyperslice';
         
-        const wHeader = document.createElement('div');
-        wHeader.innerHTML = `<h4 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 0.75rem;">W=${w}</h4>`;
+        const subHeader = document.createElement('h4');
+        subHeader.textContent = `Ana ${w}`;
+        subHeader.className = 'nested-header';
         
-        const zSlicesGrid = document.createElement('div');
-        zSlicesGrid.style.display = 'grid';
-        zSlicesGrid.style.gridTemplateColumns = `repeat(auto-fit, minmax(80px, 1fr))`;
-        zSlicesGrid.style.gap = '0.5rem';
+        const slicesGrid = document.createElement('div');
+        slicesGrid.className = 'nested-slices-grid';
         
         for (let z = 0; z < this.sizes[2]; z++) {
-          const miniSlice = document.createElement('div');
-          miniSlice.style.background = 'var(--bg-primary)';
-          miniSlice.style.border = '1px solid var(--border-light)';
-          miniSlice.style.borderRadius = '4px';
-          miniSlice.style.padding = '0.5rem';
-          
-          const miniHeader = document.createElement('div');
-          miniHeader.innerHTML = `<span style="font-size: 0.6rem; color: var(--text-muted);">Z=${z}</span>`;
-          
-          const board = this.createBoard([this.sizes[0], this.sizes[1]], [z, w, v], true);
-          board.style.gap = '0.5px';
-          
-          miniSlice.appendChild(miniHeader);
-          miniSlice.appendChild(board);
-          zSlicesGrid.appendChild(miniSlice);
+          const miniBoard = this.createBoard([this.sizes[0], this.sizes[1]], [z, w, v], false, 'tiny');
+          slicesGrid.appendChild(miniBoard);
         }
         
-        wWrapper.appendChild(wHeader);
-        wWrapper.appendChild(zSlicesGrid);
-        wSlicesGrid.appendChild(wWrapper);
+        hypersliceDiv.appendChild(subHeader);
+        hypersliceDiv.appendChild(slicesGrid);
+        hyperslicesGrid.appendChild(hypersliceDiv);
       }
       
-      hypersliceDiv.appendChild(headerDiv);
-      hypersliceDiv.appendChild(wSlicesGrid);
-      container.appendChild(hypersliceDiv);
+      pentasliceWrapper.appendChild(header);
+      pentasliceWrapper.appendChild(hyperslicesGrid);
+      container.appendChild(pentasliceWrapper);
     }
   }
 
@@ -367,40 +468,22 @@ class NDMinesweeper {
     
     const header = document.createElement('div');
     header.className = 'slice-header';
-    
-    const coordsStr = coords.length > 0 ? 
-      `[*, *, ${coords.join(', ')}]` : 
-      '[X, Y]';
-    
-    header.innerHTML = `
-      <h3 class="slice-title">${title}</h3>
-      <p class="slice-coords">${coordsStr}</p>
-    `;
+    header.innerHTML = `<h3 class="slice-title">${title}</h3>`;
     
     wrapper.appendChild(header);
     return wrapper;
   }
 
-  createBoard(gridSize, extraCoords, mini = false) {
+  createBoard(gridSize, extraCoords, showIndicators = false, size = 'medium') {
     const board = document.createElement('div');
-    board.className = 'board';
+    board.className = `board board-${size}`;
     board.style.gridTemplateColumns = `repeat(${gridSize[0]}, 1fr)`;
-    
-    const cellSize = mini ? '12px' : '24px';
-    const fontSize = mini ? '0.5rem' : '0.7rem';
     
     for (let y = 0; y < gridSize[1]; y++) {
       for (let x = 0; x < gridSize[0]; x++) {
         const coords = [x, y, ...extraCoords];
         const cell = this.game.getCell(coords);
-        const cellElement = this.createCellElement(coords, cell, mini);
-        
-        if (mini) {
-          cellElement.style.width = cellSize;
-          cellElement.style.height = cellSize;
-          cellElement.style.fontSize = fontSize;
-        }
-        
+        const cellElement = this.createCellElement(coords, cell, size);
         board.appendChild(cellElement);
       }
     }
@@ -408,68 +491,29 @@ class NDMinesweeper {
     return board;
   }
 
-  createCellElement(coords, cell, mini = false) {
+  createCellElement(coords, cell, size = 'medium') {
     const cellEl = document.createElement('div');
-    cellEl.className = 'cell';
+    cellEl.className = `cell cell-${size}`;
     cellEl.dataset.coords = JSON.stringify(coords);
     
     if (cell.revealed) {
       cellEl.classList.add('revealed');
       if (cell.isMine) {
         cellEl.classList.add('mine');
-        cellEl.innerHTML = mini ? '●' : '💣';
+        cellEl.innerHTML = size === 'tiny' ? '●' : '💣';
       } else if (cell.neighborMines > 0) {
         cellEl.textContent = cell.neighborMines;
         cellEl.classList.add(`mines-${cell.neighborMines}`);
       }
     } else if (cell.flagged) {
       cellEl.classList.add('flagged');
-      cellEl.innerHTML = mini ? '🚩' : '🚩';
-    }
-    
-    // Add visual cues for connected cells in other dimensions
-    if (this.dimensions > 2 && !mini) {
-      const connected = this.getConnectedCellsInfo(coords);
-      if (connected.mines > 0) {
-        cellEl.classList.add('has-connected-mines');
-      }
-      if (connected.revealed > 0) {
-        cellEl.classList.add('has-connected-revealed');
-      }
+      cellEl.innerHTML = '🚩';
     }
     
     cellEl.addEventListener('click', (e) => this.handleCellClick(e, coords));
     cellEl.addEventListener('contextmenu', (e) => this.handleCellRightClick(e, coords));
     
     return cellEl;
-  }
-
-  getConnectedCellsInfo(coords) {
-    let mines = 0;
-    let revealed = 0;
-    
-    // Check cells at same X,Y position in other dimensional slices
-    if (this.dimensions === 3) {
-      // For 3D, check other Z slices
-      for (let z = 0; z < this.sizes[2]; z++) {
-        if (z === coords[2]) continue;
-        const otherCoords = [coords[0], coords[1], z];
-        const otherCell = this.game.getCell(otherCoords);
-        if (otherCell.isMine) mines++;
-        if (otherCell.revealed) revealed++;
-      }
-    } else if (this.dimensions === 4) {
-      // For 4D, check other W hyperslices
-      for (let w = 0; w < this.sizes[3]; w++) {
-        if (w === coords[3]) continue;
-        const otherCoords = [coords[0], coords[1], coords[2], w];
-        const otherCell = this.game.getCell(otherCoords);
-        if (otherCell.isMine) mines++;
-        if (otherCell.revealed) revealed++;
-      }
-    }
-    
-    return { mines, revealed };
   }
 
   handleCellClick(e, coords) {
@@ -480,7 +524,8 @@ class NDMinesweeper {
     if (cell.revealed || cell.flagged) return;
     
     if (this.firstClick) {
-      this.game.generateMines(coords); // Ensure first click is safe
+      // Google-style mine generation with guaranteed safe area
+      this.game.generateMinesWithSafeArea(coords);
       this.firstClick = false;
       this.gameState = 'playing';
     }
@@ -494,7 +539,7 @@ class NDMinesweeper {
       this.gameState = 'won';
     }
     
-    this.renderAllSlices();
+    this.renderView();
     this.updateGameInfo();
   }
 
@@ -503,7 +548,7 @@ class NDMinesweeper {
     if (this.gameState !== 'playing' && this.gameState !== 'ready') return;
     
     this.game.toggleFlag(coords);
-    this.renderAllSlices();
+    this.renderView();
     this.updateGameInfo();
   }
 
@@ -528,7 +573,6 @@ class NDMinesweeper {
     document.getElementById('mines-left').textContent = this.game.getRemainingFlags();
     document.getElementById('cells-left').textContent = this.game.getRemainingCells();
     
-    // Update status styling
     const statusEl = document.getElementById('game-status');
     statusEl.className = `info-value status-${this.gameState}`;
   }
@@ -536,7 +580,6 @@ class NDMinesweeper {
   showHint() {
     if (this.gameState !== 'playing' && this.gameState !== 'ready') return;
     
-    // Find a safe cell to reveal
     const safeCells = [];
     for (const coords of this.game.getAllCoords()) {
       const cell = this.game.getCell(coords);
@@ -548,7 +591,6 @@ class NDMinesweeper {
     if (safeCells.length > 0) {
       const hintCoords = safeCells[Math.floor(Math.random() * safeCells.length)];
       
-      // Highlight the hint cell
       setTimeout(() => {
         const cellEl = document.querySelector(`[data-coords='${JSON.stringify(hintCoords)}']`);
         if (cellEl) {
@@ -611,16 +653,26 @@ class NDMinesweeperGame {
     return this.grid.get(this.coordsToKey(coords));
   }
 
-  generateMines(safeCoords) {
+  generateMinesWithSafeArea(safeCoords) {
     if (this.minesGenerated) return;
     
     const allCoords = this.getAllCoords();
-    const safeKey = this.coordsToKey(safeCoords);
+    
+    // Create safe area around first click (like Google minesweeper)
+    const safeArea = new Set();
+    safeArea.add(this.coordsToKey(safeCoords));
+    
+    // Add all neighbors to safe area
+    for (const neighborCoords of this.getNeighbors(safeCoords)) {
+      safeArea.add(this.coordsToKey(neighborCoords));
+    }
+    
+    // Available coordinates for mine placement
     const availableCoords = allCoords.filter(coords => 
-      this.coordsToKey(coords) !== safeKey
+      !safeArea.has(this.coordsToKey(coords))
     );
     
-    // Place mines randomly
+    // Place mines randomly in available area
     for (let i = 0; i < this.mineCount && availableCoords.length > 0; i++) {
       const randomIndex = Math.floor(Math.random() * availableCoords.length);
       const mineCoords = availableCoords.splice(randomIndex, 1)[0];
@@ -631,6 +683,9 @@ class NDMinesweeperGame {
     // Calculate neighbor counts
     this.calculateNeighborCounts();
     this.minesGenerated = true;
+    
+    // Auto-reveal the safe area to give player a good start
+    this.revealCell(safeCoords);
   }
 
   calculateNeighborCounts() {
@@ -651,7 +706,6 @@ class NDMinesweeperGame {
     
     const generate = (current, dimension) => {
       if (dimension === this.dimensions) {
-        // Skip the center cell
         if (!coords.every((coord, i) => coord === current[i])) {
           neighbors.push([...current]);
         }
@@ -684,7 +738,7 @@ class NDMinesweeperGame {
       return { gameOver: true, won: false };
     }
     
-    // Auto-reveal empty neighbors
+    // Auto-reveal empty neighbors (flood fill)
     if (cell.neighborMines === 0) {
       for (const neighborCoords of this.getNeighbors(coords)) {
         const neighbor = this.getCell(neighborCoords);
@@ -694,7 +748,6 @@ class NDMinesweeperGame {
       }
     }
     
-    // Check win condition
     const won = this.checkWinCondition();
     return { gameOver: false, won };
   }
