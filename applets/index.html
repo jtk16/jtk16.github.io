@@ -3,27 +3,392 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Applets</title>
-  <link rel="stylesheet" href="./shared/css/applet-base.css">
-  <link rel="stylesheet" href="./shared/css/components.css">
+  <meta name="description" content="Interactive mathematical and game applets by Jack Kinney - explore graph theory, n-dimensional games, and more">
+  <title>Interactive Applets — Jack Kinney</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --success: #10b981;
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --bg-card: #1e293b;
+      --bg-card-hover: #2d3a4f;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --border-light: #475569;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 0.5rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.5rem;
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .logo:hover {
+      color: var(--primary);
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      background: rgba(99, 102, 241, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .applets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .applet-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .applet-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+
+    .applet-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .applet-icon i {
+      font-size: 1.5rem;
+      color: white;
+      z-index: 1;
+    }
+
+    .applet-icon::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+
+    .applet-card:hover .applet-icon::before {
+      animation: shine 0.5s ease;
+    }
+
+    @keyframes shine {
+      from { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      to { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .applet-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .applet-card p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .applet-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tech-tag {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      color: var(--primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .difficulty-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .difficulty-easy { background: var(--success); color: white; }
+    .difficulty-intermediate { background: #f59e0b; color: white; }
+    .difficulty-advanced { background: #ef4444; color: white; }
+
+    .applet-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .applet-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero {
+        padding: 2rem 0;
+      }
+
+      .applets-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .applet-card {
+        padding: 1.5rem;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Available Applets</h1>
-    <ul id="applet-list"></ul>
-  </div>
-  <script type="module">
-    fetch('./applet-registry.json').then(r => r.json()).then(data => {
-      const list = document.getElementById('applet-list');
-      data.applets.forEach(applet => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = `./${applet.path}/index.html`;
-        a.textContent = applet.name;
-        li.appendChild(a);
-        list.appendChild(li);
-      });
-    });
+  <header class="header">
+    <div class="header-content">
+      <a href="../index.html" class="logo">&lt;JTK/&gt;</a>
+      <a href="../projects.html" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Projects
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="hero">
+        <h1>Interactive Applets</h1>
+        <p>
+          Explore mathematics, games, and algorithms through interactive web applications. 
+          Built to make complex concepts accessible and engaging.
+        </p>
+      </div>
+
+      <div class="applets-grid" id="applet-list">
+        <!-- Applets will be dynamically loaded here -->
+      </div>
+
+      <div class="empty-state" id="empty-state" style="display: none;">
+        <i class="fas fa-code"></i>
+        <h3>No applets found</h3>
+        <p>Check back soon for new interactive experiences!</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Applet icon mapping
+    const iconMap = {
+      'graph-laplacian': 'project-diagram',
+      'minesweeper-nd': 'cube'
+    };
+
+    // Difficulty mapping
+    const difficultyMap = {
+      'easy': 'Easy',
+      'intermediate': 'Intermediate', 
+      'advanced': 'Advanced',
+      'expert': 'Expert'
+    };
+
+    async function loadApplets() {
+      try {
+        const response = await fetch('./applet-registry.json');
+        const data = await response.json();
+        
+        const appletList = document.getElementById('applet-list');
+        const emptyState = document.getElementById('empty-state');
+        
+        if (!data.applets || data.applets.length === 0) {
+          emptyState.style.display = 'block';
+          return;
+        }
+        
+        data.applets.forEach(applet => {
+          const appletCard = document.createElement('div');
+          appletCard.className = 'applet-card';
+          
+          const icon = iconMap[applet.path] || 'cube';
+          const difficulty = difficultyMap[applet.difficulty] || 'Unknown';
+          
+          appletCard.innerHTML = `
+            <div class="applet-icon">
+              <i class="fas fa-${icon}"></i>
+            </div>
+            <h3>${applet.name}</h3>
+            <p>${applet.description}</p>
+            <div class="applet-meta">
+              <span class="difficulty-badge difficulty-${applet.difficulty}">${difficulty}</span>
+              ${applet.technologies.map(tech => 
+                `<span class="tech-tag">${tech}</span>`
+              ).join('')}
+            </div>
+            <a href="./${applet.path}/index.html" class="applet-link">
+              <i class="fas fa-play"></i>
+              Launch Applet
+            </a>
+          `;
+          
+          appletList.appendChild(appletCard);
+        });
+        
+      } catch (error) {
+        console.error('Failed to load applets:', error);
+        document.getElementById('empty-state').style.display = 'block';
+      }
+    }
+
+    // Load applets on page load
+    document.addEventListener('DOMContentLoaded', loadApplets);
   </script>
 </body>
 </html>
