@@ -1,7 +1,7 @@
 // Service Worker for Jack Kinney Portfolio
 // Provides basic caching and offline functionality
 
-const CACHE_NAME = 'jtk-portfolio-v1.1.0'; // <-- Incremented version number
+const CACHE_NAME = 'jtk-portfolio-v1.1.1'; // <-- Incremented version number
 const urlsToCache = [
   '/',
   '/index.html',
@@ -10,7 +10,6 @@ const urlsToCache = [
   '/assets/js/main.js',
   '/assets/images/profile.jpg',
   '/manifest.json',
-  '/applets/index.html',
   '/applets/graph-laplacian/index.html',
   '/applets/graph-laplacian/graph-engine.js',
   '/applets/graph-laplacian/visualizer.js',
