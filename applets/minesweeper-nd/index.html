@@ -3,12 +3,200 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>N-Dimensional Minesweeper</title>
+  <meta name="description" content="N-Dimensional Minesweeper - Play the classic game in 2D, 3D, 4D, and beyond! Navigate through hyperspace and find all the mines.">
+  <meta name="keywords" content="minesweeper, n-dimensional, 3d, 4d, hyperdimensional, puzzle game, mathematics, geometry">
+  <meta name="author" content="Jack Kinney">
+  
+  <title>N-Dimensional Minesweeper — Jack Kinney</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="../shared/css/applet-base.css">
+  <link rel="stylesheet" href="../shared/css/components.css">
   <link rel="stylesheet" href="style.css">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    
+    .header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      font-family: 'JetBrains Mono', monospace;
+      text-decoration: none;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.2s;
+    }
+    
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+    
+    .intro-section {
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .intro-section h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .intro-section p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      line-height: 1.6;
+    }
+    
+    .instructions {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 600px;
+      color: #2d3748;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .instructions h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #2d3748;
+      font-size: 1.25rem;
+    }
+    
+    .instructions ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+    
+    .instructions li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+    
+    .controls-hint {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 500px;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    @media (max-width: 768px) {
+      .intro-section h1 {
+        font-size: 2rem;
+      }
+      
+      .intro-section {
+        padding: 1rem;
+      }
+      
+      .header-content {
+        padding: 0 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container" id="game-root"></div>
+  <header class="header">
+    <div class="header-content">
+      <a href="../../index.html" class="logo">&lt;JTK/&gt;</a>
+      <a href="../../projects.html" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Projects
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="intro-section">
+      <h1>N-Dimensional Minesweeper</h1>
+      <p>
+        Explore the classic minesweeper game in multiple dimensions! Navigate through 
+        hyperspace, from familiar 2D grids to mind-bending 4D and 5D spaces.
+      </p>
+      
+      <div class="instructions">
+        <h3><i class="fas fa-gamepad"></i> How to Play</h3>
+        <ul>
+          <li><strong>Click</strong> to reveal cells</li>
+          <li><strong>Right-click</strong> to flag suspected mines</li>
+          <li><strong>Navigate</strong> through dimensions using sliders or arrow keys</li>
+          <li><strong>Win</strong> by revealing all non-mine cells</li>
+          <li><strong>Avoid</strong> clicking on mines!</li>
+        </ul>
+      </div>
+      
+      <div class="controls-hint">
+        <strong>Navigation Tips:</strong> 
+        Use ↑/↓ arrows for Z-dimension, Page Up/Down for W-dimension. 
+        Red dots indicate mines in other slices, green dots show revealed areas.
+      </div>
+    </div>
+
+    <div class="container" id="game-root">
+      <!-- Game will be rendered here -->
+    </div>
+  </main>
+
   <script type="module" src="nd-minesweeper.js"></script>
 </body>
 </html>

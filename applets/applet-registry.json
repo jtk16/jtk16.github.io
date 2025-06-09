@@ -2,11 +2,19 @@
   "applets": [
     {
       "name": "Graph Laplacian Explorer",
-      "path": "graph-laplacian"
+      "path": "graph-laplacian",
+      "description": "Interactive spectral graph theory visualization",
+      "category": "mathematics",
+      "difficulty": "advanced",
+      "technologies": ["JavaScript", "Canvas API", "Linear Algebra"]
     },
     {
       "name": "N-Dimensional Minesweeper",
-      "path": "minesweeper-nd"
+      "path": "minesweeper-nd", 
+      "description": "Classic minesweeper extended to 2D, 3D, 4D, and 5D spaces",
+      "category": "game",
+      "difficulty": "intermediate",
+      "technologies": ["JavaScript", "Game Logic", "N-Dimensional Math"]
     }
   ]
 }

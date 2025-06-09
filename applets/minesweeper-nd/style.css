@@ -1,19 +1,513 @@
-/* Styles for N-Dimensional Minesweeper */
-.board {
-  display: grid;
-  gap: 2px;
+/* applets/minesweeper-nd/style.css */
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  /* Color scheme for minesweeper */
+  --mine-red: #e53e3e;
+  --safe-green: #38a169;
+  --flag-orange: #ed8936;
+  --hint-yellow: #f6e05e;
+  --bg-cell: #f7fafc;
+  --bg-revealed: #edf2f7;
+  --border-cell: #cbd5e0;
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --shadow-cell: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* Number colors for mine counts */
+  --mines-1: #3182ce;
+  --mines-2: #38a169;
+  --mines-3: #e53e3e;
+  --mines-4: #805ad5;
+  --mines-5: #d53f8c;
+  --mines-6: #00b5d8;
+  --mines-7: #2d3748;
+  --mines-8: #e53e3e;
 }
-.cell {
-  width: 24px;
-  height: 24px;
-  background: #334155;
-  color: #fff;
-  font-size: 14px;
+
+/* ===== MAIN LAYOUT ===== */
+.nd-minesweeper {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* ===== CONTROLS PANEL ===== */
+.controls-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+}
+
+.control-group {
+  margin-bottom: 1.5rem;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.control-select,
+.size-input,
+input[type="number"] {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--border-cell);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.control-select:focus,
+.size-input:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.size-controls {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+/* ===== GAME CONTROLS ===== */
+.game-controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-primary {
+  background: #3182ce;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2c5aa0;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background: #cbd5e0;
+  transform: translateY(-1px);
+}
+
+/* ===== GAME INFO ===== */
+.game-info {
+  background: #f7fafc;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.status-ready { color: #718096; }
+.status-playing { color: #3182ce; }
+.status-won { color: var(--safe-green); }
+.status-lost { color: var(--mine-red); }
+
+/* ===== GAME PANEL ===== */
+.game-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ===== NAVIGATION PANEL ===== */
+.navigation-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.nav-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.nav-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 1.125rem;
+}
+
+.current-position {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background: #f7fafc;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.nav-dimension {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f7fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.nav-dimension:last-child {
+  margin-bottom: 0;
+}
+
+.nav-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.nav-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.nav-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #cbd5e0;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
 }
+
+.nav-btn:hover {
+  border-color: #3182ce;
+  background: #ebf8ff;
+  transform: scale(1.05);
+}
+
+.nav-slider {
+  flex: 1;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.nav-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #3182ce;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #3182ce;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+  min-width: 60px;
+}
+
+/* ===== BOARD CONTAINER ===== */
+.board-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.board-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.board-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+}
+
+.view-info {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ===== GAME BOARD ===== */
+.board {
+  display: grid;
+  gap: 2px;
+  background: #cbd5e0;
+  padding: 2px;
+  border-radius: 8px;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* ===== CELLS ===== */
+.cell {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-cell);
+  border: 2px solid var(--border-cell);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  user-select: none;
+}
+
+.cell:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-hover);
+  border-color: #a0aec0;
+}
+
 .cell.revealed {
-  background: #1e293b;
+  background: var(--bg-revealed);
+  border-color: #a0aec0;
+  cursor: default;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.cell.revealed:hover {
+  transform: none;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.cell.mine {
+  background: var(--mine-red);
+  color: white;
+  border-color: #c53030;
+  animation: explode 0.3s ease-out;
+}
+
+.cell.flagged {
+  background: var(--flag-orange);
+  color: white;
+  border-color: #dd6b20;
+}
+
+.cell.hint {
+  animation: hint-pulse 2s ease-in-out;
+}
+
+/* ===== MINE COUNT COLORS ===== */
+.cell.mines-1 { color: var(--mines-1); }
+.cell.mines-2 { color: var(--mines-2); }
+.cell.mines-3 { color: var(--mines-3); }
+.cell.mines-4 { color: var(--mines-4); }
+.cell.mines-5 { color: var(--mines-5); }
+.cell.mines-6 { color: var(--mines-6); }
+.cell.mines-7 { color: var(--mines-7); }
+.cell.mines-8 { color: var(--mines-8); }
+
+/* ===== CONNECTED CELL INDICATORS ===== */
+.cell.has-connected-mines::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: var(--mine-red);
+  border-radius: 50%;
+  border: 1px solid white;
+}
+
+.cell.has-connected-revealed::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 8px;
+  height: 8px;
+  background: var(--safe-green);
+  border-radius: 50%;
+  border: 1px solid white;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes explode {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes hint-pulse {
+  0%, 100% { 
+    background: var(--bg-cell);
+    border-color: var(--border-cell);
+  }
+  25%, 75% { 
+    background: var(--hint-yellow);
+    border-color: #d69e2e;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(246, 224, 94, 0.5);
+  }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .nd-minesweeper {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .controls-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .nd-minesweeper {
+    padding: 0.5rem;
+  }
+  
+  .controls-panel,
+  .navigation-panel,
+  .board-container {
+    padding: 1rem;
+  }
+  
+  .game-controls {
+    flex-direction: column;
+  }
+  
+  .nav-slider-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .nav-slider {
+    width: 100%;
+  }
+  
+  .cell {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cell {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+  
+  .board {
+    gap: 1px;
+    padding: 1px;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+.cell:focus {
+  outline: 3px solid #3182ce;
+  outline-offset: 2px;
+}
+
+.nav-btn:focus,
+.btn:focus {
+  outline: 3px solid #3182ce;
+  outline-offset: 2px;
+}
+
+/* ===== LOADING STATE ===== */
+.loading .board {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: 'Generating...';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
