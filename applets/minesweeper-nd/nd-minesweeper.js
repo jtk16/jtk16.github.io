@@ -5,14 +5,15 @@ import { clamp } from '../shared/js/math-utils.js';
 class NDMinesweeper {
   constructor(root) {
     this.root = root;
-    this.dimensions = 2; // Start with 2D
-    this.sizes = [12, 12]; // Start with classic size
+    this.dimensions = 2;
+    this.sizes = [12, 12];
     this.mineCount = 20;
     this.game = null;
     this.gameState = 'ready';
     this.firstClick = true;
     this.view3D = false;
-    this.selectedSlice = 0; // For 3D cube view
+    this.selectedSlice = 0;
+    this.cubeRotation = { x: -15, y: 25 };
     
     this.init();
   }
@@ -26,120 +27,103 @@ class NDMinesweeper {
   createUI() {
     this.root.innerHTML = `
       <div class="nd-minesweeper">
-        <!-- Top Controls -->
-        <div class="controls-bar">
-          <div class="controls-section">
-            <label for="dimensions">Dimensions:</label>
+        <!-- Clean Top Controls -->
+        <div class="controls-header">
+          <div class="control-group">
+            <label>Dimensions</label>
             <select id="dimensions" class="control-select">
-              <option value="2" selected>2D (Classic)</option>
-              <option value="3">3D (Cube)</option>
-              <option value="4">4D (Tesseract)</option>
-              <option value="5">5D (Hyperspace)</option>
+              <option value="2" selected>2D</option>
+              <option value="3">3D</option>
+              <option value="4">4D</option>
+              <option value="5">5D</option>
             </select>
           </div>
 
-          <div class="controls-section" id="view-toggle-section" style="display: none;">
-            <label>View:</label>
-            <div class="toggle-buttons">
-              <button id="view-slices" class="toggle-btn active">Slices</button>
-              <button id="view-cube" class="toggle-btn">3D Cube</button>
+          <div class="control-group" id="view-toggle-group" style="display: none;">
+            <label>View</label>
+            <div class="toggle-group">
+              <button id="view-slices" class="toggle-btn active">Grid</button>
+              <button id="view-cube" class="toggle-btn">Cube</button>
             </div>
           </div>
 
-          <div class="controls-section">
-            <label for="difficulty">Difficulty:</label>
+          <div class="control-group">
+            <label>Difficulty</label>
             <select id="difficulty" class="control-select">
-              <option value="easy">Easy (10%)</option>
-              <option value="medium" selected>Medium (15%)</option>
-              <option value="hard">Hard (20%)</option>
-              <option value="expert">Expert (25%)</option>
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+              <option value="expert">Expert</option>
             </select>
           </div>
 
-          <div class="controls-section" id="size-controls">
-            <!-- Dynamic size controls -->
+          <div class="size-controls" id="size-controls"></div>
+
+          <div class="control-group">
+            <label>Mines</label>
+            <input type="number" id="mine-count" value="20" min="1" max="999" class="control-input">
           </div>
 
-          <div class="controls-section">
-            <label for="mine-count">Mines:</label>
-            <input type="number" id="mine-count" value="20" min="1" max="500" class="control-input">
+          <div class="action-group">
+            <button id="new-game" class="btn btn-primary">New Game</button>
+            <button id="hint" class="btn btn-secondary">Hint</button>
           </div>
 
-          <div class="controls-section">
-            <div class="game-controls">
-              <button id="new-game" class="btn btn-primary">
-                <i class="fas fa-plus"></i> New Game
-              </button>
-              <button id="hint" class="btn btn-secondary">
-                <i class="fas fa-lightbulb"></i> Hint
-              </button>
+          <div class="game-stats">
+            <div class="stat">
+              <span class="stat-value" id="game-status">Ready</span>
+              <span class="stat-label">Status</span>
             </div>
-          </div>
-
-          <div class="controls-section">
-            <div class="game-info">
-              <div class="info-item">
-                <span class="info-label">Status:</span>
-                <span id="game-status" class="info-value">Ready</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Mines:</span>
-                <span id="mines-left" class="info-value">20</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Safe Cells:</span>
-                <span id="cells-left" class="info-value">0</span>
-              </div>
+            <div class="stat">
+              <span class="stat-value" id="mines-left">20</span>
+              <span class="stat-label">Mines</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="cells-left">0</span>
+              <span class="stat-label">Safe</span>
             </div>
           </div>
         </div>
 
+        <!-- Game Title -->
+        <div class="game-title">
+          <h1 id="title">2D Minesweeper</h1>
+          <p id="subtitle">12×12 grid</p>
+        </div>
+
+        <!-- 3D Cube Slice Selector -->
+        <div class="slice-controls" id="slice-controls" style="display: none;">
+          <label>Layer</label>
+          <div class="slice-selector">
+            <button id="slice-prev" class="slice-btn">‹</button>
+            <input type="range" id="slice-slider" min="0" max="5" value="0" class="slider">
+            <button id="slice-next" class="slice-btn">›</button>
+            <span id="slice-display">0</span>
+          </div>
+        </div>
+
         <!-- Game View -->
-        <div class="game-view">
-          <div class="view-header">
-            <h2 id="view-title">2D Classic Minesweeper</h2>
-            <div class="dimension-info" id="dimension-info">12×12 grid</div>
+        <div class="game-container">
+          <!-- Grid View -->
+          <div class="grid-view" id="grid-view">
+            <div class="game-grid" id="game-grid"></div>
           </div>
 
-          <div class="view-container" id="view-container">
-            <!-- Slice selector for 3D cube view -->
-            <div class="slice-selector" id="slice-selector" style="display: none;">
-              <label>Viewing Slice:</label>
-              <input type="range" id="slice-slider" min="0" max="5" value="0" class="slice-slider">
-              <span id="slice-display">0 / 5</span>
-            </div>
-
-            <!-- 2D/Slice View -->
-            <div class="slices-view" id="slices-view">
-              <div class="slices-container" id="slices-container">
-                <!-- Game boards rendered here -->
+          <!-- 3D Cube View -->
+          <div class="cube-view" id="cube-view" style="display: none;">
+            <div class="cube-scene">
+              <div class="cube-container">
+                <div class="cube" id="cube"></div>
               </div>
-            </div>
-
-            <!-- 3D Cube View -->
-            <div class="cube-view" id="cube-view" style="display: none;">
-              <div class="cube-wrapper">
-                <div class="cube-container">
-                  <div class="cube" id="cube">
-                    <!-- 3D cube faces -->
+              <div class="cube-controls">
+                <div class="rotate-controls">
+                  <button class="rotate-btn" data-axis="x" data-dir="-1">↑</button>
+                  <div class="rotate-row">
+                    <button class="rotate-btn" data-axis="y" data-dir="1">←</button>
+                    <button class="rotate-btn" id="reset-rotation">⌂</button>
+                    <button class="rotate-btn" data-axis="y" data-dir="-1">→</button>
                   </div>
-                </div>
-                <div class="cube-controls">
-                  <div class="cube-control-row">
-                    <button class="cube-control-btn" data-axis="x" data-dir="-1">↑</button>
-                  </div>
-                  <div class="cube-control-row">
-                    <button class="cube-control-btn" data-axis="y" data-dir="1">←</button>
-                    <button class="cube-control-btn" id="cube-reset">Reset</button>
-                    <button class="cube-control-btn" data-axis="y" data-dir="-1">→</button>
-                  </div>
-                  <div class="cube-control-row">
-                    <button class="cube-control-btn" data-axis="x" data-dir="1">↓</button>
-                  </div>
-                  <div class="cube-info">
-                    <p>Use slice selector above to view different layers</p>
-                    <p>Drag or use arrow keys to rotate</p>
-                  </div>
+                  <button class="rotate-btn" data-axis="x" data-dir="1">↓</button>
                 </div>
               </div>
             </div>
@@ -149,33 +133,26 @@ class NDMinesweeper {
     `;
 
     this.bindEvents();
-    this.updateSizeControls();
+    this.updateControls();
   }
 
   bindEvents() {
-    // Game controls
-    document.getElementById('new-game').addEventListener('click', () => this.newGame());
-    document.getElementById('hint').addEventListener('click', () => this.showHint());
-    
+    // Dimension change - auto new game
+    document.getElementById('dimensions').addEventListener('change', (e) => {
+      this.dimensions = parseInt(e.target.value);
+      this.updateControls();
+      this.newGame();
+    });
+
     // View toggle
     document.getElementById('view-slices')?.addEventListener('click', () => this.setView('slices'));
     document.getElementById('view-cube')?.addEventListener('click', () => this.setView('cube'));
-    
-    // Slice selector for 3D cube
-    document.getElementById('slice-slider')?.addEventListener('input', (e) => {
-      this.selectedSlice = parseInt(e.target.value);
-      this.updateSliceDisplay();
-      this.render3DCube();
-    });
-    
-    // Settings
-    document.getElementById('dimensions').addEventListener('change', (e) => {
-      this.dimensions = parseInt(e.target.value);
-      this.updateSizeControls();
-      this.updateViewToggle();
-      this.newGame(); // Auto start new game
-    });
 
+    // Game controls
+    document.getElementById('new-game').addEventListener('click', () => this.newGame());
+    document.getElementById('hint').addEventListener('click', () => this.showHint());
+
+    // Settings
     document.getElementById('difficulty').addEventListener('change', () => {
       this.updateDifficulty();
       this.newGame();
@@ -184,42 +161,108 @@ class NDMinesweeper {
     document.getElementById('mine-count').addEventListener('change', (e) => {
       this.mineCount = parseInt(e.target.value);
     });
+
+    // Slice controls
+    document.getElementById('slice-prev')?.addEventListener('click', () => this.changeSlice(-1));
+    document.getElementById('slice-next')?.addEventListener('click', () => this.changeSlice(1));
+    document.getElementById('slice-slider')?.addEventListener('input', (e) => {
+      this.selectedSlice = parseInt(e.target.value);
+      this.updateSliceDisplay();
+      this.render3DCube();
+    });
+
+    // Cube rotation
+    document.getElementById('reset-rotation')?.addEventListener('click', () => this.resetRotation());
+    document.querySelectorAll('.rotate-btn[data-axis]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const axis = btn.dataset.axis;
+        const dir = parseInt(btn.dataset.dir);
+        this.rotateView(axis, dir);
+      });
+    });
+  }
+
+  updateControls() {
+    this.updateSizeControls();
+    this.updateViewToggle();
+    this.updateTitle();
+  }
+
+  updateSizeControls() {
+    const container = document.getElementById('size-controls');
+    container.innerHTML = '';
+    
+    const defaultSizes = {
+      2: [12, 12],
+      3: [6, 6, 6],
+      4: [5, 5, 4, 4],
+      5: [4, 4, 3, 3, 3]
+    };
+    
+    this.sizes = defaultSizes[this.dimensions] || new Array(this.dimensions).fill(4);
+    const labels = ['W', 'H', 'D', 'W₄', 'W₅'];
+    
+    for (let i = 0; i < this.dimensions; i++) {
+      const sizeGroup = document.createElement('div');
+      sizeGroup.className = 'size-group';
+      sizeGroup.innerHTML = `
+        <label>${labels[i]}</label>
+        <input type="number" id="size-${i}" value="${this.sizes[i]}" min="3" max="16" class="size-input">
+      `;
+      container.appendChild(sizeGroup);
+      
+      document.getElementById(`size-${i}`).addEventListener('change', (e) => {
+        this.sizes[i] = parseInt(e.target.value);
+        this.updateTitle();
+      });
+    }
   }
 
   updateViewToggle() {
-    const viewToggleSection = document.getElementById('view-toggle-section');
+    const viewToggle = document.getElementById('view-toggle-group');
     if (this.dimensions === 3) {
-      viewToggleSection.style.display = 'block';
+      viewToggle.style.display = 'block';
     } else {
-      viewToggleSection.style.display = 'none';
+      viewToggle.style.display = 'none';
       this.setView('slices');
     }
+  }
+
+  updateTitle() {
+    const dimensionNames = ['2D Minesweeper', '3D Cube', '4D Tesseract', '5D Hyperspace'];
+    const sizeStr = this.sizes.slice(0, this.dimensions).join('×');
+    const totalCells = this.sizes.slice(0, this.dimensions).reduce((a, b) => a * b, 1);
+    
+    document.getElementById('title').textContent = 
+      this.view3D && this.dimensions === 3 ? '3D Interactive Cube' : dimensionNames[this.dimensions - 2];
+    document.getElementById('subtitle').textContent = `${sizeStr} (${totalCells.toLocaleString()} cells)`;
   }
 
   setView(viewType) {
     this.view3D = (viewType === 'cube');
     
-    // Update toggle buttons
+    // Update buttons
     document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`view-${viewType}`).classList.add('active');
     
     // Show/hide views
-    document.getElementById('slices-view').style.display = this.view3D ? 'none' : 'block';
+    document.getElementById('grid-view').style.display = this.view3D ? 'none' : 'block';
     document.getElementById('cube-view').style.display = this.view3D ? 'block' : 'none';
     
-    // Show/hide slice selector
-    const sliceSelector = document.getElementById('slice-selector');
+    // Show/hide slice controls
+    const sliceControls = document.getElementById('slice-controls');
     if (this.view3D && this.dimensions === 3) {
-      sliceSelector.style.display = 'flex';
-      this.updateSliceSelector();
+      sliceControls.style.display = 'flex';
+      this.updateSliceControls();
     } else {
-      sliceSelector.style.display = 'none';
+      sliceControls.style.display = 'none';
     }
     
+    this.updateTitle();
     this.renderView();
   }
 
-  updateSliceSelector() {
+  updateSliceControls() {
     const slider = document.getElementById('slice-slider');
     slider.max = this.sizes[2] - 1;
     slider.value = Math.min(this.selectedSlice, this.sizes[2] - 1);
@@ -228,65 +271,25 @@ class NDMinesweeper {
   }
 
   updateSliceDisplay() {
-    const display = document.getElementById('slice-display');
-    display.textContent = `${this.selectedSlice} / ${this.sizes[2] - 1}`;
+    document.getElementById('slice-display').textContent = this.selectedSlice;
   }
 
-  updateSizeControls() {
-    const container = document.getElementById('size-controls');
-    container.innerHTML = '';
-    
-    // Better default sizes
-    const defaultSizes = {
-      2: [12, 12],
-      3: [6, 6, 6],
-      4: [5, 5, 4, 4],
-      5: [4, 4, 4, 3, 3]
-    };
-    
-    this.sizes = defaultSizes[this.dimensions] || new Array(this.dimensions).fill(4);
-
-    const dimLabels = ['W', 'H', 'D', 'A', 'K'];
-    
-    for (let i = 0; i < this.dimensions; i++) {
-      const sizeControl = document.createElement('div');
-      sizeControl.className = 'size-control';
-      sizeControl.innerHTML = `
-        <label for="size-${i}">${dimLabels[i]}:</label>
-        <input type="number" id="size-${i}" value="${this.sizes[i]}" min="3" max="16" class="control-input size-input">
-      `;
-      container.appendChild(sizeControl);
-      
-      document.getElementById(`size-${i}`).addEventListener('change', (e) => {
-        this.sizes[i] = parseInt(e.target.value);
-        this.updateDimensionInfo();
-      });
-    }
-  }
-
-  updateDimensionInfo() {
-    const dimNames = ['Classic Minesweeper', '3D Cube', '4D Tesseract', '5D Hyperspace', '6D+ Spacetime'];
-    const sizeStr = this.sizes.slice(0, this.dimensions).join('×');
-    const totalVolume = this.sizes.slice(0, this.dimensions).reduce((a, b) => a * b, 1);
-    
-    document.getElementById('view-title').textContent = 
-      this.dimensions === 2 ? '2D Classic Minesweeper' :
-      this.dimensions === 3 && this.view3D ? '3D Interactive Cube' : 
-      `${this.dimensions}D ${dimNames[this.dimensions - 1]}`;
-    document.getElementById('dimension-info').textContent = `${sizeStr} (${totalVolume.toLocaleString()} cells)`;
+  changeSlice(direction) {
+    this.selectedSlice = clamp(this.selectedSlice + direction, 0, this.sizes[2] - 1);
+    document.getElementById('slice-slider').value = this.selectedSlice;
+    this.updateSliceDisplay();
+    this.render3DCube();
   }
 
   setupKeyboardControls() {
     document.addEventListener('keydown', (e) => {
-      if (this.gameState !== 'playing' && this.gameState !== 'ready') return;
+      if (e.target.tagName === 'INPUT') return;
       
-      switch(e.key) {
+      switch(e.key.toLowerCase()) {
         case 'n':
-        case 'N':
           this.newGame();
           break;
         case 'h':
-        case 'H':
           this.showHint();
           break;
         case '3':
@@ -294,19 +297,11 @@ class NDMinesweeper {
             this.setView(this.view3D ? 'slices' : 'cube');
           }
           break;
-        case 'ArrowLeft':
-          if (this.view3D && this.dimensions === 3) {
-            this.selectedSlice = Math.max(0, this.selectedSlice - 1);
-            this.updateSliceSelector();
-            this.render3DCube();
-          }
+        case 'arrowleft':
+          if (this.view3D) this.changeSlice(-1);
           break;
-        case 'ArrowRight':
-          if (this.view3D && this.dimensions === 3) {
-            this.selectedSlice = Math.min(this.sizes[2] - 1, this.selectedSlice + 1);
-            this.updateSliceSelector();
-            this.render3DCube();
-          }
+        case 'arrowright':
+          if (this.view3D) this.changeSlice(1);
           break;
       }
     });
@@ -315,13 +310,7 @@ class NDMinesweeper {
   updateDifficulty() {
     const difficulty = document.getElementById('difficulty').value;
     const totalCells = this.sizes.slice(0, this.dimensions).reduce((a, b) => a * b, 1);
-    
-    const ratios = {
-      easy: 0.1,
-      medium: 0.15,
-      hard: 0.2,
-      expert: 0.25
-    };
+    const ratios = { easy: 0.1, medium: 0.15, hard: 0.2, expert: 0.25 };
     
     this.mineCount = Math.max(1, Math.floor(totalCells * ratios[difficulty]));
     document.getElementById('mine-count').value = this.mineCount;
@@ -329,205 +318,148 @@ class NDMinesweeper {
 
   newGame() {
     this.updateDifficulty();
-    this.updateDimensionInfo();
     this.game = new NDMinesweeperGame(this.dimensions, this.sizes.slice(0, this.dimensions), this.mineCount);
     this.gameState = 'ready';
     this.firstClick = true;
     
-    if (this.view3D && this.dimensions === 3) {
-      this.updateSliceSelector();
-    }
-    
+    if (this.view3D) this.updateSliceControls();
     this.renderView();
     this.updateGameInfo();
   }
 
   renderView() {
-    if (this.dimensions === 3 && this.view3D) {
+    if (this.view3D && this.dimensions === 3) {
       this.render3DCube();
     } else {
-      this.renderSlices();
+      this.renderGrid();
     }
   }
 
-  renderSlices() {
-    const container = document.getElementById('slices-container');
+  renderGrid() {
+    const container = document.getElementById('game-grid');
     container.innerHTML = '';
-    container.className = `slices-container dim-${this.dimensions}`;
+    container.className = `game-grid dim-${this.dimensions}`;
     
     if (this.dimensions === 2) {
-      this.render2D(container);
-    } else if (this.dimensions === 3) {
-      this.render3DSlices(container);
-    } else if (this.dimensions === 4) {
-      this.render4D(container);
-    } else if (this.dimensions === 5) {
-      this.render5D(container);
+      const board = this.createBoard([this.sizes[0], this.sizes[1]], []);
+      container.appendChild(board);
+    } else {
+      this.renderMultiDimensional(container);
     }
   }
 
-  render2D(container) {
-    const board = this.createBoard([this.sizes[0], this.sizes[1]], [], 'large');
-    container.appendChild(board);
+  renderMultiDimensional(container) {
+    const coords = this.generateSliceCoords();
+    
+    coords.forEach((sliceCoords, index) => {
+      const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
+      board.className += ` board-${this.getBoardSize()}`;
+      
+      // Add subtle label
+      const label = document.createElement('div');
+      label.className = 'board-label';
+      label.textContent = this.getSliceLabel(sliceCoords);
+      
+      const wrapper = document.createElement('div');
+      wrapper.className = 'board-wrapper';
+      wrapper.appendChild(label);
+      wrapper.appendChild(board);
+      
+      container.appendChild(wrapper);
+    });
   }
 
-  render3DSlices(container) {
-    // Horizontal layout for better space usage
-    for (let z = 0; z < this.sizes[2]; z++) {
-      const sliceWrapper = this.createSliceWrapper(`Layer ${z}`, [z]);
-      const board = this.createBoard([this.sizes[0], this.sizes[1]], [z], 'medium');
-      sliceWrapper.appendChild(board);
-      container.appendChild(sliceWrapper);
-    }
-  }
-
-  render4D(container) {
-    // Grid layout for 4D - Ana slices with embedded Z layers
-    for (let w = 0; w < this.sizes[3]; w++) {
-      const anaWrapper = document.createElement('div');
-      anaWrapper.className = 'ana-slice-wrapper';
-      
-      const anaHeader = document.createElement('div');
-      anaHeader.className = 'ana-header';
-      anaHeader.innerHTML = `<h3>Ana ${w}</h3>`;
-      
-      const layersGrid = document.createElement('div');
-      layersGrid.className = 'layers-grid';
-      
+  generateSliceCoords() {
+    const coords = [];
+    
+    if (this.dimensions === 3) {
       for (let z = 0; z < this.sizes[2]; z++) {
-        const sliceWrapper = this.createSliceWrapper(`Layer ${z}`, [z, w]);
-        const board = this.createBoard([this.sizes[0], this.sizes[1]], [z, w], 'small');
-        sliceWrapper.appendChild(board);
-        layersGrid.appendChild(sliceWrapper);
+        coords.push([z]);
       }
-      
-      anaWrapper.appendChild(anaHeader);
-      anaWrapper.appendChild(layersGrid);
-      container.appendChild(anaWrapper);
+    } else if (this.dimensions === 4) {
+      for (let w = 0; w < this.sizes[3]; w++) {
+        for (let z = 0; z < this.sizes[2]; z++) {
+          coords.push([z, w]);
+        }
+      }
+    } else if (this.dimensions === 5) {
+      for (let v = 0; v < this.sizes[4]; v++) {
+        for (let w = 0; w < this.sizes[3]; w++) {
+          for (let z = 0; z < this.sizes[2]; z++) {
+            coords.push([z, w, v]);
+          }
+        }
+      }
     }
+    
+    return coords;
   }
 
-  render5D(container) {
-    // Nested grid for 5D
-    for (let v = 0; v < this.sizes[4]; v++) {
-      const kataWrapper = document.createElement('div');
-      kataWrapper.className = 'kata-slice-wrapper';
-      
-      const kataHeader = document.createElement('div');
-      kataHeader.className = 'kata-header';
-      kataHeader.innerHTML = `<h3>Kata ${v}</h3>`;
-      
-      const anaGrid = document.createElement('div');
-      anaGrid.className = 'ana-grid';
-      
-      for (let w = 0; w < this.sizes[3]; w++) {
-        const anaSubWrapper = document.createElement('div');
-        anaSubWrapper.className = 'ana-sub-wrapper';
-        
-        const anaSubHeader = document.createElement('h4');
-        anaSubHeader.textContent = `Ana ${w}`;
-        anaSubHeader.className = 'ana-sub-header';
-        
-        const layersGrid = document.createElement('div');
-        layersGrid.className = 'layers-mini-grid';
-        
-        for (let z = 0; z < this.sizes[2]; z++) {
-          const miniBoard = this.createBoard([this.sizes[0], this.sizes[1]], [z, w, v], 'tiny');
-          layersGrid.appendChild(miniBoard);
-        }
-        
-        anaSubWrapper.appendChild(anaSubHeader);
-        anaSubWrapper.appendChild(layersGrid);
-        anaGrid.appendChild(anaSubWrapper);
-      }
-      
-      kataWrapper.appendChild(kataHeader);
-      kataWrapper.appendChild(anaGrid);
-      container.appendChild(kataWrapper);
-    }
+  getSliceLabel(coords) {
+    if (this.dimensions === 3) return `Z${coords[0]}`;
+    if (this.dimensions === 4) return `Z${coords[0]}W${coords[1]}`;
+    if (this.dimensions === 5) return `Z${coords[0]}W${coords[1]}V${coords[2]}`;
+    return '';
+  }
+
+  getBoardSize() {
+    if (this.dimensions === 2) return 'large';
+    if (this.dimensions === 3) return 'medium';
+    if (this.dimensions === 4) return 'small';
+    return 'tiny';
   }
 
   render3DCube() {
-    const cubeContainer = document.getElementById('cube');
-    cubeContainer.innerHTML = '';
+    const cube = document.getElementById('cube');
+    cube.innerHTML = '';
     
-    // Create transparent cube showing the selected slice
-    const board = this.createBoard([this.sizes[0], this.sizes[1]], [this.selectedSlice], 'medium');
-    board.className += ' cube-slice-board';
-    
-    // Create cube frame
-    const cubeFrame = document.createElement('div');
-    cubeFrame.className = 'cube-frame';
-    
-    // Add wireframe edges to show 3D structure
-    for (let i = 0; i < 12; i++) {
-      const edge = document.createElement('div');
-      edge.className = `cube-edge edge-${i}`;
-      cubeFrame.appendChild(edge);
+    // Create all 6 faces of the cube, each showing a different Z layer
+    for (let z = 0; z < this.sizes[2]; z++) {
+      const face = document.createElement('div');
+      face.className = `cube-face face-${z}`;
+      
+      // Make non-selected layers transparent
+      if (z !== this.selectedSlice) {
+        face.style.opacity = '0.3';
+      } else {
+        face.style.opacity = '1';
+      }
+      
+      const board = this.createBoard([this.sizes[0], this.sizes[1]], [z]);
+      board.className += ' cube-board';
+      face.appendChild(board);
+      
+      cube.appendChild(face);
     }
     
-    cubeContainer.appendChild(cubeFrame);
-    cubeContainer.appendChild(board);
-    
-    this.setupCubeControls();
+    this.updateCubeRotation();
   }
 
-  setupCubeControls() {
+  updateCubeRotation() {
     const cube = document.getElementById('cube');
-    let rotationX = -15;
-    let rotationY = 25;
-    
-    const updateRotation = () => {
-      cube.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
-    };
-    
-    // Control buttons
-    document.querySelectorAll('.cube-control-btn[data-axis]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const axis = btn.dataset.axis;
-        const dir = parseInt(btn.dataset.dir);
-        
-        if (axis === 'x') {
-          rotationX += dir * 15;
-        } else {
-          rotationY += dir * 15;
-        }
-        updateRotation();
-      });
-    });
-    
-    // Reset button
-    document.getElementById('cube-reset')?.addEventListener('click', () => {
-      rotationX = -15;
-      rotationY = 25;
-      updateRotation();
-    });
-    
-    updateRotation();
+    cube.style.transform = `rotateX(${this.cubeRotation.x}deg) rotateY(${this.cubeRotation.y}deg)`;
   }
 
-  createSliceWrapper(title, coords) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'slice-wrapper';
-    
-    const header = document.createElement('div');
-    header.className = 'slice-header';
-    header.innerHTML = `<h4 class="slice-title">${title}</h4>`;
-    
-    wrapper.appendChild(header);
-    return wrapper;
+  rotateView(axis, direction) {
+    this.cubeRotation[axis] += direction * 15;
+    this.updateCubeRotation();
   }
 
-  createBoard(gridSize, extraCoords, size = 'medium') {
+  resetRotation() {
+    this.cubeRotation = { x: -15, y: 25 };
+    this.updateCubeRotation();
+  }
+
+  createBoard(gridSize, extraCoords) {
     const board = document.createElement('div');
-    board.className = `board board-${size}`;
+    board.className = 'board';
     board.style.gridTemplateColumns = `repeat(${gridSize[0]}, 1fr)`;
     
     for (let y = 0; y < gridSize[1]; y++) {
       for (let x = 0; x < gridSize[0]; x++) {
         const coords = [x, y, ...extraCoords];
         const cell = this.game.getCell(coords);
-        const cellElement = this.createCellElement(coords, cell, size);
+        const cellElement = this.createCellElement(coords, cell);
         board.appendChild(cellElement);
       }
     }
@@ -535,23 +467,23 @@ class NDMinesweeper {
     return board;
   }
 
-  createCellElement(coords, cell, size = 'medium') {
+  createCellElement(coords, cell) {
     const cellEl = document.createElement('div');
-    cellEl.className = `cell cell-${size}`;
+    cellEl.className = 'cell';
     cellEl.dataset.coords = JSON.stringify(coords);
     
     if (cell.revealed) {
       cellEl.classList.add('revealed');
       if (cell.isMine) {
         cellEl.classList.add('mine');
-        cellEl.innerHTML = size === 'tiny' ? '●' : '💣';
+        cellEl.textContent = '💣';
       } else if (cell.neighborMines > 0) {
         cellEl.textContent = cell.neighborMines;
         cellEl.classList.add(`mines-${cell.neighborMines}`);
       }
     } else if (cell.flagged) {
       cellEl.classList.add('flagged');
-      cellEl.innerHTML = '🚩';
+      cellEl.textContent = '🚩';
     }
     
     cellEl.addEventListener('click', (e) => this.handleCellClick(e, coords));
@@ -598,9 +530,7 @@ class NDMinesweeper {
   revealAllMines() {
     for (const coords of this.game.getAllCoords()) {
       const cell = this.game.getCell(coords);
-      if (cell.isMine) {
-        cell.revealed = true;
-      }
+      if (cell.isMine) cell.revealed = true;
     }
   }
 
@@ -608,8 +538,8 @@ class NDMinesweeper {
     const statusMap = {
       ready: 'Ready',
       playing: 'Playing',
-      won: '🎉 Won!',
-      lost: '💥 Lost'
+      won: 'Won!',
+      lost: 'Lost'
     };
     
     document.getElementById('game-status').textContent = statusMap[this.gameState];
@@ -617,7 +547,7 @@ class NDMinesweeper {
     document.getElementById('cells-left').textContent = this.game.getRemainingCells();
     
     const statusEl = document.getElementById('game-status');
-    statusEl.className = `info-value status-${this.gameState}`;
+    statusEl.className = `stat-value status-${this.gameState}`;
   }
 
   showHint() {
@@ -646,7 +576,7 @@ class NDMinesweeper {
   }
 }
 
-// Game logic class (unchanged from before)
+// Same game logic class as before
 class NDMinesweeperGame {
   constructor(dimensions, sizes, mineCount) {
     this.dimensions = dimensions;
@@ -655,47 +585,35 @@ class NDMinesweeperGame {
     this.grid = new Map();
     this.minesGenerated = false;
     this.flagCount = 0;
-    
     this.initializeGrid();
   }
 
   initializeGrid() {
     for (const coords of this.getAllCoords()) {
       this.grid.set(this.coordsToKey(coords), {
-        isMine: false,
-        revealed: false,
-        flagged: false,
-        neighborMines: 0
+        isMine: false, revealed: false, flagged: false, neighborMines: 0
       });
     }
   }
 
   getAllCoords() {
     const coords = [];
-    
     const generate = (current, dimension) => {
       if (dimension === this.dimensions) {
         coords.push([...current]);
         return;
       }
-      
       for (let i = 0; i < this.sizes[dimension]; i++) {
         current[dimension] = i;
         generate(current, dimension + 1);
       }
     };
-    
     generate(new Array(this.dimensions), 0);
     return coords;
   }
 
-  coordsToKey(coords) {
-    return coords.join(',');
-  }
-
-  getCell(coords) {
-    return this.grid.get(this.coordsToKey(coords));
-  }
+  coordsToKey(coords) { return coords.join(','); }
+  getCell(coords) { return this.grid.get(this.coordsToKey(coords)); }
 
   generateMinesWithSafeArea(safeCoords) {
     if (this.minesGenerated) return;
@@ -708,15 +626,12 @@ class NDMinesweeperGame {
       safeArea.add(this.coordsToKey(neighborCoords));
     }
     
-    const availableCoords = allCoords.filter(coords => 
-      !safeArea.has(this.coordsToKey(coords))
-    );
+    const availableCoords = allCoords.filter(coords => !safeArea.has(this.coordsToKey(coords)));
     
     for (let i = 0; i < this.mineCount && availableCoords.length > 0; i++) {
       const randomIndex = Math.floor(Math.random() * availableCoords.length);
       const mineCoords = availableCoords.splice(randomIndex, 1)[0];
-      const cell = this.getCell(mineCoords);
-      cell.isMine = true;
+      this.getCell(mineCoords).isMine = true;
     }
     
     this.calculateNeighborCounts();
@@ -739,7 +654,6 @@ class NDMinesweeperGame {
 
   getNeighbors(coords) {
     const neighbors = [];
-    
     const generate = (current, dimension) => {
       if (dimension === this.dimensions) {
         if (!coords.every((coord, i) => coord === current[i])) {
@@ -747,7 +661,6 @@ class NDMinesweeperGame {
         }
         return;
       }
-      
       const coord = coords[dimension];
       for (let offset = -1; offset <= 1; offset++) {
         const newCoord = coord + offset;
@@ -757,22 +670,16 @@ class NDMinesweeperGame {
         }
       }
     };
-    
     generate(new Array(this.dimensions), 0);
     return neighbors;
   }
 
   revealCell(coords) {
     const cell = this.getCell(coords);
-    if (cell.revealed || cell.flagged) {
-      return { gameOver: false, won: false };
-    }
+    if (cell.revealed || cell.flagged) return { gameOver: false, won: false };
     
     cell.revealed = true;
-    
-    if (cell.isMine) {
-      return { gameOver: true, won: false };
-    }
+    if (cell.isMine) return { gameOver: true, won: false };
     
     if (cell.neighborMines === 0) {
       for (const neighborCoords of this.getNeighbors(coords)) {
@@ -783,8 +690,7 @@ class NDMinesweeperGame {
       }
     }
     
-    const won = this.checkWinCondition();
-    return { gameOver: false, won };
+    return { gameOver: false, won: this.checkWinCondition() };
   }
 
   toggleFlag(coords) {
@@ -803,28 +709,22 @@ class NDMinesweeperGame {
   checkWinCondition() {
     for (const coords of this.getAllCoords()) {
       const cell = this.getCell(coords);
-      if (!cell.isMine && !cell.revealed) {
-        return false;
-      }
+      if (!cell.isMine && !cell.revealed) return false;
     }
     return true;
   }
 
-  getRemainingFlags() {
-    return this.mineCount - this.flagCount;
-  }
-
+  getRemainingFlags() { return this.mineCount - this.flagCount; }
+  
   getRemainingCells() {
     let unrevealed = 0;
     for (const coords of this.getAllCoords()) {
       const cell = this.getCell(coords);
-      if (!cell.revealed && !cell.isMine) {
-        unrevealed++;
-      }
+      if (!cell.revealed && !cell.isMine) unrevealed++;
     }
     return unrevealed;
   }
 }
 
-// Initialize the game
+// Initialize
 new NDMinesweeper(document.getElementById('game-root'));
