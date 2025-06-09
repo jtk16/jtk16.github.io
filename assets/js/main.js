@@ -577,13 +577,13 @@ class Portfolio {
   // UTILITIES
   // ====================
   initGraphLaplacian() {
-    const laplacianLink = document.querySelector('a[href="./graph-laplacian.html"]');
+    const laplacianLink = document.querySelector('a[href="./applets/graph-laplacian/index.html"]');
     if (laplacianLink) {
       // Preload critical resources when user hovers
       laplacianLink.addEventListener('mouseenter', () => {
         const link = document.createElement('link');
         link.rel = 'prefetch';
-        link.href = './assets/js/graph-laplacian-engine.js';
+        link.href = './applets/graph-laplacian/graph-engine.js';
         document.head.appendChild(link);
       });
     }

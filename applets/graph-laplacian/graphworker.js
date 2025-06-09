@@ -1,4 +1,4 @@
-self.importScripts('./graph-laplacian-engine.js');
+self.importScripts('./graph-engine.js');
 
 const engine = new GraphLaplacianEngine();
 

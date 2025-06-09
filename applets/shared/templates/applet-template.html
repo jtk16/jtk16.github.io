@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../shared/css/applet-base.css">
+  <link rel="stylesheet" href="../shared/css/components.css">
+  <title>Applet Template</title>
+</head>
+<body>
+  <div class="container" id="applet-root"></div>
+  <script type="module">
+    import {Applet} from '../shared/js/applet-framework.js';
+    class MyApplet extends Applet {
+      init() {
+        this.container.textContent = 'Replace with your applet content';
+      }
+    }
+    new MyApplet(document.getElementById('applet-root')).init();
+  </script>
+</body>
+</html>

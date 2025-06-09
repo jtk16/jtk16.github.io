@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applets</title>
+  <link rel="stylesheet" href="./shared/css/applet-base.css">
+  <link rel="stylesheet" href="./shared/css/components.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Available Applets</h1>
+    <ul id="applet-list"></ul>
+  </div>
+  <script type="module">
+    fetch('./applet-registry.json').then(r => r.json()).then(data => {
+      const list = document.getElementById('applet-list');
+      data.applets.forEach(applet => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `./${applet.path}/index.html`;
+        a.textContent = applet.name;
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>

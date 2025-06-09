@@ -1,0 +1,12 @@
+{
+  "applets": [
+    {
+      "name": "Graph Laplacian Explorer",
+      "path": "graph-laplacian"
+    },
+    {
+      "name": "N-Dimensional Minesweeper",
+      "path": "minesweeper-nd"
+    }
+  ]
+}
