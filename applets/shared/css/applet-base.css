@@ -1,0 +1,9 @@
+/* Base styles for all applets */
+:root {
+  --applet-font: 'Inter', sans-serif;
+}
+body {
+  font-family: var(--applet-font);
+  margin: 0;
+  padding: 0;
+}

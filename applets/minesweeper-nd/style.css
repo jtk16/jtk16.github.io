@@ -1,0 +1,19 @@
+/* Styles for N-Dimensional Minesweeper */
+.board {
+  display: grid;
+  gap: 2px;
+}
+.cell {
+  width: 24px;
+  height: 24px;
+  background: #334155;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.cell.revealed {
+  background: #1e293b;
+}
