@@ -14,7 +14,7 @@ class NDMinesweeper {
     this.firstClick = true;
     this.view3D = false;
     this.selectedSlice = 0;
-    this.cubeRotation = { x: -15, y: 25 };
+    this.cubeRotation = { x: -20, y: 30 };
     this.autoRotate = false;
     
     this.init();
@@ -418,25 +418,69 @@ class NDMinesweeper {
   renderMultiDimensional(container) {
     const coords = this.generateSliceCoords();
     
-    coords.forEach((sliceCoords, index) => {
-      const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
-      board.className += ` board-${this.getBoardSize()}`;
+    if (this.dimensions === 5) {
+      // Special handling for 5D - group by highest dimension
+      const grouped = {};
+      coords.forEach(coord => {
+        const v = coord[2]; // Group by V dimension
+        if (!grouped[v]) grouped[v] = [];
+        grouped[v].push(coord);
+      });
       
-      const label = document.createElement('div');
-      label.className = 'board-label';
-      label.textContent = this.getSliceLabel(sliceCoords);
-      
-      const wrapper = document.createElement('div');
-      wrapper.className = 'board-wrapper';
-      wrapper.appendChild(label);
-      wrapper.appendChild(board);
-      
-      // Add entrance animation
-      wrapper.style.animationDelay = `${index * 50}ms`;
-      wrapper.style.animation = 'fadeInUp 0.5s ease forwards';
-      
-      container.appendChild(wrapper);
-    });
+      // Create mega-boards for each V value
+      Object.entries(grouped).forEach(([v, coordsGroup]) => {
+        const megaWrapper = document.createElement('div');
+        megaWrapper.className = 'mega-board-wrapper';
+        
+        const megaLabel = document.createElement('div');
+        megaLabel.className = 'mega-board-label';
+        megaLabel.textContent = `V = ${v}`;
+        megaWrapper.appendChild(megaLabel);
+        
+        const megaGrid = document.createElement('div');
+        megaGrid.className = 'mega-board-grid';
+        
+        coordsGroup.forEach((sliceCoords, index) => {
+          const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
+          
+          const label = document.createElement('div');
+          label.className = 'board-label';
+          label.textContent = this.getSliceLabel(sliceCoords);
+          
+          const wrapper = document.createElement('div');
+          wrapper.className = 'board-wrapper';
+          wrapper.appendChild(label);
+          wrapper.appendChild(board);
+          
+          wrapper.style.animationDelay = `${index * 30}ms`;
+          wrapper.style.animation = 'fadeInUp 0.5s ease forwards';
+          
+          megaGrid.appendChild(wrapper);
+        });
+        
+        megaWrapper.appendChild(megaGrid);
+        container.appendChild(megaWrapper);
+      });
+    } else {
+      // Regular handling for 3D and 4D
+      coords.forEach((sliceCoords, index) => {
+        const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
+        
+        const label = document.createElement('div');
+        label.className = 'board-label';
+        label.textContent = this.getSliceLabel(sliceCoords);
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = 'board-wrapper';
+        wrapper.appendChild(label);
+        wrapper.appendChild(board);
+        
+        wrapper.style.animationDelay = `${index * 50}ms`;
+        wrapper.style.animation = 'fadeInUp 0.5s ease forwards';
+        
+        container.appendChild(wrapper);
+      });
+    }
   }
 
   generateSliceCoords() {
@@ -468,43 +512,51 @@ class NDMinesweeper {
   getSliceLabel(coords) {
     if (this.dimensions === 3) return `Z${coords[0]}`;
     if (this.dimensions === 4) return `Z${coords[0]}W${coords[1]}`;
-    if (this.dimensions === 5) return `Z${coords[0]}W${coords[1]}V${coords[2]}`;
+    if (this.dimensions === 5) return `Z${coords[0]}W${coords[1]}`;
     return '';
-  }
-
-  getBoardSize() {
-    if (this.dimensions === 2) return 'large';
-    if (this.dimensions === 3) return 'medium';
-    if (this.dimensions === 4) return 'small';
-    return 'tiny';
   }
 
   render3DCube() {
     const cube = document.getElementById('cube');
     cube.innerHTML = '';
     
-    // Create clean 3D cube faces with proper spacing
+    // Calculate spacing between layers
+    const totalDepth = 300;
+    const layerSpacing = totalDepth / (this.sizes[2] - 1);
+    
+    // Create all layers positioned in 3D space
     for (let z = 0; z < this.sizes[2]; z++) {
       const face = document.createElement('div');
       face.className = `cube-face face-${z}`;
       
-      // Clean opacity handling for selected layer
+      // Position each layer in 3D space
+      const zPosition = (z - (this.sizes[2] - 1) / 2) * layerSpacing;
+      face.style.transform = `translateZ(${zPosition}px)`;
+      
+      // Progressive transparency based on distance from selected layer
+      const distance = Math.abs(z - this.selectedSlice);
+      const opacity = z === this.selectedSlice ? 1 : Math.max(0.15, 0.7 - distance * 0.15);
+      face.style.opacity = opacity;
+      
+      // Slight background for non-selected layers
+      if (z !== this.selectedSlice) {
+        face.style.background = 'rgba(30, 41, 59, 0.2)';
+      }
+      
       if (z === this.selectedSlice) {
-        face.style.opacity = '1';
         face.classList.add('selected');
-      } else {
-        face.style.opacity = '0.3';
       }
       
       const board = this.createBoard([this.sizes[0], this.sizes[1]], [z]);
       board.className += ' cube-board';
       
-      // Simple layer indicator
+      // Layer indicator
       const layerIndicator = document.createElement('div');
       layerIndicator.className = 'layer-indicator';
       layerIndicator.textContent = `Layer ${z}`;
       if (z !== this.selectedSlice) {
-        layerIndicator.style.opacity = '0.5';
+        layerIndicator.style.opacity = '0.6';
+        layerIndicator.style.background = 'var(--bg-tertiary)';
       }
       
       face.appendChild(layerIndicator);
@@ -527,7 +579,7 @@ class NDMinesweeper {
   }
 
   resetRotation() {
-    this.cubeRotation = { x: -15, y: 25 };
+    this.cubeRotation = { x: -20, y: 30 };
     this.updateCubeRotation();
   }
 
