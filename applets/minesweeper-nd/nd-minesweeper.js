@@ -16,44 +16,14 @@ class NDMinesweeper {
     this.selectedSlice = 0;
     this.cubeRotation = { x: -15, y: 25 };
     this.autoRotate = false;
-    this.particles = [];
     
     this.init();
   }
 
   init() {
     this.createUI();
-    this.createParticles();
     this.newGame();
     this.setupKeyboardControls();
-    this.animateParticles();
-  }
-
-  createParticles() {
-    const particlesContainer = document.createElement('div');
-    particlesContainer.className = 'particles';
-    document.body.appendChild(particlesContainer);
-
-    for (let i = 0; i < 50; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.animationDelay = Math.random() * 20 + 's';
-      particle.style.animationDuration = (20 + Math.random() * 10) + 's';
-      particle.style.width = particle.style.height = (2 + Math.random() * 4) + 'px';
-      particle.style.background = `rgba(${Math.random() > 0.5 ? '99, 102, 241' : '236, 72, 153'}, ${0.3 + Math.random() * 0.4})`;
-      particlesContainer.appendChild(particle);
-      this.particles.push(particle);
-    }
-  }
-
-  animateParticles() {
-    this.particles.forEach((particle, i) => {
-      if (Math.random() > 0.98) {
-        particle.style.background = `rgba(${Math.random() > 0.5 ? '99, 102, 241' : '236, 72, 153'}, ${0.3 + Math.random() * 0.4})`;
-      }
-    });
-    requestAnimationFrame(() => this.animateParticles());
   }
 
   createUI() {
@@ -513,43 +483,29 @@ class NDMinesweeper {
     const cube = document.getElementById('cube');
     cube.innerHTML = '';
     
-    // Create enhanced 3D cube faces
+    // Create clean 3D cube faces with proper spacing
     for (let z = 0; z < this.sizes[2]; z++) {
       const face = document.createElement('div');
       face.className = `cube-face face-${z}`;
       
-      // Enhanced opacity and effects for selected layer
+      // Clean opacity handling for selected layer
       if (z === this.selectedSlice) {
         face.style.opacity = '1';
-        face.style.filter = 'brightness(1)';
         face.classList.add('selected');
       } else {
-        const distance = Math.abs(z - this.selectedSlice);
-        face.style.opacity = Math.max(0.2, 0.8 - distance * 0.2);
-        face.style.filter = `brightness(${0.7 - distance * 0.1})`;
+        face.style.opacity = '0.3';
       }
       
       const board = this.createBoard([this.sizes[0], this.sizes[1]], [z]);
       board.className += ' cube-board';
       
-      // Add layer indicator
+      // Simple layer indicator
       const layerIndicator = document.createElement('div');
       layerIndicator.className = 'layer-indicator';
       layerIndicator.textContent = `Layer ${z}`;
-      layerIndicator.style.cssText = `
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(99, 102, 241, 0.8);
-        color: white;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        opacity: ${z === this.selectedSlice ? 1 : 0.5};
-      `;
+      if (z !== this.selectedSlice) {
+        layerIndicator.style.opacity = '0.5';
+      }
       
       face.appendChild(layerIndicator);
       face.appendChild(board);
@@ -717,44 +673,33 @@ class NDMinesweeper {
   }
 
   showGameEndAnimation(result) {
-    const overlay = document.createElement('div');
-    overlay.className = 'game-end-overlay';
-    overlay.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      animation: fadeIn 0.5s ease;
-    `;
-    
+    // Simple toast notification instead of full overlay
     const message = document.createElement('div');
     message.className = 'game-end-message';
     message.style.cssText = `
-      background: ${result === 'won' ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #ef4444, #dc2626)'};
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: ${result === 'won' ? 'var(--success)' : 'var(--danger)'};
       color: white;
-      padding: 2rem 4rem;
-      border-radius: 1rem;
-      font-size: 2rem;
-      font-weight: 800;
+      padding: 1.5rem 3rem;
+      border-radius: var(--radius-lg);
+      font-size: 1.5rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      animation: bounceIn 0.6s ease;
+      letter-spacing: 0.05em;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      animation: fadeInScale 0.3s ease;
     `;
     message.textContent = result === 'won' ? 'Victory!' : 'Game Over';
     
-    overlay.appendChild(message);
-    document.body.appendChild(overlay);
+    document.body.appendChild(message);
     
     setTimeout(() => {
-      overlay.style.animation = 'fadeOut 0.5s ease';
-      setTimeout(() => overlay.remove(), 500);
+      message.style.animation = 'fadeOutScale 0.3s ease';
+      setTimeout(() => message.remove(), 300);
     }, 2000);
   }
 }
@@ -930,11 +875,26 @@ style.textContent = `
     to { opacity: 0; }
   }
   
-  @keyframes bounceIn {
-    0% { transform: scale(0.3); opacity: 0; }
-    50% { transform: scale(1.05); }
-    70% { transform: scale(0.9); }
-    100% { transform: scale(1); opacity: 1; }
+  @keyframes fadeInScale {
+    from { 
+      opacity: 0; 
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+    to { 
+      opacity: 1; 
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  
+  @keyframes fadeOutScale {
+    from { 
+      opacity: 1; 
+      transform: translate(-50%, -50%) scale(1);
+    }
+    to { 
+      opacity: 0; 
+      transform: translate(-50%, -50%) scale(0.8);
+    }
   }
   
   @keyframes fadeInUp {
