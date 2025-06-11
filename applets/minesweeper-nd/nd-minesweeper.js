@@ -404,8 +404,17 @@ class NDMinesweeper {
 
   renderGrid() {
     const container = document.getElementById('game-grid');
+    const gridView = document.getElementById('grid-view');
+    
     container.innerHTML = '';
     container.className = `game-grid dim-${this.dimensions}`;
+    
+    // Control overflow based on dimensions
+    if (this.dimensions === 2) {
+      gridView.style.overflowX = 'visible';
+    } else {
+      gridView.style.overflowX = 'auto';
+    }
     
     if (this.dimensions === 2) {
       const board = this.createBoard([this.sizes[0], this.sizes[1]], []);
@@ -418,8 +427,72 @@ class NDMinesweeper {
   renderMultiDimensional(container) {
     const coords = this.generateSliceCoords();
     
-    if (this.dimensions === 5) {
-      // Special handling for 5D - group by highest dimension
+    if (this.dimensions === 3) {
+      // 3D: All slices in one row
+      coords.forEach((sliceCoords, index) => {
+        const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
+        
+        const label = document.createElement('div');
+        label.className = 'board-label';
+        label.textContent = this.getSliceLabel(sliceCoords);
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = 'board-wrapper';
+        wrapper.appendChild(label);
+        wrapper.appendChild(board);
+        
+        wrapper.style.opacity = '0';
+        wrapper.style.animation = `fadeIn 0.3s ease ${index * 50}ms forwards`;
+        
+        container.appendChild(wrapper);
+      });
+      
+    } else if (this.dimensions === 4) {
+      // 4D: Group by W dimension, each row contains all Z slices
+      const grouped = {};
+      coords.forEach(coord => {
+        const w = coord[1]; // Group by W dimension
+        if (!grouped[w]) grouped[w] = [];
+        grouped[w].push(coord);
+      });
+      
+      // Create rows for each W value
+      Object.entries(grouped).forEach(([w, coordsGroup]) => {
+        const rowContainer = document.createElement('div');
+        rowContainer.className = 'dim4-row-container';
+        
+        const rowLabel = document.createElement('div');
+        rowLabel.className = 'dim4-row-label';
+        rowLabel.textContent = `W = ${w}`;
+        rowContainer.appendChild(rowLabel);
+        
+        const row = document.createElement('div');
+        row.className = 'dim4-row';
+        
+        coordsGroup.forEach((sliceCoords, index) => {
+          const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
+          
+          const label = document.createElement('div');
+          label.className = 'board-label';
+          label.textContent = `Z${sliceCoords[0]}`;
+          
+          const wrapper = document.createElement('div');
+          wrapper.className = 'board-wrapper';
+          wrapper.appendChild(label);
+          wrapper.appendChild(board);
+          
+          wrapper.style.opacity = '0';
+          wrapper.style.animation = `fadeIn 0.3s ease ${index * 30}ms forwards`;
+          
+          row.appendChild(wrapper);
+        });
+        
+        rowContainer.appendChild(row);
+        container.appendChild(rowContainer);
+      });
+      
+    } else if (this.dimensions === 5) {
+      // 5D: Group by V dimension, each containing a 4D layout
       const grouped = {};
       coords.forEach(coord => {
         const v = coord[2]; // Group by V dimension
@@ -437,48 +510,54 @@ class NDMinesweeper {
         megaLabel.textContent = `V = ${v}`;
         megaWrapper.appendChild(megaLabel);
         
-        const megaGrid = document.createElement('div');
-        megaGrid.className = 'mega-board-grid';
+        const megaContent = document.createElement('div');
+        megaContent.className = 'mega-board-content';
         
-        coordsGroup.forEach((sliceCoords, index) => {
-          const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
-          
-          const label = document.createElement('div');
-          label.className = 'board-label';
-          label.textContent = this.getSliceLabel(sliceCoords);
-          
-          const wrapper = document.createElement('div');
-          wrapper.className = 'board-wrapper';
-          wrapper.appendChild(label);
-          wrapper.appendChild(board);
-          
-          wrapper.style.animationDelay = `${index * 30}ms`;
-          wrapper.style.animation = 'fadeInUp 0.5s ease forwards';
-          
-          megaGrid.appendChild(wrapper);
+        // Group by W within each V
+        const wGrouped = {};
+        coordsGroup.forEach(coord => {
+          const w = coord[1];
+          if (!wGrouped[w]) wGrouped[w] = [];
+          wGrouped[w].push(coord);
         });
         
-        megaWrapper.appendChild(megaGrid);
+        // Create rows for each W value
+        Object.entries(wGrouped).forEach(([w, wCoordsGroup]) => {
+          const rowContainer = document.createElement('div');
+          rowContainer.className = 'dim4-row-container';
+          
+          const rowLabel = document.createElement('div');
+          rowLabel.className = 'dim4-row-label';
+          rowLabel.textContent = `W = ${w}`;
+          rowContainer.appendChild(rowLabel);
+          
+          const row = document.createElement('div');
+          row.className = 'dim4-row';
+          
+          wCoordsGroup.forEach((sliceCoords, index) => {
+            const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
+            
+            const label = document.createElement('div');
+            label.className = 'board-label';
+            label.textContent = `Z${sliceCoords[0]}`;
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'board-wrapper';
+            wrapper.appendChild(label);
+            wrapper.appendChild(board);
+            
+            wrapper.style.opacity = '0';
+            wrapper.style.animation = `fadeIn 0.3s ease ${index * 20}ms forwards`;
+            
+            row.appendChild(wrapper);
+          });
+          
+          rowContainer.appendChild(row);
+          megaContent.appendChild(rowContainer);
+        });
+        
+        megaWrapper.appendChild(megaContent);
         container.appendChild(megaWrapper);
-      });
-    } else {
-      // Regular handling for 3D and 4D
-      coords.forEach((sliceCoords, index) => {
-        const board = this.createBoard([this.sizes[0], this.sizes[1]], sliceCoords);
-        
-        const label = document.createElement('div');
-        label.className = 'board-label';
-        label.textContent = this.getSliceLabel(sliceCoords);
-        
-        const wrapper = document.createElement('div');
-        wrapper.className = 'board-wrapper';
-        wrapper.appendChild(label);
-        wrapper.appendChild(board);
-        
-        wrapper.style.animationDelay = `${index * 50}ms`;
-        wrapper.style.animation = 'fadeInUp 0.5s ease forwards';
-        
-        container.appendChild(wrapper);
       });
     }
   }
@@ -511,8 +590,8 @@ class NDMinesweeper {
 
   getSliceLabel(coords) {
     if (this.dimensions === 3) return `Z${coords[0]}`;
-    if (this.dimensions === 4) return `Z${coords[0]}W${coords[1]}`;
-    if (this.dimensions === 5) return `Z${coords[0]}W${coords[1]}`;
+    if (this.dimensions === 4) return `Z${coords[0]}`;
+    if (this.dimensions === 5) return `Z${coords[0]}`;
     return '';
   }
 
@@ -593,6 +672,13 @@ class NDMinesweeper {
         const coords = [x, y, ...extraCoords];
         const cell = this.game.getCell(coords);
         const cellElement = this.createCellElement(coords, cell);
+        
+        // Add classes for border control in 2D mode
+        if (this.dimensions === 2) {
+          if (x === gridSize[0] - 1) cellElement.classList.add('last-col');
+          if (y === gridSize[1] - 1) cellElement.classList.add('last-row');
+        }
+        
         board.appendChild(cellElement);
       }
     }
