@@ -1,3 +1,4 @@
+<!-- applets/minesweeper-nd/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,13 +30,14 @@
     }
     
     .header {
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.95);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid #334155;
       padding: 1rem 0;
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     }
     
     .header-content {
@@ -82,8 +84,8 @@
     .intro-section {
       text-align: center;
       color: #f8fafc;
-      padding: 3rem 2rem;
-      max-width: 800px;
+      padding: 2rem;
+      max-width: 900px;
       margin: 0 auto;
       position: relative;
       z-index: 1;
@@ -106,70 +108,121 @@
       line-height: 1.6;
     }
     
-    .instructions {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 0.75rem;
+    .quick-start {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 1rem;
       padding: 2rem;
       margin: 2rem auto;
-      max-width: 600px;
-      color: #f8fafc;
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      max-width: 700px;
+      backdrop-filter: blur(10px);
     }
     
-    .instructions h3 {
+    .quick-start h3 {
       margin-top: 0;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       color: #6366f1;
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
     }
     
-    .instructions ul {
-      margin: 0;
-      padding-left: 1.5rem;
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
     }
     
-    .instructions li {
-      margin-bottom: 0.75rem;
-      line-height: 1.6;
-      color: #cbd5e1;
+    .feature {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: 0.75rem;
+      border: 1px solid rgba(99, 102, 241, 0.1);
     }
     
-    .instructions strong {
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .feature h4 {
+      margin: 0 0 0.5rem 0;
       color: #f8fafc;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .feature p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #94a3b8;
+      line-height: 1.4;
     }
     
     .controls-hint {
       background: rgba(99, 102, 241, 0.1);
       border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      margin: 1rem auto;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin: 1.5rem auto;
       max-width: 600px;
       font-size: 0.875rem;
       color: #cbd5e1;
-      line-height: 1.5;
+      line-height: 1.6;
+    }
+    
+    .controls-hint h4 {
+      margin: 0 0 1rem 0;
+      color: #6366f1;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .shortcut {
+      display: inline-block;
+      background: rgba(30, 41, 59, 0.8);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      margin: 0 0.25rem;
     }
     
     @media (max-width: 768px) {
       .intro-section h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
       
       .intro-section {
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
       }
       
       .header-content {
         padding: 0 1rem;
       }
       
-      .instructions {
+      .quick-start {
         padding: 1.5rem;
+        margin: 1.5rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .controls-hint {
         margin: 1rem;
+        padding: 1rem;
       }
     }
   </style>
@@ -189,27 +242,53 @@
     <div class="intro-section">
       <h1>N-Dimensional Minesweeper</h1>
       <p>
-        Explore the classic minesweeper game in multiple dimensions! Navigate through 
-        hyperspace, from familiar 2D grids to mind-bending 4D and 5D spaces.
+        Experience the classic minesweeper game reimagined across multiple dimensions! 
+        From familiar 2D grids to mind-bending 4D and 5D hyperspaces.
       </p>
       
-      <div class="instructions">
-        <h3><i class="fas fa-gamepad"></i> How to Play</h3>
-        <ul>
-          <li><strong>First click is always safe</strong> - creates a flood-fill opening like Google</li>
-          <li><strong>Left-click</strong> to reveal cells, <strong>right-click</strong> to flag mines</li>
-          <li><strong>3D Mode:</strong> Toggle between grid slices and interactive 3D cube view</li>
-          <li><strong>Higher Dimensions:</strong> See all slices arranged in grids</li>
-          <li><strong>Numbers</strong> count neighboring mines across ALL dimensions</li>
-          <li><strong>Touch Support:</strong> Tap to reveal, long-press to flag on mobile</li>
-        </ul>
-      </div>
-      
-      <div class="controls-hint">
-        <strong>Keyboard Shortcuts:</strong> 
-        Press '3' to toggle 3D views, 'N' for new game, 'H' for hints. In 3D cube mode, 
-        use arrow keys or mouse drag to rotate. Hold Shift+R to auto-rotate.
-        Changing dimensions automatically starts a new game.
+      <div class="quick-start">
+        <h3><i class="fas fa-rocket"></i> Quick Start Guide</h3>
+        
+        <div class="features-grid">
+          <div class="feature">
+            <span class="feature-icon">🎯</span>
+            <h4>Smart First Click</h4>
+            <p>Your first click is always safe and creates a flood-fill opening</p>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🎮</span>
+            <h4>Intuitive Controls</h4>
+            <p>Left-click to reveal, right-click to flag mines, with full touch support</p>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🧊</span>
+            <h4>3D Interactive Cube</h4>
+            <p>Explore layers in immersive 3D with mouse/touch rotation controls</p>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🌌</span>
+            <h4>Higher Dimensions</h4>
+            <p>Navigate 4D and 5D spaces with organized grid layouts</p>
+          </div>
+        </div>
+        
+        <div class="controls-hint">
+          <h4><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h4>
+          <p>
+            <strong>Essential:</strong> 
+            <span class="shortcut">N</span> New Game • 
+            <span class="shortcut">H</span> Hint • 
+            <span class="shortcut">Space</span> Start/Restart
+            <br><br>
+            <strong>3D Navigation:</strong> 
+            <span class="shortcut">3</span> Toggle Cube View • 
+            <span class="shortcut">←/→</span> Change Layer • 
+            <span class="shortcut">R</span> Reset View • 
+            <span class="shortcut">Shift+R</span> Auto-Rotate
+            <br><br>
+            <strong>3D Cube:</strong> Drag to rotate, scroll wheel for layers, double-click to reset
+          </p>
+        </div>
       </div>
     </div>
 
