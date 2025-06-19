@@ -1,6 +1,14 @@
 {
   "applets": [
     {
+      "name": "Quantum Algorithm Visualizer",
+      "path": "quantum-visualizer",
+      "description": "Interactive quantum computing education - step through algorithms like Grover's search and Deutsch with real-time state visualization",
+      "category": "quantum computing",
+      "difficulty": "advanced",
+      "technologies": ["JavaScript", "Canvas API", "Linear Algebra", "Quantum Mechanics", "KaTeX"]
+    },
+    {
       "name": "Graph Laplacian Explorer",
       "path": "graph-laplacian",
       "description": "Interactive spectral graph theory visualization",

@@ -1,27 +1,36 @@
 // Service Worker for Jack Kinney Portfolio
 // Provides basic caching and offline functionality
 
-const CACHE_NAME = 'jtk-portfolio-v1.1.6'; // <-- Incremented version number
+const CACHE_NAME = 'jtk-portfolio-v1.2.0'; // <-- Updated version for quantum visualizer
 const urlsToCache = [
   '/',
   '/index.html',
-  '/projects.html', // Added projects page
+  '/projects.html',
   '/assets/css/style.css',
   '/assets/js/main.js',
   '/assets/images/profile.jpg',
   '/manifest.json',
+  '/applets/index.html',
+  '/applets/applet-registry.json',
+  // Graph Laplacian Explorer
   '/applets/graph-laplacian/index.html',
   '/applets/graph-laplacian/graph-engine.js',
   '/applets/graph-laplacian/visualizer.js',
   '/applets/graph-laplacian/eigenvalue-controls.js',
   '/applets/graph-laplacian/style.css',
+  // N-Dimensional Minesweeper
   '/applets/minesweeper-nd/index.html',
   '/applets/minesweeper-nd/nd-minesweeper.js',
   '/applets/minesweeper-nd/dimension-visualizer.js',
   '/applets/minesweeper-nd/style.css',
-  // Add other critical resources here
-  '[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap)',
-  '[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)'
+  // Quantum Algorithm Visualizer
+  '/applets/quantum-visualizer/index.html',
+  '/applets/quantum-visualizer/quantum-visualizer.js',
+  '/applets/quantum-visualizer/style.css',
+  // External dependencies
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css'
 ];
 
 // Install event - cache resources
@@ -68,6 +77,32 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   // Only handle same-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
+    // For external resources (fonts, CDNs), try network first, fallback to cache
+    if (event.request.url.includes('fonts.googleapis.com') ||
+        event.request.url.includes('cdnjs.cloudflare.com') ||
+        event.request.url.includes('cdn.jsdelivr.net')) {
+      
+      event.respondWith(
+        fetch(event.request)
+          .then((response) => {
+            // Clone and cache successful responses
+            if (response.ok) {
+              const responseToCache = response.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+            }
+            return response;
+          })
+          .catch(() => {
+            // Fallback to cache if network fails
+            return caches.match(event.request);
+          })
+      );
+      return;
+    }
+    
+    // For other external requests, just try network
     return;
   }
 
@@ -127,7 +162,7 @@ self.addEventListener('push', (event) => {
   console.log('Service Worker: Push event received');
 
   const options = {
-    body: event.data ? event.data.text() : 'New notification',
+    body: event.data ? event.data.text() : 'New quantum algorithm available!',
     icon: './assets/images/icons/icon-192x192.png',
     badge: './assets/images/icons/icon-72x72.png',
     tag: 'portfolio-notification',
@@ -140,8 +175,8 @@ self.addEventListener('push', (event) => {
         icon: './assets/images/icons/icon-72x72.png'
       },
       {
-        action: 'close',
-        title: 'Close',
+        action: 'quantum',
+        title: 'Try Quantum Visualizer',
         icon: './assets/images/icons/icon-72x72.png'
       }
     ]
@@ -162,6 +197,10 @@ self.addEventListener('notificationclick', (event) => {
     event.waitUntil(
       clients.openWindow('/')
     );
+  } else if (event.action === 'quantum') {
+    event.waitUntil(
+      clients.openWindow('/applets/quantum-visualizer/index.html')
+    );
   }
 });
 
@@ -175,4 +214,15 @@ self.addEventListener('unhandledrejection', (event) => {
   console.error('Service Worker: Unhandled promise rejection:', event.reason);
 });
 
-console.log('Service Worker: Script loaded successfully');
+// Message handling for cache updates
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  if (event.data && event.data.type === 'GET_VERSION') {
+    event.ports[0].postMessage({ version: CACHE_NAME });
+  }
+});
+
+console.log('Service Worker: Script loaded successfully with quantum visualizer support');

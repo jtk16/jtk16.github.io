@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive quantum algorithm visualizer - Learn quantum computing through step-by-step algorithm visualization">
+  <meta name="keywords" content="quantum computing, quantum algorithms, visualization, education, Grover, Deutsch, quantum gates">
+  <meta name="author" content="Jack Kinney">
+  
+  <title>Quantum Algorithm Visualizer — Jack Kinney</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- KaTeX for mathematical notation -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="../../index.html" class="logo">&lt;JTK/&gt;</a>
+      <div class="header-title">
+        <h1>🌌 Quantum Algorithm Visualizer</h1>
+        <p>Interactive quantum computing education</p>
+      </div>
+      <a href="../../projects.html" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Projects
+      </a>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Quick Start Guide -->
+    <div class="intro-section">
+      <div class="quick-start">
+        <h3><i class="fas fa-rocket"></i> Quick Start Guide</h3>
+        <div class="features-grid">
+          <div class="feature">
+            <span class="feature-icon">🎯</span>
+            <h4>Choose Algorithm</h4>
+            <p>Select from basic gates to advanced algorithms like Grover's search</p>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">▶️</span>
+            <h4>Step Through</h4>
+            <p>Watch quantum states evolve with each gate operation</p>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">📊</span>
+            <h4>Visualize States</h4>
+            <p>See amplitudes, phases, and probabilities in real-time</p>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🧠</span>
+            <h4>Learn Concepts</h4>
+            <p>Understand quantum mechanics through interactive exploration</p>
+          </div>
+        </div>
+        
+        <div class="controls-hint">
+          <h4><i class="fas fa-keyboard"></i> Controls</h4>
+          <p>
+            <span class="shortcut">Space</span> Play/Pause • 
+            <span class="shortcut">→</span> Step Forward • 
+            <span class="shortcut">←</span> Step Back • 
+            <span class="shortcut">R</span> Reset • 
+            <span class="shortcut">H</span> Help
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="quantum-visualizer" id="quantum-app">
+      <!-- Top Controls -->
+      <div class="top-controls">
+        <div class="algorithm-section">
+          <label for="algorithm-select">Algorithm:</label>
+          <select id="algorithm-select" class="algorithm-select">
+            <optgroup label="🔰 Basics">
+              <option value="single-qubit">Single Qubit Gates</option>
+              <option value="two-qubit">Two Qubit Gates</option>
+              <option value="bell-states">Bell States</option>
+            </optgroup>
+            <optgroup label="🚀 Algorithms">
+              <option value="deutsch">Deutsch Algorithm</option>
+              <option value="grovers" selected>Grover's Search</option>
+              <option value="qft">Quantum Fourier Transform</option>
+              <option value="teleportation">Quantum Teleportation</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="playback-controls">
+          <button id="step-back" class="control-btn" title="Step Back (←)">
+            <i class="fas fa-step-backward"></i>
+          </button>
+          <button id="play-pause" class="control-btn primary" title="Play/Pause (Space)">
+            <i class="fas fa-play"></i>
+          </button>
+          <button id="step-forward" class="control-btn" title="Step Forward (→)">
+            <i class="fas fa-step-forward"></i>
+          </button>
+          <button id="reset" class="control-btn" title="Reset (R)">
+            <i class="fas fa-undo"></i>
+          </button>
+        </div>
+
+        <div class="speed-control">
+          <label for="speed-slider">Speed:</label>
+          <input type="range" id="speed-slider" min="0.25" max="3" step="0.25" value="1" class="speed-slider">
+          <span id="speed-display">1x</span>
+        </div>
+
+        <div class="help-section">
+          <button id="guided-tour" class="control-btn" title="Guided Tour">
+            <i class="fas fa-route"></i>
+          </button>
+          <button id="help" class="control-btn" title="Help (H)">
+            <i class="fas fa-question"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="step-counter">
+          <span id="current-step">0</span> / <span id="total-steps">0</span>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="content-grid">
+        <!-- Circuit Panel -->
+        <div class="panel circuit-panel">
+          <div class="panel-header">
+            <h3><i class="fas fa-sitemap"></i> Quantum Circuit</h3>
+            <div class="panel-controls">
+              <button id="circuit-zoom-in" class="panel-btn" title="Zoom In">
+                <i class="fas fa-search-plus"></i>
+              </button>
+              <button id="circuit-zoom-out" class="panel-btn" title="Zoom Out">
+                <i class="fas fa-search-minus"></i>
+              </button>
+              <button id="circuit-reset-zoom" class="panel-btn" title="Reset Zoom">
+                <i class="fas fa-expand-arrows-alt"></i>
+              </button>
+            </div>
+          </div>
+          <div class="panel-content">
+            <div class="circuit-container" id="circuit-container">
+              <svg id="circuit-svg" class="circuit-svg"></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- State Visualization Panel -->
+        <div class="panel state-panel">
+          <div class="panel-header">
+            <h3><i class="fas fa-wave-square"></i> Quantum State</h3>
+            <div class="view-tabs">
+              <button class="tab-btn active" data-view="amplitudes">Amplitudes</button>
+              <button class="tab-btn" data-view="bloch">Bloch</button>
+              <button class="tab-btn" data-view="matrix">Matrix</button>
+            </div>
+          </div>
+          <div class="panel-content">
+            <!-- Amplitude View -->
+            <div class="state-view active" id="amplitudes-view">
+              <div class="amplitudes-container" id="amplitudes-container">
+                <!-- Amplitude bars will be generated here -->
+              </div>
+            </div>
+
+            <!-- Bloch Sphere View -->
+            <div class="state-view" id="bloch-view">
+              <div class="bloch-container">
+                <canvas id="bloch-canvas" class="bloch-canvas"></canvas>
+                <div class="bloch-info">
+                  <div class="coordinate-display">
+                    <div class="coord">x: <span id="bloch-x">0.000</span></div>
+                    <div class="coord">y: <span id="bloch-y">0.000</span></div>
+                    <div class="coord">z: <span id="bloch-z">1.000</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Matrix View -->
+            <div class="state-view" id="matrix-view">
+              <div class="matrix-container">
+                <div class="state-vector" id="state-vector">
+                  <!-- State vector will be rendered here -->
+                </div>
+                <div class="gate-matrix" id="gate-matrix">
+                  <!-- Current gate matrix will be rendered here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Information Panel -->
+        <div class="panel info-panel">
+          <div class="panel-header">
+            <h3><i class="fas fa-info-circle"></i> Information</h3>
+            <div class="info-tabs">
+              <button class="tab-btn active" data-info="explanation">Explanation</button>
+              <button class="tab-btn" data-info="math">Mathematics</button>
+              <button class="tab-btn" data-info="concepts">Concepts</button>
+            </div>
+          </div>
+          <div class="panel-content">
+            <!-- Explanation Tab -->
+            <div class="info-view active" id="explanation-view">
+              <div class="algorithm-description">
+                <h4 id="algorithm-title">Grover's Search Algorithm</h4>
+                <p id="algorithm-overview">
+                  Grover's algorithm provides a quadratic speedup for searching unsorted databases...
+                </p>
+              </div>
+              
+              <div class="step-explanation">
+                <h4 id="step-title">Step 1: Initialize Superposition</h4>
+                <p id="step-description">
+                  Apply Hadamard gates to create an equal superposition of all possible states...
+                </p>
+              </div>
+
+              <div class="progress-info">
+                <div class="metric">
+                  <span class="metric-label">Success Probability:</span>
+                  <span class="metric-value" id="success-probability">0%</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Current State:</span>
+                  <span class="metric-value" id="current-state">|000⟩</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Target State:</span>
+                  <span class="metric-value" id="target-state">|111⟩</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mathematics Tab -->
+            <div class="info-view" id="math-view">
+              <div class="math-section">
+                <h4>Current Operation</h4>
+                <div class="math-expression" id="current-math">
+                  <!-- Mathematical expressions rendered with KaTeX -->
+                </div>
+              </div>
+              
+              <div class="math-section">
+                <h4>State Evolution</h4>
+                <div class="math-expression" id="state-math">
+                  <!-- State evolution equations -->
+                </div>
+              </div>
+
+              <div class="math-section">
+                <h4>Probability Calculation</h4>
+                <div class="math-expression" id="probability-math">
+                  <!-- Probability calculations -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Concepts Tab -->
+            <div class="info-view" id="concepts-view">
+              <div class="concept-list">
+                <div class="concept-item">
+                  <h4>🌊 Superposition</h4>
+                  <p>A quantum system can exist in multiple states simultaneously until measured.</p>
+                </div>
+                <div class="concept-item">
+                  <h4>🔗 Entanglement</h4>
+                  <p>Quantum particles can be correlated in ways that have no classical analog.</p>
+                </div>
+                <div class="concept-item">
+                  <h4>🎯 Amplitude Amplification</h4>
+                  <p>Grover's algorithm selectively amplifies the amplitude of target states.</p>
+                </div>
+                <div class="concept-item">
+                  <h4>📏 Measurement</h4>
+                  <p>Quantum measurement collapses the superposition to a definite classical state.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Measurement Results Modal -->
+      <div class="measurement-modal" id="measurement-modal" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>🎯 Measurement Results</h3>
+            <button class="modal-close" id="modal-close">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="measurement-result" id="measurement-result">
+              <!-- Measurement outcome will be displayed here -->
+            </div>
+            <div class="probability-breakdown" id="probability-breakdown">
+              <!-- Probability breakdown will be shown here -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" id="measure-again">Measure Again</button>
+            <button class="btn btn-secondary" id="continue-algorithm">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="spinner"></div>
+      <p>Initializing quantum system...</p>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script type="module" src="quantum-visualizer.js"></script>
+</body>
+</html>
