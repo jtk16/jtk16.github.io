@@ -598,7 +598,6 @@ export class BlochSphere {
   getQuantumAmplitudes() {
     const angles = this.getBlochAngles();
     const alpha = Math.cos(angles.theta / 2);
-    const beta = Math.sin(angles.theta / 2) * Math.exp(1i * angles.phi);
     
     return {
       alpha: {real: alpha, imag: 0},
