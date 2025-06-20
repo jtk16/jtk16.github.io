@@ -577,68 +577,6 @@ body::before {
   display: block;
 }
 
-/* Circuit SVG Styles */
-.qubit-line {
-  stroke: var(--text-muted);
-  stroke-width: 2;
-  fill: none;
-}
-
-.gate {
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.gate:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
-}
-
-.gate-box {
-  fill: var(--quantum-primary);
-  stroke: var(--border-light);
-  stroke-width: 2;
-  rx: 4;
-}
-
-.gate-text {
-  fill: white;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 600;
-  text-anchor: middle;
-  dominant-baseline: central;
-}
-
-.measurement-box {
-  fill: var(--bg-input);
-  stroke: var(--border-light);
-  stroke-width: 2;
-  rx: 4;
-}
-
-.control-dot {
-  fill: var(--quantum-primary);
-  stroke: var(--border-light);
-  stroke-width: 2;
-}
-
-.control-line {
-  stroke: var(--quantum-primary);
-  stroke-width: 2;
-}
-
-.gate.active .gate-box {
-  fill: var(--quantum-secondary);
-  stroke: var(--quantum-secondary);
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
-}
-
-.gate.completed .gate-box {
-  fill: var(--quantum-success);
-  stroke: var(--quantum-success);
-}
-
 /* ===== STATE VISUALIZATION ===== */
 .state-view {
   display: none;
@@ -649,90 +587,338 @@ body::before {
   display: block;
 }
 
-/* Amplitudes View */
-.amplitudes-container {
+/* State Visualizer Styles */
+.state-visualizer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.state-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.mode-selector {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.mode-btn {
+  padding: var(--space-1) var(--space-3);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.mode-btn:hover {
+  background: var(--bg-panel-hover);
+  color: var(--text-primary);
+}
+
+.mode-btn.active {
+  background: var(--quantum-primary);
+  color: white;
+  border-color: var(--quantum-primary);
+}
+
+.sort-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sort-selector span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sort-select {
+  padding: var(--space-1) var(--space-2);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+}
+
+.state-content {
+  flex: 1;
+  overflow: auto;
+  padding: var(--space-4);
+}
+
+.bars-container {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  height: 100%;
 }
 
-.amplitude-bar {
+.state-bar {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2);
+  padding: var(--space-3);
   background: var(--bg-input);
   border-radius: var(--radius);
   transition: var(--transition);
+  cursor: pointer;
 }
 
-.amplitude-bar:hover {
+.state-bar:hover {
   background: var(--bg-panel-hover);
   transform: translateX(2px);
 }
 
-.amplitude-label {
+.state-bar.hovered {
+  border: 1px solid var(--quantum-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.bar-label {
+  min-width: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.binary-label {
   font-family: var(--font-mono);
   font-weight: 600;
   color: var(--text-primary);
-  min-width: 3rem;
+  font-size: 0.875rem;
 }
 
-.amplitude-visual {
-  flex: 1;
-  height: 20px;
-  background: var(--bg-primary);
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
-}
-
-.amplitude-fill {
-  height: 100%;
-  border-radius: 10px;
-  transition: width 0.5s ease, background-color 0.3s ease;
-  position: relative;
-}
-
-.amplitude-fill.positive {
-  background: linear-gradient(90deg, var(--amplitude-positive), var(--quantum-primary));
-}
-
-.amplitude-fill.negative {
-  background: linear-gradient(90deg, var(--amplitude-negative), var(--quantum-secondary));
-}
-
-.amplitude-value {
+.decimal-label {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-muted);
-  min-width: 4rem;
-  text-align: right;
 }
 
-.probability-value {
+.bar-visual {
+  flex: 1;
+  min-width: 0;
+}
+
+.amplitude-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.amplitude-component {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.component-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 1.5rem;
+}
+
+.component-bar {
+  flex: 1;
+  height: 12px;
+  background: var(--bg-primary);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.component-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.5s ease, background-color 0.3s ease;
+}
+
+.component-fill.positive {
+  background: linear-gradient(90deg, var(--amplitude-positive), var(--quantum-primary));
+}
+
+.component-fill.negative {
+  background: linear-gradient(90deg, var(--amplitude-negative), var(--quantum-secondary));
+}
+
+.component-value {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--probability-color);
+  color: var(--text-muted);
   min-width: 3rem;
   text-align: right;
 }
 
-/* Bloch Sphere View */
+.probability-bar {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.probability-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--probability-color), var(--quantum-success));
+  border-radius: 12px;
+  transition: width 0.5s ease;
+}
+
+.probability-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.phase-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.phase-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid var(--border);
+}
+
+.phase-arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 12px;
+  background: white;
+  transform-origin: bottom center;
+  transform: translate(-50%, -100%);
+}
+
+.phase-value {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+.bar-values {
+  min-width: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.value-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.value-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.value-number {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  margin-bottom: var(--space-2);
+  color: var(--text-secondary);
+}
+
+/* Tooltips */
+.state-tooltip {
+  position: absolute;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  max-width: 250px;
+}
+
+.tooltip-header {
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  color: var(--quantum-primary);
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tooltip-row span:first-child {
+  color: var(--text-muted);
+}
+
+.tooltip-row span:last-child {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* Bloch Sphere */
 .bloch-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100%;
+  padding: var(--space-4);
 }
 
 .bloch-canvas {
-  width: 300px;
-  height: 300px;
   border-radius: var(--radius);
   background: var(--bg-primary);
   cursor: grab;
+  border: 1px solid var(--border);
 }
 
 .bloch-canvas:active {
@@ -781,26 +967,6 @@ body::before {
   margin-bottom: var(--space-3);
   color: var(--text-primary);
   font-size: 0.875rem;
-}
-
-.matrix {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.6;
-  color: var(--text-primary);
-}
-
-.complex-number {
-  display: inline-block;
-  margin-right: var(--space-2);
-}
-
-.complex-real {
-  color: var(--amplitude-positive);
-}
-
-.complex-imaginary {
-  color: var(--phase-color);
 }
 
 /* ===== INFORMATION PANEL ===== */
@@ -880,6 +1046,8 @@ body::before {
   border-radius: var(--radius);
   padding: var(--space-4);
   overflow-x: auto;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
 }
 
 .concept-list {
@@ -907,8 +1075,11 @@ body::before {
   line-height: 1.5;
 }
 
-/* ===== MEASUREMENT MODAL ===== */
-.measurement-modal {
+/* ===== MODALS ===== */
+.measurement-modal,
+.state-detail-modal,
+.error-modal,
+.tutorial-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -969,6 +1140,7 @@ body::before {
 
 .modal-body {
   padding: var(--space-6);
+  overflow-y: auto;
 }
 
 .modal-footer {
@@ -1009,6 +1181,44 @@ body::before {
 .btn-secondary:hover {
   background: var(--bg-panel-hover);
   border-color: var(--border-light);
+}
+
+/* Tutorial Overlay */
+.tutorial-overlay .modal-content {
+  max-width: 600px;
+}
+
+.tutorial-content {
+  padding: var(--space-6);
+}
+
+.tutorial-content h3 {
+  margin-bottom: var(--space-4);
+  color: var(--quantum-primary);
+  text-align: center;
+}
+
+.tutorial-section {
+  margin-bottom: var(--space-6);
+}
+
+.tutorial-section h4 {
+  margin-bottom: var(--space-3);
+  color: var(--text-primary);
+}
+
+.tutorial-section ul {
+  padding-left: var(--space-4);
+  color: var(--text-secondary);
+}
+
+.tutorial-section li {
+  margin-bottom: var(--space-1);
+}
+
+.tutorial-actions {
+  text-align: center;
+  margin-top: var(--space-6);
 }
 
 /* ===== LOADING OVERLAY ===== */
@@ -1060,17 +1270,6 @@ body::before {
   to { 
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
