@@ -1,5 +1,5 @@
 // visualization/state-visualizer.js
-// Quantum state amplitude and probability visualization
+// Enhanced quantum state visualization with better performance and clear limits
 
 import { QuantumMath } from '../utils/quantum-math.js';
 
@@ -8,7 +8,8 @@ export class StateVisualizer {
     this.container = container;
     this.currentState = null;
     this.animationDuration = 300;
-    this.maxBars = 16; // Limit for performance
+    this.maxBars = 32; // Increased limit with clear communication
+    this.showTruncationWarning = false;
     
     this.config = {
       colors: {
@@ -17,7 +18,8 @@ export class StateVisualizer {
         positiveImag: '#8b5cf6',
         negativeImag: '#f59e0b',
         probability: '#10b981',
-        phase: '#ec4899'
+        phase: '#ec4899',
+        truncated: '#64748b'
       },
       barHeight: 30,
       spacing: 8,
@@ -69,7 +71,7 @@ export class StateVisualizer {
     
     header.appendChild(modeSelector);
     
-    // Sort options
+    // Sort and display options
     const sortSelector = document.createElement('div');
     sortSelector.className = 'sort-selector';
     
@@ -98,11 +100,48 @@ export class StateVisualizer {
     sortSelector.appendChild(sortSelect);
     header.appendChild(sortSelector);
     
+    // Display limit selector
+    const limitSelector = document.createElement('div');
+    limitSelector.className = 'limit-selector';
+    
+    const limitLabel = document.createElement('span');
+    limitLabel.textContent = 'Show:';
+    limitSelector.appendChild(limitLabel);
+    
+    const limitSelect = document.createElement('select');
+    limitSelect.className = 'limit-select';
+    
+    const limitOptions = [
+      { value: '8', label: 'Top 8' },
+      { value: '16', label: 'Top 16' },
+      { value: '32', label: 'Top 32' },
+      { value: 'all', label: 'All States' }
+    ];
+    
+    limitOptions.forEach(option => {
+      const optionElement = document.createElement('option');
+      optionElement.value = option.value;
+      optionElement.textContent = option.label;
+      if (option.value === '16') optionElement.selected = true;
+      limitSelect.appendChild(optionElement);
+    });
+    
+    limitSelect.addEventListener('change', () => {
+      this.maxBars = limitSelect.value === 'all' ? Infinity : parseInt(limitSelect.value);
+      if (this.currentState) {
+        this.updateState(this.currentState);
+      }
+    });
+    
+    limitSelector.appendChild(limitSelect);
+    header.appendChild(limitSelector);
+    
     this.container.appendChild(header);
     
     // Store references
     this.modeButtons = modeSelector.querySelectorAll('.mode-btn');
     this.sortSelect = sortSelect;
+    this.limitSelect = limitSelect;
     this.currentMode = 'amplitude';
     this.currentSort = 'index';
   }
@@ -145,27 +184,73 @@ export class StateVisualizer {
       return;
     }
     
-    // Limit number of bars for performance
-    const displayState = state.length > this.maxBars ? 
-      this.getTopStates(state, this.maxBars) : state;
+    // Check if we need to truncate and warn user
+    this.showTruncationWarning = state.length > this.maxBars && this.maxBars !== Infinity;
     
-    this.renderBars(displayState);
+    // Get states to display (either all or top N by probability)
+    const displayStates = this.getStatesToDisplay(state);
+    
+    this.renderBars(displayStates);
+    
+    // Show truncation warning if needed
+    if (this.showTruncationWarning) {
+      this.showTruncationInfo(state.length, displayStates.length);
+    }
   }
 
-  getTopStates(state, count) {
-    // Get indices sorted by probability
-    const indices = Array.from({length: state.length}, (_, i) => i);
-    indices.sort((a, b) => {
-      const probA = state[a].real * state[a].real + state[a].imag * state[a].imag;
-      const probB = state[b].real * state[b].real + state[b].imag * state[b].imag;
-      return probB - probA;
-    });
+  getStatesToDisplay(state) {
+    if (this.maxBars === Infinity || state.length <= this.maxBars) {
+      return state.map((amplitude, index) => ({...amplitude, originalIndex: index}));
+    }
     
-    // Return top states with their original indices
-    return indices.slice(0, count).map(i => ({
-      ...state[i],
-      originalIndex: i
+    // Calculate probabilities and get top N states
+    const statesWithProb = state.map((amplitude, index) => ({
+      amplitude,
+      originalIndex: index,
+      probability: QuantumMath.complexMagnitude(amplitude) ** 2
     }));
+    
+    // Sort by probability (descending) and take top maxBars
+    statesWithProb.sort((a, b) => b.probability - a.probability);
+    
+    return statesWithProb.slice(0, this.maxBars).map(item => ({
+      ...item.amplitude,
+      originalIndex: item.originalIndex
+    }));
+  }
+
+  showTruncationInfo(totalStates, shownStates) {
+    let infoElement = this.content.querySelector('.truncation-info');
+    
+    if (!infoElement) {
+      infoElement = document.createElement('div');
+      infoElement.className = 'truncation-info';
+      this.content.insertBefore(infoElement, this.content.firstChild);
+    }
+    
+    const hiddenStates = totalStates - shownStates;
+    const maxQubits = Math.log2(this.maxBars);
+    
+    infoElement.innerHTML = `
+      <div class="info-banner">
+        <i class="fas fa-info-circle"></i>
+        <span>
+          Showing top ${shownStates} of ${totalStates} states (${hiddenStates} hidden). 
+          For better performance with ${Math.log2(totalStates)}-qubit systems, 
+          increase the limit or focus on states with higher probability.
+        </span>
+        <button class="btn-show-all" onclick="this.parentElement.parentElement.parentElement.querySelector('.limit-select').value='all'; this.parentElement.parentElement.parentElement.querySelector('.limit-select').dispatchEvent(new Event('change'))">
+          Show All
+        </button>
+      </div>
+    `;
+  }
+
+  removeTruncationInfo() {
+    const infoElement = this.content.querySelector('.truncation-info');
+    if (infoElement) {
+      infoElement.remove();
+    }
   }
 
   showEmptyState() {
@@ -181,6 +266,16 @@ export class StateVisualizer {
   renderBars(state) {
     // Clear previous content
     this.content.innerHTML = '';
+    
+    // Remove truncation info if not needed
+    if (!this.showTruncationWarning) {
+      this.removeTruncationInfo();
+    }
+    
+    // Show truncation info if needed
+    if (this.showTruncationWarning) {
+      this.showTruncationInfo(this.currentState.length, state.length);
+    }
     
     // Create container for bars
     const barsContainer = document.createElement('div');
@@ -203,7 +298,7 @@ export class StateVisualizer {
   }
 
   processStateData(state) {
-    const numQubits = Math.log2(state.length);
+    const numQubits = Math.log2(this.currentState.length);
     
     return state.map((amplitude, index) => {
       const originalIndex = amplitude.originalIndex !== undefined ? amplitude.originalIndex : index;
@@ -243,6 +338,11 @@ export class StateVisualizer {
     const barElement = document.createElement('div');
     barElement.className = 'state-bar';
     barElement.dataset.index = stateData.index;
+    
+    // Add truncated indicator if this state was in the truncated set
+    if (this.showTruncationWarning && stateData.probability < 0.001) {
+      barElement.classList.add('truncated-state');
+    }
     
     // Create bar structure
     barElement.innerHTML = `
@@ -290,7 +390,7 @@ export class StateVisualizer {
             <div class="component-fill ${stateData.real >= 0 ? 'positive' : 'negative'}" 
                  style="width: ${realWidth}%"></div>
           </div>
-          <div class="component-value">${stateData.real.toFixed(3)}</div>
+          <div class="component-value">${QuantumMath.formatNumber(stateData.real, 3)}</div>
         </div>
         <div class="amplitude-component imaginary">
           <div class="component-label">Im:</div>
@@ -298,7 +398,7 @@ export class StateVisualizer {
             <div class="component-fill ${stateData.imag >= 0 ? 'positive' : 'negative'}" 
                  style="width: ${imagWidth}%"></div>
           </div>
-          <div class="component-value">${stateData.imag.toFixed(3)}</div>
+          <div class="component-value">${QuantumMath.formatNumber(stateData.imag, 3)}</div>
         </div>
       </div>
     `;
@@ -306,11 +406,12 @@ export class StateVisualizer {
 
   createProbabilityVisualization(stateData) {
     const width = stateData.probability * 100;
+    const isSignificant = stateData.probability > 0.001;
     
     return `
-      <div class="probability-bar">
+      <div class="probability-bar ${!isSignificant ? 'low-probability' : ''}">
         <div class="probability-fill" style="width: ${width}%"></div>
-        <div class="probability-text">${(stateData.probability * 100).toFixed(1)}%</div>
+        <div class="probability-text">${QuantumMath.formatPercentage(stateData.probability, 2)}</div>
       </div>
     `;
   }
@@ -318,42 +419,58 @@ export class StateVisualizer {
   createPhaseVisualization(stateData) {
     const normalizedPhase = ((stateData.phase % 360) + 360) % 360;
     const hue = normalizedPhase;
-    const saturation = stateData.magnitude * 100;
+    const saturation = Math.min(stateData.magnitude * 100, 100);
     const lightness = 50;
     
     return `
       <div class="phase-bar">
         <div class="phase-circle" 
-             style="background: hsl(${hue}, ${saturation}%, ${lightness}%)">
+             style="background: hsl(${hue}, ${saturation}%, ${lightness}%); opacity: ${Math.max(stateData.magnitude, 0.1)}">
           <div class="phase-arrow" 
-               style="transform: rotate(${normalizedPhase}deg)"></div>
+               style="transform: translate(-50%, -100%) rotate(${normalizedPhase}deg)"></div>
         </div>
-        <div class="phase-value">${normalizedPhase.toFixed(1)}°</div>
+        <div class="phase-value">${QuantumMath.formatNumber(normalizedPhase, 1)}°</div>
       </div>
     `;
   }
 
   createBarValues(stateData) {
+    const magnitude = QuantumMath.formatNumber(stateData.magnitude, 4);
+    const probability = QuantumMath.formatPercentage(stateData.probability, 2);
+    const phase = QuantumMath.formatNumber(stateData.phase, 1);
+    
     switch (this.currentMode) {
       case 'amplitude':
         return `
           <div class="value-item">
             <span class="value-label">|ψ|:</span>
-            <span class="value-number">${stateData.magnitude.toFixed(3)}</span>
+            <span class="value-number">${magnitude}</span>
+          </div>
+          <div class="value-item">
+            <span class="value-label">P:</span>
+            <span class="value-number">${probability}</span>
           </div>
         `;
       case 'probability':
         return `
           <div class="value-item">
             <span class="value-label">P:</span>
-            <span class="value-number">${(stateData.probability * 100).toFixed(1)}%</span>
+            <span class="value-number">${probability}</span>
+          </div>
+          <div class="value-item">
+            <span class="value-label">|ψ|:</span>
+            <span class="value-number">${magnitude}</span>
           </div>
         `;
       case 'phase':
         return `
           <div class="value-item">
             <span class="value-label">φ:</span>
-            <span class="value-number">${stateData.phase.toFixed(1)}°</span>
+            <span class="value-number">${phase}°</span>
+          </div>
+          <div class="value-item">
+            <span class="value-label">|ψ|:</span>
+            <span class="value-number">${magnitude}</span>
           </div>
         `;
       default:
@@ -385,7 +502,7 @@ export class StateVisualizer {
 
   showTooltip(event, stateData) {
     const tooltipContent = `
-      <div class="tooltip-header">State |${stateData.binaryLabel}⟩</div>
+      <div class="tooltip-header">State |${stateData.binaryLabel}⟩ (Index ${stateData.index})</div>
       <div class="tooltip-content">
         <div class="tooltip-row">
           <span>Complex Amplitude:</span>
@@ -393,15 +510,19 @@ export class StateVisualizer {
         </div>
         <div class="tooltip-row">
           <span>Magnitude:</span>
-          <span>${stateData.magnitude.toFixed(4)}</span>
+          <span>${QuantumMath.formatNumber(stateData.magnitude, 4)}</span>
         </div>
         <div class="tooltip-row">
           <span>Probability:</span>
-          <span>${(stateData.probability * 100).toFixed(2)}%</span>
+          <span>${QuantumMath.formatPercentage(stateData.probability, 3)}</span>
         </div>
         <div class="tooltip-row">
           <span>Phase:</span>
-          <span>${stateData.phase.toFixed(1)}°</span>
+          <span>${QuantumMath.formatNumber(stateData.phase, 2)}°</span>
+        </div>
+        <div class="tooltip-row">
+          <span>Polar Form:</span>
+          <span>${QuantumMath.formatNumber(stateData.magnitude, 3)}∠${QuantumMath.formatNumber(stateData.phase, 1)}°</span>
         </div>
       </div>
     `;
@@ -416,8 +537,23 @@ export class StateVisualizer {
     const x = event.clientX - rect.left + 10;
     const y = event.clientY - rect.top - 10;
     
-    this.tooltip.style.left = `${x}px`;
-    this.tooltip.style.top = `${y}px`;
+    // Keep tooltip within container bounds
+    const tooltipRect = this.tooltip.getBoundingClientRect();
+    const containerRect = this.container.getBoundingClientRect();
+    
+    let finalX = x;
+    let finalY = y;
+    
+    if (x + tooltipRect.width > containerRect.width) {
+      finalX = x - tooltipRect.width - 20;
+    }
+    
+    if (y + tooltipRect.height > containerRect.height) {
+      finalY = y - tooltipRect.height - 20;
+    }
+    
+    this.tooltip.style.left = `${Math.max(0, finalX)}px`;
+    this.tooltip.style.top = `${Math.max(0, finalY)}px`;
   }
 
   hideTooltip() {
@@ -425,7 +561,7 @@ export class StateVisualizer {
   }
 
   showDetailedView(stateData) {
-    // Create modal with detailed information
+    // Create modal with comprehensive state information
     const modal = document.createElement('div');
     modal.className = 'state-detail-modal';
     modal.innerHTML = `
@@ -439,35 +575,42 @@ export class StateVisualizer {
           <div class="detail-section">
             <h4>Complex Representation</h4>
             <div class="complex-display">
-              ${QuantumMath.formatComplex(stateData.amplitude, 6)}
-            </div>
-          </div>
-          
-          <div class="detail-section">
-            <h4>Polar Form</h4>
-            <div class="polar-display">
-              ${stateData.magnitude.toFixed(6)} × e^(i × ${(stateData.phase * Math.PI / 180).toFixed(4)})
+              <strong>Rectangular:</strong> ${QuantumMath.formatComplex(stateData.amplitude, 6)}<br>
+              <strong>Polar:</strong> ${QuantumMath.formatNumber(stateData.magnitude, 6)} × e^(i × ${QuantumMath.formatNumber(stateData.phase * Math.PI / 180, 4)})
             </div>
           </div>
           
           <div class="detail-section">
             <h4>Properties</h4>
             <table class="properties-table">
-              <tr><td>Real Part:</td><td>${stateData.real.toFixed(6)}</td></tr>
-              <tr><td>Imaginary Part:</td><td>${stateData.imag.toFixed(6)}</td></tr>
-              <tr><td>Magnitude:</td><td>${stateData.magnitude.toFixed(6)}</td></tr>
-              <tr><td>Phase (degrees):</td><td>${stateData.phase.toFixed(2)}°</td></tr>
-              <tr><td>Phase (radians):</td><td>${(stateData.phase * Math.PI / 180).toFixed(4)}</td></tr>
-              <tr><td>Probability:</td><td>${(stateData.probability * 100).toFixed(4)}%</td></tr>
+              <tr><td>State Index:</td><td>${stateData.index}</td></tr>
+              <tr><td>Binary Representation:</td><td>|${stateData.binaryLabel}⟩</td></tr>
+              <tr><td>Real Part:</td><td>${QuantumMath.formatNumber(stateData.real, 6)}</td></tr>
+              <tr><td>Imaginary Part:</td><td>${QuantumMath.formatNumber(stateData.imag, 6)}</td></tr>
+              <tr><td>Magnitude:</td><td>${QuantumMath.formatNumber(stateData.magnitude, 6)}</td></tr>
+              <tr><td>Phase (degrees):</td><td>${QuantumMath.formatNumber(stateData.phase, 2)}°</td></tr>
+              <tr><td>Phase (radians):</td><td>${QuantumMath.formatNumber(stateData.phase * Math.PI / 180, 4)}</td></tr>
+              <tr><td>Probability:</td><td>${QuantumMath.formatPercentage(stateData.probability, 4)}</td></tr>
+              <tr><td>Probability Amplitude:</td><td>${QuantumMath.formatNumber(Math.sqrt(stateData.probability), 6)}</td></tr>
             </table>
           </div>
           
           <div class="detail-section">
-            <h4>Bloch Sphere (Single Qubit)</h4>
-            <div class="bloch-coordinates">
-              ${this.getBlochCoordinates(stateData)}
+            <h4>Individual Qubit States</h4>
+            <div class="qubit-breakdown">
+              ${this.getQubitBreakdown(stateData)}
             </div>
           </div>
+
+          <div class="detail-section">
+            <h4>Context Information</h4>
+            <div class="context-info">
+              ${this.getContextInfo(stateData)}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="this.closest('.state-detail-modal').remove()">Close</button>
         </div>
       </div>
     `;
@@ -485,28 +628,41 @@ export class StateVisualizer {
     });
   }
 
-  getBlochCoordinates(stateData) {
-    // This is a simplified calculation for educational purposes
-    // In practice, single qubit Bloch coordinates require the full 2D state
-    if (this.currentState.length !== 2) {
-      return '<p>Bloch sphere representation only available for single-qubit systems</p>';
+  getQubitBreakdown(stateData) {
+    const numQubits = stateData.binaryLabel.length;
+    let breakdown = '<table class="qubit-table"><tr><th>Qubit</th><th>Value</th><th>Position</th></tr>';
+    
+    for (let i = 0; i < numQubits; i++) {
+      const bit = stateData.binaryLabel[i];
+      breakdown += `<tr><td>q<sub>${i}</sub></td><td>|${bit}⟩</td><td>${i === 0 ? 'MSB' : i === numQubits - 1 ? 'LSB' : 'Bit ' + i}</td></tr>`;
     }
     
-    const alpha = this.currentState[0];
-    const beta = this.currentState[1];
-    
-    const x = 2 * (alpha.real * beta.real + alpha.imag * beta.imag);
-    const y = 2 * (alpha.imag * beta.real - alpha.real * beta.imag);
-    const z = alpha.real * alpha.real + alpha.imag * alpha.imag - 
-             beta.real * beta.real - beta.imag * beta.imag;
+    breakdown += '</table>';
+    return breakdown;
+  }
+
+  getContextInfo(stateData) {
+    const totalStates = this.currentState.length;
+    const numQubits = Math.log2(totalStates);
+    const rank = this.getRankByProbability(stateData.index);
     
     return `
-      <table class="bloch-table">
-        <tr><td>X coordinate:</td><td>${x.toFixed(4)}</td></tr>
-        <tr><td>Y coordinate:</td><td>${y.toFixed(4)}</td></tr>
-        <tr><td>Z coordinate:</td><td>${z.toFixed(4)}</td></tr>
-      </table>
+      <p><strong>System:</strong> ${numQubits}-qubit quantum system (${totalStates} total states)</p>
+      <p><strong>Probability Rank:</strong> ${rank} of ${totalStates} states</p>
+      <p><strong>Significance:</strong> ${stateData.probability > 0.01 ? 'High' : stateData.probability > 0.001 ? 'Medium' : 'Low'} probability state</p>
+      ${this.showTruncationWarning ? `<p><strong>Note:</strong> This state is among the top ${this.maxBars} states by probability</p>` : ''}
     `;
+  }
+
+  getRankByProbability(targetIndex) {
+    const probabilities = this.currentState.map((amp, idx) => ({
+      index: idx,
+      prob: QuantumMath.complexMagnitude(amp) ** 2
+    }));
+    
+    probabilities.sort((a, b) => b.prob - a.prob);
+    
+    return probabilities.findIndex(item => item.index === targetIndex) + 1;
   }
 
   animateBarsIn(container) {
@@ -520,7 +676,7 @@ export class StateVisualizer {
         bar.style.transition = `opacity ${this.animationDuration}ms ease, transform ${this.animationDuration}ms ease`;
         bar.style.opacity = '1';
         bar.style.transform = 'translateX(0)';
-      }, index * 50);
+      }, index * 25); // Stagger animation
     });
   }
 
@@ -552,6 +708,7 @@ export class StateVisualizer {
     fills.forEach(fill => {
       // Add glow effect during change
       fill.style.boxShadow = '0 0 10px currentColor';
+      fill.style.transition = 'all 0.5s ease';
       
       setTimeout(() => {
         fill.style.boxShadow = '';
@@ -566,23 +723,31 @@ export class StateVisualizer {
     const statsElement = document.createElement('div');
     statsElement.className = 'state-statistics';
     statsElement.innerHTML = `
-      <h4>State Statistics</h4>
+      <h4>Quantum State Statistics</h4>
       <div class="stats-grid">
         <div class="stat-item">
           <span class="stat-label">Total Probability:</span>
-          <span class="stat-value">${(stats.totalProbability * 100).toFixed(2)}%</span>
+          <span class="stat-value">${QuantumMath.formatPercentage(stats.totalProbability, 4)}</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Entropy:</span>
-          <span class="stat-value">${stats.entropy.toFixed(4)}</span>
+          <span class="stat-label">Von Neumann Entropy:</span>
+          <span class="stat-value">${QuantumMath.formatNumber(stats.entropy, 4)}</span>
         </div>
         <div class="stat-item">
           <span class="stat-label">Dominant State:</span>
-          <span class="stat-value">|${stats.dominantState}⟩</span>
+          <span class="stat-value">|${stats.dominantState}⟩ (${QuantumMath.formatPercentage(stats.maxProbability, 2)})</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Non-zero States:</span>
-          <span class="stat-value">${stats.nonZeroStates}</span>
+          <span class="stat-label">Significant States:</span>
+          <span class="stat-value">${stats.significantStates} (P > 0.1%)</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">System Size:</span>
+          <span class="stat-value">${Math.log2(state.length)} qubits (${state.length} states)</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Entanglement:</span>
+          <span class="stat-value">${stats.entanglement !== null ? QuantumMath.formatNumber(stats.entanglement, 3) : 'N/A'}</span>
         </div>
       </div>
     `;
@@ -595,17 +760,17 @@ export class StateVisualizer {
     let entropy = 0;
     let maxProbability = 0;
     let dominantStateIndex = 0;
-    let nonZeroStates = 0;
+    let significantStates = 0;
     
     const numQubits = Math.log2(state.length);
     
     state.forEach((amplitude, index) => {
-      const probability = amplitude.real * amplitude.real + amplitude.imag * amplitude.imag;
+      const probability = QuantumMath.complexMagnitude(amplitude) ** 2;
       totalProbability += probability;
       
       if (probability > 0.001) {
-        nonZeroStates++;
-        entropy -= probability * Math.log2(probability);
+        significantStates++;
+        entropy -= probability * Math.log2(probability + 1e-10); // Add small epsilon to avoid log(0)
       }
       
       if (probability > maxProbability) {
@@ -616,11 +781,23 @@ export class StateVisualizer {
     
     const dominantState = dominantStateIndex.toString(2).padStart(numQubits, '0');
     
+    // Calculate entanglement for 2-qubit systems
+    let entanglement = null;
+    if (numQubits === 2) {
+      try {
+        entanglement = QuantumMath.computeEntanglement(state);
+      } catch (e) {
+        entanglement = null;
+      }
+    }
+    
     return {
       totalProbability,
       entropy,
       dominantState,
-      nonZeroStates
+      maxProbability,
+      significantStates,
+      entanglement
     };
   }
 
@@ -628,13 +805,15 @@ export class StateVisualizer {
   exportData() {
     if (!this.currentState) return null;
     
-    const processedState = this.processStateData(this.currentState);
+    const processedState = this.processStateData(this.currentState.map((amp, idx) => ({...amp, originalIndex: idx})));
     const stats = this.calculateStatistics(this.currentState);
     
     return {
       timestamp: new Date().toISOString(),
       mode: this.currentMode,
       sort: this.currentSort,
+      maxBars: this.maxBars,
+      showTruncationWarning: this.showTruncationWarning,
       state: processedState,
       statistics: stats,
       formatted: QuantumMath.formatState(this.currentState)

@@ -1,6 +1,4 @@
-// core/quantum-engine.js
-// Core quantum state management and gate operations
-
+// core/quantum-engine.js - Fixed version with proper history management and oracle implementations
 import { QuantumMath } from '../utils/quantum-math.js';
 import { MathUtils } from '../utils/math-utils.js';
 
@@ -11,6 +9,7 @@ export class QuantumEngine {
     this.state = null;
     this.history = [];
     this.currentStep = 0;
+    this.classicalBits = []; // For measurement outcomes
     
     this.reset();
   }
@@ -27,6 +26,7 @@ export class QuantumEngine {
     
     this.history = [this.cloneState()];
     this.currentStep = 0;
+    this.classicalBits = new Array(this.numQubits).fill(0);
     
     console.log(`Quantum engine reset with ${this.numQubits} qubits`);
   }
@@ -39,9 +39,44 @@ export class QuantumEngine {
   }
 
   saveState() {
-    this.history = this.history.slice(0, this.currentStep + 1);
-    this.history.push(this.cloneState());
-    this.currentStep++;
+    // Only save if we're at the end of history (no branching)
+    if (this.currentStep === this.history.length - 1) {
+      this.history.push(this.cloneState());
+      this.currentStep++;
+    } else {
+      // If we're in the middle, truncate future states and add new one
+      this.history = this.history.slice(0, this.currentStep + 1);
+      this.history.push(this.cloneState());
+      this.currentStep++;
+    }
+  }
+
+  // Efficient step backward using history
+  stepBackward() {
+    if (this.currentStep > 0) {
+      this.currentStep--;
+      this.state = this.history[this.currentStep].map(amp => ({...amp}));
+      return true;
+    }
+    return false;
+  }
+
+  stepForward() {
+    if (this.currentStep < this.history.length - 1) {
+      this.currentStep++;
+      this.state = this.history[this.currentStep].map(amp => ({...amp}));
+      return true;
+    }
+    return false;
+  }
+
+  stepTo(stepIndex) {
+    if (stepIndex >= 0 && stepIndex < this.history.length) {
+      this.currentStep = stepIndex;
+      this.state = this.history[stepIndex].map(amp => ({...amp}));
+      return true;
+    }
+    return false;
   }
 
   // Core gate application method
@@ -49,13 +84,14 @@ export class QuantumEngine {
     console.log(`Applying ${gateName} gate to qubits:`, qubits);
     
     try {
-      const matrix = this.getGateMatrix(gateName, parameters);
-      
       if (qubits.length === 1) {
+        const matrix = this.getSingleQubitMatrix(gateName, parameters);
         this.applySingleQubitGate(matrix, qubits[0]);
       } else if (qubits.length === 2) {
+        const matrix = this.getTwoQubitMatrix(gateName, parameters);
         this.applyTwoQubitGate(matrix, qubits[0], qubits[1]);
-      } else if (qubits.length >= 3) {
+      } else {
+        const matrix = this.getMultiQubitMatrix(gateName, qubits, parameters);
         this.applyMultiQubitGate(matrix, qubits);
       }
       
@@ -67,9 +103,8 @@ export class QuantumEngine {
     }
   }
 
-  getGateMatrix(gateName, parameters = {}) {
+  getSingleQubitMatrix(gateName, parameters = {}) {
     const gates = {
-      // Pauli gates
       'I': [[{real: 1, imag: 0}, {real: 0, imag: 0}], 
             [{real: 0, imag: 0}, {real: 1, imag: 0}]],
       
@@ -82,39 +117,203 @@ export class QuantumEngine {
       'Z': [[{real: 1, imag: 0}, {real: 0, imag: 0}], 
             [{real: 0, imag: 0}, {real: -1, imag: 0}]],
       
-      // Hadamard gate
       'H': [[{real: 1/Math.sqrt(2), imag: 0}, {real: 1/Math.sqrt(2), imag: 0}], 
             [{real: 1/Math.sqrt(2), imag: 0}, {real: -1/Math.sqrt(2), imag: 0}]],
       
-      // Phase gates
       'S': [[{real: 1, imag: 0}, {real: 0, imag: 0}], 
             [{real: 0, imag: 0}, {real: 0, imag: 1}]],
       
       'T': [[{real: 1, imag: 0}, {real: 0, imag: 0}], 
             [{real: 0, imag: 0}, {real: Math.cos(Math.PI/4), imag: Math.sin(Math.PI/4)}]],
       
-      // Rotation gates
       'RX': this.createRotationX(parameters.angle || 0),
       'RY': this.createRotationY(parameters.angle || 0),
-      'RZ': this.createRotationZ(parameters.angle || 0),
-      
-      // Two-qubit gates
-      'CNOT': this.createCNOTMatrix(),
-      'CZ': this.createCZMatrix(),
-      'SWAP': this.createSWAPMatrix(),
-      
-      // Three-qubit gates
-      'CCX': this.createCCXMatrix(),
-      'CCZ': this.createCCZMatrix()
+      'RZ': this.createRotationZ(parameters.angle || 0)
     };
     
     if (!gates[gateName]) {
-      throw new Error(`Unknown gate: ${gateName}`);
+      throw new Error(`Unknown single-qubit gate: ${gateName}`);
     }
     
     return gates[gateName];
   }
 
+  getTwoQubitMatrix(gateName, parameters = {}) {
+    const gates = {
+      'CNOT': this.createCNOTMatrix(),
+      'CZ': this.createCZMatrix(),
+      'SWAP': this.createSWAPMatrix()
+    };
+    
+    if (!gates[gateName]) {
+      throw new Error(`Unknown two-qubit gate: ${gateName}`);
+    }
+    
+    return gates[gateName];
+  }
+
+  getMultiQubitMatrix(gateName, qubits, parameters = {}) {
+    if (gateName === 'CCX') {
+      return this.createCCXMatrix();
+    } else if (gateName === 'CCZ') {
+      return this.createCCZMatrix();
+    }
+    
+    throw new Error(`Unknown multi-qubit gate: ${gateName}`);
+  }
+
+  // Proper Deutsch algorithm oracle implementation
+  applyDeutschOracle(qubits, functionType = 'constant', functionValue = 0) {
+    if (qubits.length !== 2) {
+      throw new Error('Deutsch oracle requires exactly 2 qubits');
+    }
+    
+    const [controlQubit, ancillaQubit] = qubits;
+    
+    // Oracle implements |x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩
+    if (functionType === 'constant') {
+      if (functionValue === 1) {
+        // f(x) = 1 for all x, so flip ancilla regardless
+        this.applyGate('X', [ancillaQubit]);
+      }
+      // f(x) = 0 for all x means no operation needed
+    } else if (functionType === 'balanced') {
+      // f(0) ≠ f(1), so use CNOT (f(x) = x) or CNOT + X on ancilla (f(x) = NOT x)
+      this.applyGate('CNOT', [controlQubit, ancillaQubit]);
+      if (functionValue === 1) {
+        // For f(x) = NOT x, add X gate on ancilla
+        this.applyGate('X', [ancillaQubit]);
+      }
+    }
+    
+    console.log(`Deutsch oracle applied: ${functionType}, value: ${functionValue}`);
+  }
+
+  // Grover's oracle for marking specific states
+  applyGroverOracle(qubits, markedStates = null) {
+    if (!markedStates) {
+      // Default: mark the |111...1⟩ state
+      markedStates = [Math.pow(2, qubits.length) - 1];
+    }
+    
+    if (!Array.isArray(markedStates)) {
+      markedStates = [markedStates];
+    }
+    
+    // Apply phase flip to marked states
+    markedStates.forEach(state => {
+      if (state >= 0 && state < this.state.length) {
+        this.state[state].real *= -1;
+        this.state[state].imag *= -1;
+      }
+    });
+    
+    this.saveState();
+    console.log(`Grover oracle applied, marked states:`, markedStates.map(s => 
+      `|${s.toString(2).padStart(qubits.length, '0')}⟩`));
+  }
+
+  // Proper QFT implementation with controlled rotations
+  applyQFT(qubits) {
+    const n = qubits.length;
+    
+    for (let i = 0; i < n; i++) {
+      // Apply Hadamard to current qubit
+      this.applyGate('H', [qubits[i]]);
+      
+      // Apply controlled rotations
+      for (let j = i + 1; j < n; j++) {
+        const angle = Math.PI / Math.pow(2, j - i);
+        this.applyControlledPhase(qubits[j], qubits[i], angle);
+      }
+    }
+    
+    // Reverse the order of qubits (bit reversal)
+    for (let i = 0; i < Math.floor(n / 2); i++) {
+      this.applyGate('SWAP', [qubits[i], qubits[n - 1 - i]]);
+    }
+    
+    console.log('QFT applied to qubits:', qubits);
+  }
+
+  applyControlledPhase(controlQubit, targetQubit, angle) {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    
+    // Controlled phase gate matrix
+    const matrix = Array(4).fill(null).map(() => Array(4).fill(null).map(() => ({real: 0, imag: 0})));
+    matrix[0][0] = {real: 1, imag: 0}; // |00⟩
+    matrix[1][1] = {real: 1, imag: 0}; // |01⟩
+    matrix[2][2] = {real: 1, imag: 0}; // |10⟩
+    matrix[3][3] = {real: cos, imag: sin}; // |11⟩ gets phase
+    
+    this.applyTwoQubitGate(matrix, controlQubit, targetQubit);
+  }
+
+  // Measurement with classical bit storage
+  measure(qubits = null, storeClassical = true) {
+    const measureQubits = qubits || Array.from({length: this.numQubits}, (_, i) => i);
+    const probabilities = this.getProbabilities();
+    
+    // Random measurement based on probabilities
+    const random = Math.random();
+    let cumulative = 0;
+    
+    for (let i = 0; i < probabilities.length; i++) {
+      cumulative += probabilities[i];
+      if (random <= cumulative) {
+        const binaryState = i.toString(2).padStart(this.numQubits, '0');
+        
+        // Store classical measurement outcomes
+        if (storeClassical) {
+          measureQubits.forEach((qubit, idx) => {
+            const bit = (i >> (this.numQubits - 1 - qubit)) & 1;
+            this.classicalBits[qubit] = bit;
+          });
+        }
+        
+        // Collapse to measured state
+        this.state.fill({real: 0, imag: 0});
+        this.state[i] = {real: 1, imag: 0};
+        
+        this.saveState();
+        
+        return {
+          state: binaryState,
+          stateIndex: i,
+          probability: probabilities[i],
+          qubits: measureQubits,
+          classicalBits: [...this.classicalBits]
+        };
+      }
+    }
+    
+    // Fallback
+    return {
+      state: '0'.repeat(this.numQubits),
+      stateIndex: 0,
+      probability: probabilities[0] || 1,
+      qubits: measureQubits,
+      classicalBits: [...this.classicalBits]
+    };
+  }
+
+  // Conditional gate application based on classical bits
+  applyConditionalGate(gateName, targetQubits, conditionQubits, conditionValues) {
+    // Check if classical condition is met
+    const conditionMet = conditionQubits.every((qubit, idx) => 
+      this.classicalBits[qubit] === conditionValues[idx]
+    );
+    
+    if (conditionMet) {
+      this.applyGate(gateName, targetQubits);
+      console.log(`Conditional ${gateName} applied based on classical bits`);
+    } else {
+      console.log(`Conditional ${gateName} skipped - condition not met`);
+    }
+  }
+
+  // Create rotation matrices
   createRotationX(angle) {
     const cos = Math.cos(angle / 2);
     const sin = Math.sin(angle / 2);
@@ -143,7 +342,6 @@ export class QuantumEngine {
   }
 
   createCNOTMatrix() {
-    // CNOT gate matrix (4x4)
     const matrix = Array(4).fill(null).map(() => Array(4).fill(null).map(() => ({real: 0, imag: 0})));
     matrix[0][0] = {real: 1, imag: 0}; // |00⟩ → |00⟩
     matrix[1][1] = {real: 1, imag: 0}; // |01⟩ → |01⟩
@@ -171,7 +369,6 @@ export class QuantumEngine {
   }
 
   createCCXMatrix() {
-    // Toffoli gate (8x8)
     const matrix = Array(8).fill(null).map(() => Array(8).fill(null).map(() => ({real: 0, imag: 0})));
     for (let i = 0; i < 6; i++) {
       matrix[i][i] = {real: 1, imag: 0}; // Identity for first 6 states
@@ -190,67 +387,66 @@ export class QuantumEngine {
     return matrix;
   }
 
+  // More efficient gate application using tensor products
   applySingleQubitGate(matrix, targetQubit) {
-    const newState = this.cloneState();
-    const numStates = Math.pow(2, this.numQubits);
+    const newState = new Array(this.state.length);
     
-    for (let i = 0; i < numStates; i++) {
+    for (let i = 0; i < this.state.length; i++) {
+      newState[i] = {real: 0, imag: 0};
+    }
+    
+    for (let i = 0; i < this.state.length; i++) {
       const bit = (i >> (this.numQubits - 1 - targetQubit)) & 1;
       const flippedIndex = i ^ (1 << (this.numQubits - 1 - targetQubit));
       
-      if (bit === 0) {
-        // Apply matrix to |0⟩ and |1⟩ components
-        const amp0 = this.state[i];
-        const amp1 = this.state[flippedIndex];
-        
-        newState[i] = QuantumMath.complexAdd(
-          QuantumMath.complexMul(matrix[0][0], amp0),
-          QuantumMath.complexMul(matrix[0][1], amp1)
-        );
-        
-        newState[flippedIndex] = QuantumMath.complexAdd(
-          QuantumMath.complexMul(matrix[1][0], amp0),
-          QuantumMath.complexMul(matrix[1][1], amp1)
-        );
-      }
+      // Apply matrix transformation
+      const coeff0 = matrix[bit][0];
+      const coeff1 = matrix[bit][1];
+      
+      const amp0 = this.state[bit === 0 ? i : flippedIndex];
+      const amp1 = this.state[bit === 0 ? flippedIndex : i];
+      
+      const contribution = QuantumMath.complexAdd(
+        QuantumMath.complexMul(coeff0, amp0),
+        QuantumMath.complexMul(coeff1, amp1)
+      );
+      
+      newState[i] = QuantumMath.complexAdd(newState[i], contribution);
     }
     
     this.state = newState;
   }
 
-  applyTwoQubitGate(matrix, controlQubit, targetQubit) {
-    const newState = this.cloneState();
-    const numStates = Math.pow(2, this.numQubits);
+  applyTwoQubitGate(matrix, qubit1, qubit2) {
+    const newState = new Array(this.state.length);
+    for (let i = 0; i < this.state.length; i++) {
+      newState[i] = {real: 0, imag: 0};
+    }
     
-    for (let i = 0; i < numStates; i++) {
-      const controlBit = (i >> (this.numQubits - 1 - controlQubit)) & 1;
-      const targetBit = (i >> (this.numQubits - 1 - targetQubit)) & 1;
-      const basisState = controlBit * 2 + targetBit; // 0, 1, 2, or 3
+    for (let i = 0; i < this.state.length; i++) {
+      const bit1 = (i >> (this.numQubits - 1 - qubit1)) & 1;
+      const bit2 = (i >> (this.numQubits - 1 - qubit2)) & 1;
+      const inputState = bit1 * 2 + bit2;
       
-      // Find all four related states
-      const states = [];
-      for (let j = 0; j < 4; j++) {
-        const newControlBit = (j >> 1) & 1;
-        const newTargetBit = j & 1;
+      for (let outputState = 0; outputState < 4; outputState++) {
+        const outputBit1 = (outputState >> 1) & 1;
+        const outputBit2 = outputState & 1;
         
-        let stateIndex = i;
-        stateIndex &= ~(1 << (this.numQubits - 1 - controlQubit)); // Clear control bit
-        stateIndex &= ~(1 << (this.numQubits - 1 - targetQubit));   // Clear target bit
-        stateIndex |= (newControlBit << (this.numQubits - 1 - controlQubit)); // Set new control
-        stateIndex |= (newTargetBit << (this.numQubits - 1 - targetQubit));   // Set new target
+        let outputIndex = i;
+        outputIndex &= ~(1 << (this.numQubits - 1 - qubit1));
+        outputIndex &= ~(1 << (this.numQubits - 1 - qubit2));
+        outputIndex |= (outputBit1 << (this.numQubits - 1 - qubit1));
+        outputIndex |= (outputBit2 << (this.numQubits - 1 - qubit2));
         
-        states[j] = stateIndex;
-      }
-      
-      // Apply transformation
-      if (i === states[basisState]) {
-        newState[i] = {real: 0, imag: 0};
-        for (let j = 0; j < 4; j++) {
-          newState[i] = QuantumMath.complexAdd(
-            newState[i],
-            QuantumMath.complexMul(matrix[basisState][j], this.state[states[j]])
-          );
-        }
+        const contribution = QuantumMath.complexMul(
+          matrix[outputState][inputState],
+          this.state[i]
+        );
+        
+        newState[outputIndex] = QuantumMath.complexAdd(
+          newState[outputIndex],
+          contribution
+        );
       }
     }
     
@@ -258,91 +454,50 @@ export class QuantumEngine {
   }
 
   applyMultiQubitGate(matrix, qubits) {
-    // Simplified multi-qubit gate application
-    console.log('Applying multi-qubit gate to qubits:', qubits);
+    const numQubits = qubits.length;
+    const matrixSize = Math.pow(2, numQubits);
     
-    if (qubits.length === 3 && matrix.length === 8) {
-      this.applyThreeQubitGate(matrix, qubits);
+    if (matrix.length !== matrixSize || matrix[0].length !== matrixSize) {
+      throw new Error(`Matrix size ${matrix.length}x${matrix[0].length} doesn't match ${numQubits} qubits`);
     }
-  }
-
-  applyThreeQubitGate(matrix, qubits) {
-    const newState = this.cloneState();
-    const numStates = Math.pow(2, this.numQubits);
     
-    for (let i = 0; i < numStates; i++) {
-      const bits = qubits.map(q => (i >> (this.numQubits - 1 - q)) & 1);
-      const basisState = bits[0] * 4 + bits[1] * 2 + bits[2];
+    const newState = new Array(this.state.length);
+    for (let i = 0; i < this.state.length; i++) {
+      newState[i] = {real: 0, imag: 0};
+    }
+    
+    for (let i = 0; i < this.state.length; i++) {
+      // Extract bits for the target qubits
+      const inputBits = qubits.map(q => (i >> (this.numQubits - 1 - q)) & 1);
+      const inputState = inputBits.reduce((acc, bit, idx) => acc + bit * Math.pow(2, numQubits - 1 - idx), 0);
       
-      // Find all eight related states
-      const states = [];
-      for (let j = 0; j < 8; j++) {
-        const newBits = [(j >> 2) & 1, (j >> 1) & 1, j & 1];
+      for (let outputState = 0; outputState < matrixSize; outputState++) {
+        // Convert output state to bit array
+        const outputBits = [];
+        for (let j = 0; j < numQubits; j++) {
+          outputBits.push((outputState >> (numQubits - 1 - j)) & 1);
+        }
         
-        let stateIndex = i;
+        // Construct output index
+        let outputIndex = i;
         qubits.forEach((qubit, idx) => {
-          stateIndex &= ~(1 << (this.numQubits - 1 - qubit));
-          stateIndex |= (newBits[idx] << (this.numQubits - 1 - qubit));
+          outputIndex &= ~(1 << (this.numQubits - 1 - qubit));
+          outputIndex |= (outputBits[idx] << (this.numQubits - 1 - qubit));
         });
         
-        states[j] = stateIndex;
-      }
-      
-      // Apply transformation
-      if (i === states[basisState]) {
-        newState[i] = {real: 0, imag: 0};
-        for (let j = 0; j < 8; j++) {
-          newState[i] = QuantumMath.complexAdd(
-            newState[i],
-            QuantumMath.complexMul(matrix[basisState][j], this.state[states[j]])
-          );
-        }
+        const contribution = QuantumMath.complexMul(
+          matrix[outputState][inputState],
+          this.state[i]
+        );
+        
+        newState[outputIndex] = QuantumMath.complexAdd(
+          newState[outputIndex],
+          contribution
+        );
       }
     }
     
     this.state = newState;
-  }
-
-  // Special oracle for Grover's algorithm
-  applyOracle(qubits, markedState = null) {
-    // Default: mark the |111...1⟩ state
-    const targetState = markedState !== null ? markedState : Math.pow(2, qubits.length) - 1;
-    
-    // Apply phase flip to marked state
-    this.state[targetState].real *= -1;
-    this.state[targetState].imag *= -1;
-    
-    this.saveState();
-    console.log(`Oracle applied, marked state: |${targetState.toString(2).padStart(qubits.length, '0')}⟩`);
-  }
-
-  // Diffusion operator for Grover's algorithm
-  applyDiffusion(qubits) {
-    // H⊗n - X⊗n - CCZ - X⊗n - H⊗n
-    
-    // Apply Hadamard to all qubits
-    qubits.forEach(q => this.applyGate('H', [q]));
-    
-    // Apply X to all qubits
-    qubits.forEach(q => this.applyGate('X', [q]));
-    
-    // Apply conditional phase flip (CCZ or multi-controlled Z)
-    if (qubits.length === 3) {
-      this.applyGate('CCZ', qubits);
-    } else {
-      // For other sizes, apply phase flip to |111...1⟩ state
-      const allOnesState = Math.pow(2, qubits.length) - 1;
-      this.state[allOnesState].real *= -1;
-      this.state[allOnesState].imag *= -1;
-    }
-    
-    // Apply X to all qubits again
-    qubits.forEach(q => this.applyGate('X', [q]));
-    
-    // Apply Hadamard to all qubits again
-    qubits.forEach(q => this.applyGate('H', [q]));
-    
-    console.log('Diffusion operator applied');
   }
 
   normalizeState() {
@@ -358,45 +513,7 @@ export class QuantumEngine {
     }
   }
 
-  // Measurement
-  measure(qubits = null) {
-    const measureQubits = qubits || Array.from({length: this.numQubits}, (_, i) => i);
-    const probabilities = this.getProbabilities();
-    
-    // Random measurement based on probabilities
-    const random = Math.random();
-    let cumulative = 0;
-    
-    for (let i = 0; i < probabilities.length; i++) {
-      cumulative += probabilities[i];
-      if (random <= cumulative) {
-        const binaryState = i.toString(2).padStart(this.numQubits, '0');
-        
-        // Collapse to measured state
-        this.state.fill({real: 0, imag: 0});
-        this.state[i] = {real: 1, imag: 0};
-        
-        this.saveState();
-        
-        return {
-          state: binaryState,
-          stateIndex: i,
-          probability: probabilities[i],
-          qubits: measureQubits
-        };
-      }
-    }
-    
-    // Fallback
-    return {
-      state: '0'.repeat(this.numQubits),
-      stateIndex: 0,
-      probability: probabilities[0] || 1,
-      qubits: measureQubits
-    };
-  }
-
-  // State access methods
+  // State access methods remain the same...
   getState() {
     return this.state;
   }
@@ -424,14 +541,8 @@ export class QuantumEngine {
     return '|' + maxIndex.toString(2).padStart(this.numQubits, '0') + '⟩';
   }
 
-  // Bloch sphere coordinates (for single qubit only)
   getBlochVector(qubitIndex = 0) {
-    if (this.numQubits !== 1 && qubitIndex >= this.numQubits) {
-      return { x: 0, y: 0, z: 1 };
-    }
-    
     if (this.numQubits === 1) {
-      // For single qubit: |ψ⟩ = α|0⟩ + β|1⟩
       const alpha = this.state[0];
       const beta = this.state[1];
       
@@ -442,48 +553,75 @@ export class QuantumEngine {
       
       return { x, y, z };
     } else {
-      // For multi-qubit, trace out other qubits (simplified)
-      const prob0 = this.getQubitProbability(qubitIndex, 0);
-      const prob1 = this.getQubitProbability(qubitIndex, 1);
-      
-      return { 
-        x: 0, 
-        y: 0, 
-        z: prob0 - prob1 
-      };
+      // For multi-qubit, compute reduced density matrix for single qubit
+      return this.getReducedQubitBlochVector(qubitIndex);
     }
   }
 
-  getQubitProbability(qubitIndex, value) {
-    let probability = 0;
-    const numStates = Math.pow(2, this.numQubits);
+  getReducedQubitBlochVector(qubitIndex) {
+    // Compute reduced density matrix for single qubit
+    const reducedDensity = this.getReducedDensityMatrix(qubitIndex);
     
-    for (let i = 0; i < numStates; i++) {
-      const bit = (i >> (this.numQubits - 1 - qubitIndex)) & 1;
-      if (bit === value) {
-        const amplitude = this.state[i];
-        probability += amplitude.real * amplitude.real + amplitude.imag * amplitude.imag;
+    // Extract Bloch vector from density matrix
+    // ρ = (I + r⃗·σ⃗)/2, so r⃗ = Tr(ρσ⃗)
+    const x = 2 * reducedDensity[0][1].real; // Tr(ρσₓ)
+    const y = 2 * reducedDensity[0][1].imag; // Tr(ρσᵧ)
+    const z = reducedDensity[0][0].real - reducedDensity[1][1].real; // Tr(ρσᵤ)
+    
+    return { x, y, z };
+  }
+
+  getReducedDensityMatrix(qubitIndex) {
+    // 2x2 reduced density matrix for single qubit
+    const rho = [
+      [{real: 0, imag: 0}, {real: 0, imag: 0}],
+      [{real: 0, imag: 0}, {real: 0, imag: 0}]
+    ];
+    
+    for (let i = 0; i < this.state.length; i++) {
+      for (let j = 0; j < this.state.length; j++) {
+        const bit_i = (i >> (this.numQubits - 1 - qubitIndex)) & 1;
+        const bit_j = (j >> (this.numQubits - 1 - qubitIndex)) & 1;
+        
+        // Check if other qubits match
+        let otherQubitsMatch = true;
+        for (let q = 0; q < this.numQubits; q++) {
+          if (q !== qubitIndex) {
+            const bit_i_q = (i >> (this.numQubits - 1 - q)) & 1;
+            const bit_j_q = (j >> (this.numQubits - 1 - q)) & 1;
+            if (bit_i_q !== bit_j_q) {
+              otherQubitsMatch = false;
+              break;
+            }
+          }
+        }
+        
+        if (otherQubitsMatch) {
+          const element = QuantumMath.complexMul(
+            this.state[i],
+            QuantumMath.complexConj(this.state[j])
+          );
+          
+          rho[bit_i][bit_j] = QuantumMath.complexAdd(rho[bit_i][bit_j], element);
+        }
       }
     }
     
-    return probability;
+    return rho;
   }
 
-  // History navigation
-  stepTo(stepIndex) {
-    if (stepIndex >= 0 && stepIndex < this.history.length) {
-      this.currentStep = stepIndex;
-      this.state = this.history[stepIndex].map(amp => ({...amp}));
-      return true;
-    }
-    return false;
+  getClassicalBits() {
+    return [...this.classicalBits];
   }
 
   getHistory() {
     return this.history;
   }
 
-  // Debug methods
+  getCurrentStep() {
+    return this.currentStep;
+  }
+
   printState() {
     console.log('Quantum State:');
     this.state.forEach((amplitude, index) => {

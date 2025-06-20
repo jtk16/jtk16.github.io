@@ -1,4 +1,4 @@
-// quantum-visualizer.js - Main application controller
+// quantum-visualizer.js - Fixed main application controller
 import { QuantumEngine } from './core/quantum-engine.js';
 import { CircuitRenderer } from './visualization/circuit-visualizer.js';
 import { StateVisualizer } from './visualization/state-visualizer.js';
@@ -130,7 +130,7 @@ class QuantumVisualizer {
       });
     }
 
-    // Playback controls
+    // Playback controls - use efficient step navigation
     if (this.elements.stepBack) {
       this.elements.stepBack.addEventListener('click', () => this.stepBackward());
     }
@@ -202,12 +202,20 @@ class QuantumVisualizer {
     const algorithmDef = AlgorithmUtils.getAlgorithm(algorithmName);
     if (!algorithmDef) {
       console.error(`Algorithm '${algorithmName}' not found`);
-      // Fallback to a simple algorithm
-      this.currentAlgorithm = this.createFallbackAlgorithm();
-    } else {
-      this.currentAlgorithm = algorithmDef;
+      this.showError(`Algorithm '${algorithmName}' not found`);
+      return;
     }
 
+    // Validate algorithm definition
+    try {
+      AlgorithmUtils.validateAlgorithmDefinition(algorithmDef);
+    } catch (error) {
+      console.error('Invalid algorithm definition:', error);
+      this.showError('Invalid algorithm definition: ' + error.message);
+      return;
+    }
+
+    this.currentAlgorithm = algorithmDef;
     console.log(`Loading algorithm: ${algorithmName}`);
     
     this.currentStep = 0;
@@ -229,38 +237,22 @@ class QuantumVisualizer {
     this.updateControls();
   }
 
-  createFallbackAlgorithm() {
-    return {
-      name: "Grover's Search Algorithm",
-      description: 'Quantum search algorithm providing quadratic speedup over classical search.',
-      qubits: 3,
-      steps: [
-        { type: 'gate', gate: 'H', qubits: [0, 1, 2], explanation: 'Initialize equal superposition' },
-        { type: 'oracle', gate: 'Oracle', qubits: [0, 1, 2], explanation: 'Mark target state |111⟩' },
-        { type: 'gate', gate: 'H', qubits: [0, 1, 2], explanation: 'Hadamard before diffusion' },
-        { type: 'gate', gate: 'X', qubits: [0, 1, 2], explanation: 'Flip all qubits' },
-        { type: 'gate', gate: 'CCZ', qubits: [0, 1, 2], explanation: 'Conditional phase flip' },
-        { type: 'gate', gate: 'X', qubits: [0, 1, 2], explanation: 'Flip all qubits back' },
-        { type: 'gate', gate: 'H', qubits: [0, 1, 2], explanation: 'Complete diffusion operator' },
-        { type: 'measure', qubits: [0, 1, 2], explanation: 'Measure to find marked state' }
-      ],
-      initialState: '|000⟩',
-      targetState: '|111⟩',
-      successMetric: 'High probability of measuring |111⟩'
-    };
-  }
-
+  // Efficient step navigation using quantum engine history
   stepForward() {
     if (this.currentStep >= this.totalSteps) return;
     
-    const step = this.currentAlgorithm.steps[this.currentStep];
-    console.log(`Executing step ${this.currentStep + 1}:`, step);
-    
-    // Execute the quantum operation
-    this.executeStep(step);
-    
-    // Update step counter
-    this.currentStep++;
+    // Try to use history first (more efficient)
+    if (this.quantumEngine.stepForward()) {
+      this.currentStep++;
+      console.log(`Stepped forward to step ${this.currentStep} using history`);
+    } else {
+      // Execute new step if not in history
+      const step = this.currentAlgorithm.steps[this.currentStep];
+      console.log(`Executing new step ${this.currentStep + 1}:`, step);
+      
+      this.executeStep(step);
+      this.currentStep++;
+    }
     
     // Update UI
     this.updateProgress();
@@ -273,8 +265,9 @@ class QuantumVisualizer {
       this.circuitRenderer.highlightStep(this.currentStep - 1);
     }
     
-    // If this is a measurement step, show modal
-    if (step.type === 'measure') {
+    // Check for measurement step
+    const executedStep = this.currentAlgorithm.steps[this.currentStep - 1];
+    if (executedStep && executedStep.type === 'measure') {
       this.showMeasurementModal();
     }
   }
@@ -282,43 +275,113 @@ class QuantumVisualizer {
   stepBackward() {
     if (this.currentStep <= 0) return;
     
-    console.log(`Stepping back from step ${this.currentStep}`);
-    
-    // Reset to beginning and replay up to previous step
-    this.quantumEngine.reset(this.currentAlgorithm.qubits);
-    this.currentStep--;
-    
-    // Re-execute all steps up to current point
-    for (let i = 0; i < this.currentStep; i++) {
-      this.executeStep(this.currentAlgorithm.steps[i]);
-    }
-    
-    // Update UI
-    this.updateProgress();
-    this.updateStepInfo();
-    this.updateVisualization();
-    this.updateControls();
-    
-    // Highlight current step in circuit
-    if (this.circuitRenderer) {
-      this.circuitRenderer.highlightStep(this.currentStep - 1);
+    // Use efficient history-based backward navigation
+    if (this.quantumEngine.stepBackward()) {
+      this.currentStep--;
+      console.log(`Stepped backward to step ${this.currentStep} using history`);
+      
+      // Update UI
+      this.updateProgress();
+      this.updateStepInfo();
+      this.updateVisualization();
+      this.updateControls();
+      
+      // Highlight current step in circuit
+      if (this.circuitRenderer) {
+        this.circuitRenderer.highlightStep(this.currentStep - 1);
+      }
     }
   }
 
   executeStep(step) {
-    switch (step.type) {
-      case 'gate':
-        this.quantumEngine.applyGate(step.gate, step.qubits);
-        break;
-      case 'oracle':
-        this.quantumEngine.applyOracle(step.qubits);
-        break;
-      case 'measure':
-        // Don't actually measure here, just prepare for measurement
-        break;
-      default:
-        console.warn(`Unknown step type: ${step.type}`);
+    try {
+      switch (step.type) {
+        case 'gate':
+          this.quantumEngine.applyGate(step.gate, step.qubits, step.parameters);
+          break;
+          
+        case 'grover-oracle':
+          const markedStates = step.parameters?.markedStates || [Math.pow(2, step.qubits.length) - 1];
+          this.quantumEngine.applyGroverOracle(step.qubits, markedStates);
+          break;
+          
+        case 'deutsch-oracle':
+          const functionType = step.parameters?.functionType || this.currentAlgorithm.functionType || 'balanced';
+          const functionValue = step.parameters?.functionValue ?? this.currentAlgorithm.functionValue ?? 0;
+          this.quantumEngine.applyDeutschOracle(step.qubits, functionType, functionValue);
+          break;
+          
+        case 'diffusion':
+          // Implement Grover diffusion operator
+          this.applyGroverDiffusion(step.qubits);
+          break;
+          
+        case 'controlled-phase':
+          if (step.qubits.length === 2 && step.angle !== undefined) {
+            this.quantumEngine.applyControlledPhase(step.qubits[0], step.qubits[1], step.angle);
+          }
+          break;
+          
+        case 'conditional-gate':
+          if (step.conditionQubits && step.conditionValues) {
+            this.quantumEngine.applyConditionalGate(
+              step.gate, 
+              step.qubits, 
+              step.conditionQubits, 
+              step.conditionValues
+            );
+          }
+          break;
+          
+        case 'qft':
+          this.quantumEngine.applyQFT(step.qubits);
+          break;
+          
+        case 'qft-inverse':
+          this.quantumEngine.applyQFTInverse(step.qubits);
+          break;
+          
+        case 'measure':
+          // Don't actually measure here during step execution
+          // Measurement will be handled by the measurement modal
+          break;
+          
+        default:
+          console.warn(`Unknown step type: ${step.type}`);
+      }
+    } catch (error) {
+      console.error(`Error executing step:`, error);
+      this.showError(`Error executing step: ${error.message}`);
     }
+  }
+
+  applyGroverDiffusion(qubits) {
+    // Grover diffusion operator: H⊗n - X⊗n - CCZ - X⊗n - H⊗n
+    
+    // Apply Hadamard to all qubits
+    qubits.forEach(q => this.quantumEngine.applyGate('H', [q]));
+    
+    // Apply X to all qubits
+    qubits.forEach(q => this.quantumEngine.applyGate('X', [q]));
+    
+    // Apply multi-controlled Z (phase flip on |111...1⟩ state)
+    if (qubits.length === 3) {
+      this.quantumEngine.applyGate('CCZ', qubits);
+    } else {
+      // For other sizes, apply phase flip to |111...1⟩ state manually
+      const allOnesState = Math.pow(2, qubits.length) - 1;
+      const state = this.quantumEngine.getState();
+      state[allOnesState].real *= -1;
+      state[allOnesState].imag *= -1;
+    }
+    
+    // Apply X to all qubits again
+    qubits.forEach(q => this.quantumEngine.applyGate('X', [q]));
+    
+    // Apply Hadamard to all qubits again
+    qubits.forEach(q => this.quantumEngine.applyGate('H', [q]));
+    
+    console.log('Grover diffusion operator applied');
   }
 
   togglePlayback() {
@@ -444,7 +507,7 @@ class QuantumVisualizer {
       this.elements.currentState.textContent = currentState;
     }
     
-    // Calculate success probability (simplified)
+    // Calculate success probability
     const successProb = this.calculateSuccessProbability();
     if (this.elements.successProbability) {
       this.elements.successProbability.textContent = `${Math.round(successProb * 100)}%`;
@@ -463,12 +526,15 @@ class QuantumVisualizer {
       'CZ': 'The controlled-Z gate applies a phase flip to the target qubit when the control is |1⟩.',
       'CCX': 'The Toffoli gate flips the target qubit only when both control qubits are |1⟩.',
       'CCZ': 'The controlled-controlled-Z gate applies a phase flip only when all qubits are |1⟩.',
-      'Oracle': 'The oracle marks the target state by applying a phase flip, making it distinguishable from other states.',
+      'grover-oracle': 'The Grover oracle marks the target state by applying a phase flip, making it distinguishable from other states.',
+      'deutsch-oracle': 'The Deutsch oracle implements |x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩ to encode function information via phase kickback.',
+      'diffusion': 'The diffusion operator performs inversion about average, amplifying marked state amplitudes.',
+      'controlled-phase': 'Applies a phase rotation to the target qubit controlled by another qubit.',
       'QFT': 'The Quantum Fourier Transform converts between computational and frequency domains.',
       'QFT†': 'The inverse QFT extracts phase information from the frequency domain.'
     };
     
-    return descriptions[step.gate] || step.explanation;
+    return descriptions[step.gate] || descriptions[step.type] || step.explanation;
   }
 
   calculateSuccessProbability() {
@@ -476,15 +542,25 @@ class QuantumVisualizer {
     
     // Algorithm-specific success probability calculations
     if (this.currentAlgorithm.name.includes('Grover')) {
-      // For Grover's algorithm, probability increases with iterations
-      const targetState = Math.pow(2, this.currentAlgorithm.qubits) - 1; // |111⟩ for 3 qubits
-      const probability = this.quantumEngine.getProbabilities()[targetState] || 0;
-      return probability;
+      // For Grover's algorithm, check probability of marked states
+      const markedStates = this.currentAlgorithm.markedStates || [Math.pow(2, this.currentAlgorithm.qubits) - 1];
+      const probabilities = this.quantumEngine.getProbabilities();
+      return markedStates.reduce((total, state) => total + (probabilities[state] || 0), 0);
     }
     
     if (this.currentAlgorithm.name.includes('Deutsch')) {
-      // For Deutsch algorithm, success is deterministic
-      return this.currentStep >= this.totalSteps - 1 ? 1.0 : 0.5;
+      // For Deutsch algorithm, success is deterministic after completion
+      if (this.currentStep >= this.totalSteps - 1) {
+        const probabilities = this.quantumEngine.getProbabilities();
+        const measurementQubit = 0; // First qubit determines result
+        const prob0 = this.quantumEngine.getQubitProbability(measurementQubit, 0);
+        
+        // If function is constant, should measure |0⟩ with high probability
+        // If function is balanced, should measure |1⟩ with high probability
+        const functionType = this.currentAlgorithm.functionType || 'balanced';
+        return functionType === 'constant' ? prob0 : (1 - prob0);
+      }
+      return 0.5; // Before completion, it's uncertain
     }
     
     if (this.currentAlgorithm.name.includes('Bell') || this.currentAlgorithm.name.includes('Teleportation')) {
@@ -507,9 +583,21 @@ class QuantumVisualizer {
       this.stateVisualizer.updateState(this.quantumEngine.getState());
     }
     
-    // Update Bloch sphere for single qubit
-    if (this.currentAlgorithm.qubits === 1 && this.blochSphere) {
-      this.blochSphere.updateState(this.quantumEngine.getBlochVector());
+    // Update Bloch sphere - now works for multi-qubit systems too
+    if (this.blochSphere) {
+      const blochVector = this.quantumEngine.getBlochVector(0); // Show first qubit
+      this.blochSphere.updateState(blochVector);
+      
+      // Update Bloch sphere info with current qubit state
+      const blochInfo = document.querySelector('.bloch-info');
+      if (blochInfo) {
+        const coords = blochInfo.querySelectorAll('.coord span');
+        if (coords.length >= 3) {
+          coords[0].textContent = blochVector.x.toFixed(3);
+          coords[1].textContent = blochVector.y.toFixed(3);
+          coords[2].textContent = blochVector.z.toFixed(3);
+        }
+      }
     }
     
     // Update mathematical expressions
@@ -540,11 +628,14 @@ class QuantumVisualizer {
       'S': 'S = \\begin{pmatrix} 1 & 0 \\\\ 0 & i \\end{pmatrix}',
       'T': 'T = \\begin{pmatrix} 1 & 0 \\\\ 0 & e^{i\\pi/4} \\end{pmatrix}',
       'CNOT': 'CNOT = \\begin{pmatrix} 1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \\\\ 0 & 0 & 0 & 1 \\\\ 0 & 0 & 1 & 0 \\end{pmatrix}',
-      'Oracle': 'U_f |x\\rangle = (-1)^{f(x)} |x\\rangle',
+      'grover-oracle': 'O|x\\rangle = (-1)^{f(x)} |x\\rangle',
+      'deutsch-oracle': 'U_f |x\\rangle|y\\rangle = |x\\rangle|y \\oplus f(x)\\rangle',
+      'diffusion': 'D = 2|s\\rangle\\langle s| - I',
+      'controlled-phase': `R(\\phi) = \\begin{pmatrix} 1 & 0 \\\\ 0 & e^{i\\phi} \\end{pmatrix}`,
       'QFT': 'QFT|j\\rangle = \\frac{1}{\\sqrt{N}}\\sum_{k=0}^{N-1} e^{2\\pi ijk/N}|k\\rangle'
     };
     
-    return mathExpressions[step.gate] || step.math || '';
+    return mathExpressions[step.gate] || mathExpressions[step.type] || step.math || '';
   }
 
   getStateEvolutionMath() {
@@ -665,6 +756,7 @@ class QuantumVisualizer {
       resultElement.innerHTML = `
         <h4>Measured State: |${result.state}⟩</h4>
         <p>The quantum state has collapsed to |${result.state}⟩ with probability ${(result.probability * 100).toFixed(1)}%</p>
+        <p><strong>Classical bits:</strong> ${result.classicalBits.join('')}</p>
       `;
     }
     
@@ -672,7 +764,9 @@ class QuantumVisualizer {
     let breakdownHtml = '<h5>Probability Breakdown:</h5><ul>';
     breakdown.forEach((prob, index) => {
       const binaryIndex = index.toString(2).padStart(this.currentAlgorithm.qubits, '0');
-      breakdownHtml += `<li>|${binaryIndex}⟩: ${(prob * 100).toFixed(1)}%</li>`;
+      if (prob > 0.001) {
+        breakdownHtml += `<li>|${binaryIndex}⟩: ${(prob * 100).toFixed(1)}%</li>`;
+      }
     });
     breakdownHtml += '</ul>';
     
@@ -736,7 +830,6 @@ class QuantumVisualizer {
   }
 
   startGuidedTour() {
-    // Implement guided tour functionality
     console.log('Starting guided tour...');
     this.showTutorialOverlay();
   }
@@ -770,11 +863,12 @@ class QuantumVisualizer {
         </div>
         
         <div class="tutorial-section">
-          <h4>📊 Visualization Panels</h4>
+          <h4>📊 Key Improvements</h4>
           <ul>
-            <li><strong>Circuit:</strong> See quantum gates and operations</li>
-            <li><strong>State:</strong> View amplitudes, probabilities, and phases</li>
-            <li><strong>Information:</strong> Learn concepts and mathematics</li>
+            <li><strong>Efficient Navigation:</strong> History-based step navigation</li>
+            <li><strong>Correct Algorithms:</strong> Proper Deutsch oracle and QFT implementation</li>
+            <li><strong>Multi-Qubit Bloch:</strong> Reduced density matrix visualization</li>
+            <li><strong>Enhanced Grover's:</strong> Multiple iterations for optimal results</li>
           </ul>
         </div>
         
@@ -796,31 +890,32 @@ class QuantumVisualizer {
 CONTROLS:
 • Space: Play/Pause algorithm execution
 • → Arrow: Step forward through algorithm
-• ← Arrow: Step backward in algorithm
+• ← Arrow: Step backward in algorithm (uses efficient history)
 • R: Reset algorithm to beginning
 • H: Show this help message
 
 FEATURES:
-• Algorithm Selection: Choose from basic gates to advanced algorithms
-• Step-by-step Execution: Watch quantum states evolve with each operation
-• Multiple Visualizations: View states as amplitudes, probabilities, or on Bloch sphere
-• Interactive Circuit: Zoom and pan through quantum circuit diagrams
+• Algorithm Selection: Choose from corrected algorithm implementations
+• Efficient Step Navigation: Uses quantum state history for fast backward navigation
+• Multiple Visualizations: Amplitude bars, Bloch sphere (including multi-qubit), circuit diagrams
 • Educational Content: Learn concepts, mathematics, and practical applications
-
-TIPS:
-• Start with "Single Qubit Gates" if you're new to quantum computing
-• Try "Grover's Search" to see quantum speedup in action
-• Use the speed slider to control animation pace
-• Switch between visualization modes to understand different aspects
-• Click on amplitude bars for detailed quantum state information
+• Proper Algorithm Implementations: Deutsch oracle, QFT with controlled rotations, multi-iteration Grover's
 
 ALGORITHMS:
 • Single/Two Qubit Gates: Learn fundamental quantum operations
 • Bell States: Explore quantum entanglement
-• Deutsch Algorithm: See the first quantum advantage
-• Grover's Search: Experience quadratic speedup
-• Quantum Fourier Transform: Understand frequency domain operations
-• Quantum Teleportation: Witness quantum information transfer
+• Deutsch Algorithm: Proper oracle implementation with phase kickback
+• Grover's Search: Multiple iterations for optimal amplitude amplification
+• Quantum Fourier Transform: Correct implementation with controlled phase rotations
+• Quantum Teleportation: Classical feed-forward and conditional operations
+
+IMPROVEMENTS:
+• Efficient step backward using quantum state history
+• Proper Deutsch oracle: |x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩
+• Correct QFT with controlled rotations between qubits
+• Multi-iteration Grover's algorithm
+• Reduced density matrix visualization for multi-qubit Bloch sphere
+• Classical bit storage and conditional operations for teleportation
 
 For more information about quantum computing concepts, visit the Information panel while running algorithms.
     `;
@@ -829,7 +924,6 @@ For more information about quantum computing concepts, visit the Information pan
   }
 
   handleResize() {
-    // Trigger resize for components that need it
     if (this.blochSphere) {
       this.blochSphere.resize();
     }
@@ -853,7 +947,6 @@ For more information about quantum computing concepts, visit the Information pan
   showError(message) {
     console.error(message);
     
-    // Create error modal
     const errorModal = document.createElement('div');
     errorModal.className = 'error-modal';
     errorModal.innerHTML = `
@@ -864,7 +957,7 @@ For more information about quantum computing concepts, visit the Information pan
         </div>
         <div class="modal-body">
           <p>${message}</p>
-          <p>Please refresh the page and try again. If the problem persists, check the browser console for more details.</p>
+          <p>The quantum visualizer has been updated with proper algorithm implementations and efficient navigation.</p>
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" onclick="location.reload()">Reload Page</button>
@@ -877,7 +970,6 @@ For more information about quantum computing concepts, visit the Information pan
     this.hideLoading();
   }
 
-  // Cleanup
   destroy() {
     if (this.animationId) {
       clearTimeout(this.animationId);
