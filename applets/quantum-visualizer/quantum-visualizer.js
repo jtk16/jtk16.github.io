@@ -1,4 +1,11 @@
 // quantum-visualizer.js
+
+import { QuantumEngine } from './core/quantum-engine.js';
+import { CircuitRenderer } from './visualization/circuit-renderer.js';
+import { StateVisualizer } from './visualization/state-visualizer.js';
+import { BlochSphere } from './visualization/bloch-sphere.js';
+import { AlgorithmDefinitions, AlgorithmUtils } from './algorithms/algorithm-definitions.js';
+
 class QuantumVisualizer {
   constructor() {
     this.currentAlgorithm = null;
