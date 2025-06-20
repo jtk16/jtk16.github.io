@@ -957,4 +957,4 @@ export const AlgorithmDefinitions = {
       'Phase φ = 0.25 should give measurement result |010⟩ (decimal 2)'
     ]
   }
-};
+}; 
