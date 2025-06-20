@@ -58,6 +58,37 @@ export class QuantumMath {
     };
   }
 
+  static formatComplex(amplitude, precision = 3) {
+    const real = parseFloat(amplitude.real.toFixed(precision));
+    const imag = parseFloat(amplitude.imag.toFixed(precision));
+    
+    if (Math.abs(imag) < Math.pow(10, -precision)) {
+        return real.toString();
+    } else if (Math.abs(real) < Math.pow(10, -precision)) {
+        return `${imag}i`;
+    } else if (imag >= 0) {
+        return `${real} + ${imag}i`;
+    } else {
+        return `${real} - ${Math.abs(imag)}i`;
+    }
+    }
+
+    static formatState(state) {
+    const numQubits = Math.log2(state.length);
+    let result = '';
+    
+    state.forEach((amplitude, index) => {
+        const magnitude = this.complexMagnitude(amplitude);
+        if (magnitude > 0.001) {
+        const binaryIndex = index.toString(2).padStart(numQubits, '0');
+        if (result) result += ' + ';
+        result += `${this.formatComplex(amplitude)}|${binaryIndex}⟩`;
+        }
+    });
+    
+    return result || '0';
+  }
+  
   // Matrix operations
   static matrixMultiply(A, B) {
     const rows = A.length;
