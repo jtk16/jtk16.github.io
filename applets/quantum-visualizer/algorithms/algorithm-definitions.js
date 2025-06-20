@@ -1,360 +1,4 @@
-// Algorithm categories and metadata - same structure, updated algorithms
-export const AlgorithmCategories = {
-  basics: {
-    name: 'Basic Gates',
-    description: 'Fundamental quantum gates and operations',
-    color: '#10b981',
-    algorithms: ['single-qubit', 'two-qubit', 'bell-states']
-  },
-  algorithms: {
-    name: 'Quantum Algorithms',
-    description: 'Complete quantum algorithms showing advantage',
-    color: '#6366f1',
-    algorithms: ['deutsch', 'grovers', 'qft']
-  },
-  protocols: {
-    name: 'Quantum Protocols',
-    description: 'Quantum communication and information protocols',
-    color: '#ec4899',
-    algorithms: ['teleportation', 'superdense-coding']
-  },
-  subroutines: {
-    name: 'Algorithm Subroutines',
-    description: 'Building blocks for larger algorithms',
-    color: '#f59e0b',
-    algorithms: ['phase-estimation']
-  }
-};
-
-// Difficulty levels remain the same
-export const DifficultyLevels = {
-  beginner: {
-    name: 'Beginner',
-    description: 'Introduction to quantum concepts',
-    color: '#10b981',
-    prerequisites: []
-  },
-  intermediate: {
-    name: 'Intermediate',
-    description: 'Basic quantum mechanics understanding required',
-    color: '#f59e0b',
-    prerequisites: ['single-qubit', 'two-qubit']
-  },
-  advanced: {
-    name: 'Advanced',
-    description: 'Solid quantum computing background needed',
-    color: '#ef4444',
-    prerequisites: ['bell-states', 'deutsch']
-  },
-  expert: {
-    name: 'Expert',
-    description: 'Deep quantum algorithm knowledge required',
-    color: '#8b5cf6',
-    prerequisites: ['grovers', 'qft']
-  }
-};
-
-// Learning paths remain the same
-export const LearningPaths = {
-  foundations: {
-    name: 'Quantum Foundations',
-    description: 'Build understanding from basic concepts',
-    algorithms: ['single-qubit', 'two-qubit', 'bell-states', 'deutsch'],
-    estimatedTime: '2-3 hours'
-  },
-  algorithms: {
-    name: 'Quantum Algorithms',
-    description: 'Explore powerful quantum algorithms',
-    algorithms: ['deutsch', 'grovers', 'qft', 'phase-estimation'],
-    estimatedTime: '3-4 hours'
-  },
-  protocols: {
-    name: 'Quantum Information',
-    description: 'Quantum communication protocols',
-    algorithms: ['bell-states', 'teleportation', 'superdense-coding'],
-    estimatedTime: '2-3 hours'
-  },
-  complete: {
-    name: 'Complete Journey',
-    description: 'Full quantum computing curriculum',
-    algorithms: Object.keys(AlgorithmDefinitions),
-    estimatedTime: '6-8 hours'
-  }
-};
-
-// Enhanced utility functions with better error handling
-export class AlgorithmUtils {
-  static getAlgorithm(name) {
-    const algorithm = AlgorithmDefinitions[name];
-    if (!algorithm) {
-      console.warn(`Algorithm '${name}' not found`);
-      return null;
-    }
-    return algorithm;
-  }
-
-  static getAlgorithmsByCategory(category) {
-    return Object.entries(AlgorithmDefinitions)
-      .filter(([_, alg]) => alg.category === category)
-      .map(([name, _]) => name);
-  }
-
-  static getAlgorithmsByDifficulty(difficulty) {
-    return Object.entries(AlgorithmDefinitions)
-      .filter(([_, alg]) => alg.difficulty === difficulty)
-      .map(([name, _]) => name);
-  }
-
-  static getPrerequisites(algorithmName) {
-    const algorithm = AlgorithmDefinitions[algorithmName];
-    if (!algorithm) return [];
-    
-    const difficulty = algorithm.difficulty;
-    return DifficultyLevels[difficulty]?.prerequisites || [];
-  }
-
-  static validatePrerequisites(algorithmName, completedAlgorithms) {
-    const prerequisites = this.getPrerequisites(algorithmName);
-    return prerequisites.every(prereq => completedAlgorithms.includes(prereq));
-  }
-
-  static getNextAlgorithms(currentAlgorithm, completedAlgorithms) {
-    const current = AlgorithmDefinitions[currentAlgorithm];
-    if (!current) return [];
-
-    // Find algorithms that this one unlocks
-    return Object.entries(AlgorithmDefinitions)
-      .filter(([name, alg]) => {
-        if (completedAlgorithms.includes(name)) return false;
-        const prereqs = this.getPrerequisites(name);
-        return prereqs.includes(currentAlgorithm) && 
-               this.validatePrerequisites(name, [...completedAlgorithms, currentAlgorithm]);
-      })
-      .map(([name, _]) => name);
-  }
-
-  static getEstimatedTime(algorithmName) {
-    const algorithm = AlgorithmDefinitions[algorithmName];
-    if (!algorithm) return 0;
-
-    const baseTime = {
-      beginner: 20,    // 20 minutes
-      intermediate: 25, // 25 minutes  
-      advanced: 35,    // 35 minutes
-      expert: 45      // 45 minutes
-    };
-
-    return baseTime[algorithm.difficulty] || 30;
-  }
-
-  static getAlgorithmStats() {
-    const algorithms = Object.values(AlgorithmDefinitions);
-    
-    return {
-      total: algorithms.length,
-      byDifficulty: {
-        beginner: algorithms.filter(a => a.difficulty === 'beginner').length,
-        intermediate: algorithms.filter(a => a.difficulty === 'intermediate').length,
-        advanced: algorithms.filter(a => a.difficulty === 'advanced').length,
-        expert: algorithms.filter(a => a.difficulty === 'expert').length
-      },
-      byCategory: Object.entries(AlgorithmCategories).reduce((acc, [cat, info]) => {
-        acc[cat] = info.algorithms.length;
-        return acc;
-      }, {}),
-      totalConcepts: [...new Set(algorithms.flatMap(a => a.concepts))].length,
-      averageSteps: Math.round(algorithms.reduce((sum, a) => sum + a.steps.length, 0) / algorithms.length)
-    };
-  }
-
-  static searchAlgorithms(query) {
-    const searchTerm = query.toLowerCase();
-    
-    return Object.entries(AlgorithmDefinitions)
-      .filter(([name, alg]) => {
-        return name.toLowerCase().includes(searchTerm) ||
-               alg.name.toLowerCase().includes(searchTerm) ||
-               alg.description.toLowerCase().includes(searchTerm) ||
-               alg.concepts.some(concept => concept.toLowerCase().includes(searchTerm));
-      })
-      .map(([name, _]) => name);
-  }
-
-  static getRandomAlgorithm(difficulty = null, category = null) {
-    let candidates = Object.keys(AlgorithmDefinitions);
-    
-    if (difficulty) {
-      candidates = candidates.filter(name => 
-        AlgorithmDefinitions[name].difficulty === difficulty);
-    }
-    
-    if (category) {
-      candidates = candidates.filter(name => 
-        AlgorithmDefinitions[name].category === category);
-    }
-    
-    if (candidates.length === 0) return null;
-    
-    const randomIndex = Math.floor(Math.random() * candidates.length);
-    return candidates[randomIndex];
-  }
-
-  // New helper methods for the enhanced algorithms
-  static getOptimalGroverIterations(numQubits) {
-    const N = Math.pow(2, numQubits);
-    return Math.floor(Math.PI * Math.sqrt(N) / 4);
-  }
-
-  static createGroverSteps(numQubits, markedStates = null, numIterations = null) {
-    if (!markedStates) {
-      markedStates = [Math.pow(2, numQubits) - 1]; // Default to |111...1⟩
-    }
-    
-    if (!numIterations) {
-      numIterations = this.getOptimalGroverIterations(numQubits);
-    }
-    
-    const qubits = Array.from({length: numQubits}, (_, i) => i);
-    const steps = [];
-    
-    // Initial superposition
-    steps.push({
-      type: 'gate',
-      gate: 'H',
-      qubits: qubits,
-      explanation: 'Initialize uniform superposition',
-      description: 'Create equal superposition of all possible states.',
-      math: `H⊗${numQubits}|${'0'.repeat(numQubits)}⟩ = (1/√${Math.pow(2, numQubits)})∑|x⟩`
-    });
-    
-    // Grover iterations
-    for (let i = 0; i < numIterations; i++) {
-      steps.push({
-        type: 'grover-oracle',
-        qubits: qubits,
-        explanation: `Mark target state (Iteration ${i + 1})`,
-        description: 'Oracle flips the phase of the target state.',
-        math: 'O|x⟩ = -|x⟩ if x = target, +|x⟩ otherwise',
-        parameters: { markedStates }
-      });
-      
-      steps.push({
-        type: 'diffusion',
-        qubits: qubits,
-        explanation: `Apply diffusion operator (Iteration ${i + 1})`,
-        description: 'Inversion about average amplitude.',
-        math: 'D = 2|s⟩⟨s| - I where |s⟩ is uniform superposition'
-      });
-    }
-    
-    // Final measurement
-    steps.push({
-      type: 'measure',
-      qubits: qubits,
-      explanation: 'Measure to find marked state',
-      description: `High probability of measuring target state after ${numIterations} iterations.`,
-      math: 'P(target) ≈ sin²((2k+1)θ/2) where θ = 2arcsin(1/√N)'
-    });
-    
-    return steps;
-  }
-
-  static createQFTSteps(numQubits) {
-    const qubits = Array.from({length: numQubits}, (_, i) => i);
-    const steps = [];
-    
-    for (let i = 0; i < numQubits; i++) {
-      // Hadamard on current qubit
-      steps.push({
-        type: 'gate',
-        gate: 'H',
-        qubits: [qubits[i]],
-        explanation: `Apply Hadamard to qubit ${i}`,
-        description: `QFT step ${i + 1}: Create superposition on qubit ${i}`,
-        math: `H on qubit ${i}`
-      });
-      
-      // Controlled rotations
-      for (let j = i + 1; j < numQubits; j++) {
-        const angle = Math.PI / Math.pow(2, j - i);
-        steps.push({
-          type: 'controlled-phase',
-          qubits: [qubits[j], qubits[i]],
-          angle: angle,
-          explanation: `Controlled-R${j - i + 1} gate`,
-          description: `Apply controlled phase rotation between qubits ${j} and ${i}`,
-          math: `CR${j - i + 1}: phase ${angle.toFixed(3)} if control is |1⟩`
-        });
-      }
-    }
-    
-    // Bit reversal (SWAP gates)
-    for (let i = 0; i < Math.floor(numQubits / 2); i++) {
-      steps.push({
-        type: 'gate',
-        gate: 'SWAP',
-        qubits: [qubits[i], qubits[numQubits - 1 - i]],
-        explanation: `Swap qubits ${i} and ${numQubits - 1 - i}`,
-        description: 'Reverse qubit order for standard QFT output',
-        math: `SWAP(${i}, ${numQubits - 1 - i})`
-      });
-    }
-    
-    steps.push({
-      type: 'measure',
-      qubits: qubits,
-      explanation: 'Measure frequency domain state',
-      description: 'Result reveals frequency components of input state',
-      math: 'Frequency amplitudes |ck|² = |⟨k|QFT|ψ⟩|²'
-    });
-    
-    return steps;
-  }
-
-  // Validation methods
-  static validateAlgorithmDefinition(algorithmDef) {
-    const required = ['name', 'description', 'category', 'qubits', 'difficulty', 'concepts', 'steps'];
-    const missing = required.filter(field => !algorithmDef.hasOwnProperty(field));
-    
-    if (missing.length > 0) {
-      throw new Error(`Algorithm definition missing required fields: ${missing.join(', ')}`);
-    }
-    
-    if (!Array.isArray(algorithmDef.steps) || algorithmDef.steps.length === 0) {
-      throw new Error('Algorithm must have at least one step');
-    }
-    
-    algorithmDef.steps.forEach((step, index) => {
-      if (!step.type || !step.qubits || !step.explanation) {
-        throw new Error(`Step ${index} missing required fields: type, qubits, explanation`);
-      }
-      
-      if (!Array.isArray(step.qubits)) {
-        throw new Error(`Step ${index}: qubits must be an array`);
-      }
-      
-      if (step.qubits.some(q => q < 0 || q >= algorithmDef.qubits)) {
-        throw new Error(`Step ${index}: qubit indices out of range`);
-      }
-    });
-    
-    return true;
-  }
-
-  static getStepTypes() {
-    return [
-      'gate',
-      'measure', 
-      'grover-oracle',
-      'deutsch-oracle',
-      'diffusion',
-      'controlled-phase',
-      'conditional-gate',
-      'qft',
-      'qft-inverse'
-    ];
-  }
-}// algorithms/algorithm-definitions.js
+// algorithms/algorithm-definitions.js
 // Complete and corrected definitions for all quantum algorithms
 
 export const AlgorithmDefinitions = {
@@ -957,4 +601,362 @@ export const AlgorithmDefinitions = {
       'Phase φ = 0.25 should give measurement result |010⟩ (decimal 2)'
     ]
   }
-}; 
+};
+
+// Algorithm categories and metadata - NO references to AlgorithmDefinitions during initialization
+export const AlgorithmCategories = {
+  basics: {
+    name: 'Basic Gates',
+    description: 'Fundamental quantum gates and operations',
+    color: '#10b981',
+    algorithms: ['single-qubit', 'two-qubit', 'bell-states']
+  },
+  algorithms: {
+    name: 'Quantum Algorithms', 
+    description: 'Complete quantum algorithms showing advantage',
+    color: '#6366f1',
+    algorithms: ['deutsch', 'grovers', 'qft']
+  },
+  protocols: {
+    name: 'Quantum Protocols',
+    description: 'Quantum communication and information protocols',
+    color: '#ec4899',
+    algorithms: ['teleportation', 'superdense-coding']
+  },
+  subroutines: {
+    name: 'Algorithm Subroutines',
+    description: 'Building blocks for larger algorithms',
+    color: '#f59e0b',
+    algorithms: ['phase-estimation']
+  }
+};
+
+// Difficulty levels
+export const DifficultyLevels = {
+  beginner: {
+    name: 'Beginner',
+    description: 'Introduction to quantum concepts',
+    color: '#10b981',
+    prerequisites: []
+  },
+  intermediate: {
+    name: 'Intermediate',
+    description: 'Basic quantum mechanics understanding required',
+    color: '#f59e0b',
+    prerequisites: ['single-qubit', 'two-qubit']
+  },
+  advanced: {
+    name: 'Advanced',
+    description: 'Solid quantum computing background needed',
+    color: '#ef4444',
+    prerequisites: ['bell-states', 'deutsch']
+  },
+  expert: {
+    name: 'Expert',
+    description: 'Deep quantum algorithm knowledge required',
+    color: '#8b5cf6',
+    prerequisites: ['grovers', 'qft']
+  }
+};
+
+// Learning paths
+export const LearningPaths = {
+  foundations: {
+    name: 'Quantum Foundations',
+    description: 'Build understanding from basic concepts',
+    algorithms: ['single-qubit', 'two-qubit', 'bell-states', 'deutsch'],
+    estimatedTime: '2-3 hours'
+  },
+  algorithms: {
+    name: 'Quantum Algorithms',
+    description: 'Explore powerful quantum algorithms',
+    algorithms: ['deutsch', 'grovers', 'qft', 'phase-estimation'],
+    estimatedTime: '3-4 hours'
+  },
+  protocols: {
+    name: 'Quantum Information',
+    description: 'Quantum communication protocols',
+    algorithms: ['bell-states', 'teleportation', 'superdense-coding'],
+    estimatedTime: '2-3 hours'
+  },
+  complete: {
+    name: 'Complete Journey',
+    description: 'Full quantum computing curriculum',
+    algorithms: ['single-qubit', 'two-qubit', 'bell-states', 'deutsch', 'grovers', 'qft', 'teleportation', 'superdense-coding', 'phase-estimation'],
+    estimatedTime: '6-8 hours'
+  }
+};
+
+// Enhanced utility functions with better error handling
+export class AlgorithmUtils {
+  static getAlgorithm(name) {
+    const algorithm = AlgorithmDefinitions[name];
+    if (!algorithm) {
+      console.warn(`Algorithm '${name}' not found`);
+      return null;
+    }
+    return algorithm;
+  }
+
+  static getAlgorithmsByCategory(category) {
+    return Object.entries(AlgorithmDefinitions)
+      .filter(([_, alg]) => alg.category === category)
+      .map(([name, _]) => name);
+  }
+
+  static getAlgorithmsByDifficulty(difficulty) {
+    return Object.entries(AlgorithmDefinitions)
+      .filter(([_, alg]) => alg.difficulty === difficulty)
+      .map(([name, _]) => name);
+  }
+
+  static getPrerequisites(algorithmName) {
+    const algorithm = AlgorithmDefinitions[algorithmName];
+    if (!algorithm) return [];
+    
+    const difficulty = algorithm.difficulty;
+    return DifficultyLevels[difficulty]?.prerequisites || [];
+  }
+
+  static validatePrerequisites(algorithmName, completedAlgorithms) {
+    const prerequisites = this.getPrerequisites(algorithmName);
+    return prerequisites.every(prereq => completedAlgorithms.includes(prereq));
+  }
+
+  static getNextAlgorithms(currentAlgorithm, completedAlgorithms) {
+    const current = AlgorithmDefinitions[currentAlgorithm];
+    if (!current) return [];
+
+    // Find algorithms that this one unlocks
+    return Object.entries(AlgorithmDefinitions)
+      .filter(([name, alg]) => {
+        if (completedAlgorithms.includes(name)) return false;
+        const prereqs = this.getPrerequisites(name);
+        return prereqs.includes(currentAlgorithm) && 
+               this.validatePrerequisites(name, [...completedAlgorithms, currentAlgorithm]);
+      })
+      .map(([name, _]) => name);
+  }
+
+  static getEstimatedTime(algorithmName) {
+    const algorithm = AlgorithmDefinitions[algorithmName];
+    if (!algorithm) return 0;
+
+    const baseTime = {
+      beginner: 20,    // 20 minutes
+      intermediate: 25, // 25 minutes  
+      advanced: 35,    // 35 minutes
+      expert: 45      // 45 minutes
+    };
+
+    return baseTime[algorithm.difficulty] || 30;
+  }
+
+  static getAlgorithmStats() {
+    const algorithms = Object.values(AlgorithmDefinitions);
+    
+    return {
+      total: algorithms.length,
+      byDifficulty: {
+        beginner: algorithms.filter(a => a.difficulty === 'beginner').length,
+        intermediate: algorithms.filter(a => a.difficulty === 'intermediate').length,
+        advanced: algorithms.filter(a => a.difficulty === 'advanced').length,
+        expert: algorithms.filter(a => a.difficulty === 'expert').length
+      },
+      byCategory: Object.entries(AlgorithmCategories).reduce((acc, [cat, info]) => {
+        acc[cat] = info.algorithms.length;
+        return acc;
+      }, {}),
+      totalConcepts: [...new Set(algorithms.flatMap(a => a.concepts))].length,
+      averageSteps: Math.round(algorithms.reduce((sum, a) => sum + a.steps.length, 0) / algorithms.length)
+    };
+  }
+
+  static searchAlgorithms(query) {
+    const searchTerm = query.toLowerCase();
+    
+    return Object.entries(AlgorithmDefinitions)
+      .filter(([name, alg]) => {
+        return name.toLowerCase().includes(searchTerm) ||
+               alg.name.toLowerCase().includes(searchTerm) ||
+               alg.description.toLowerCase().includes(searchTerm) ||
+               alg.concepts.some(concept => concept.toLowerCase().includes(searchTerm));
+      })
+      .map(([name, _]) => name);
+  }
+
+  static getRandomAlgorithm(difficulty = null, category = null) {
+    let candidates = Object.keys(AlgorithmDefinitions);
+    
+    if (difficulty) {
+      candidates = candidates.filter(name => 
+        AlgorithmDefinitions[name].difficulty === difficulty);
+    }
+    
+    if (category) {
+      candidates = candidates.filter(name => 
+        AlgorithmDefinitions[name].category === category);
+    }
+    
+    if (candidates.length === 0) return null;
+    
+    const randomIndex = Math.floor(Math.random() * candidates.length);
+    return candidates[randomIndex];
+  }
+
+  // New helper methods for the enhanced algorithms
+  static getOptimalGroverIterations(numQubits) {
+    const N = Math.pow(2, numQubits);
+    return Math.floor(Math.PI * Math.sqrt(N) / 4);
+  }
+
+  static createGroverSteps(numQubits, markedStates = null, numIterations = null) {
+    if (!markedStates) {
+      markedStates = [Math.pow(2, numQubits) - 1]; // Default to |111...1⟩
+    }
+    
+    if (!numIterations) {
+      numIterations = this.getOptimalGroverIterations(numQubits);
+    }
+    
+    const qubits = Array.from({length: numQubits}, (_, i) => i);
+    const steps = [];
+    
+    // Initial superposition
+    steps.push({
+      type: 'gate',
+      gate: 'H',
+      qubits: qubits,
+      explanation: 'Initialize uniform superposition',
+      description: 'Create equal superposition of all possible states.',
+      math: `H⊗${numQubits}|${'0'.repeat(numQubits)}⟩ = (1/√${Math.pow(2, numQubits)})∑|x⟩`
+    });
+    
+    // Grover iterations
+    for (let i = 0; i < numIterations; i++) {
+      steps.push({
+        type: 'grover-oracle',
+        qubits: qubits,
+        explanation: `Mark target state (Iteration ${i + 1})`,
+        description: 'Oracle flips the phase of the target state.',
+        math: 'O|x⟩ = -|x⟩ if x = target, +|x⟩ otherwise',
+        parameters: { markedStates }
+      });
+      
+      steps.push({
+        type: 'diffusion',
+        qubits: qubits,
+        explanation: `Apply diffusion operator (Iteration ${i + 1})`,
+        description: 'Inversion about average amplitude.',
+        math: 'D = 2|s⟩⟨s| - I where |s⟩ is uniform superposition'
+      });
+    }
+    
+    // Final measurement
+    steps.push({
+      type: 'measure',
+      qubits: qubits,
+      explanation: 'Measure to find marked state',
+      description: `High probability of measuring target state after ${numIterations} iterations.`,
+      math: 'P(target) ≈ sin²((2k+1)θ/2) where θ = 2arcsin(1/√N)'
+    });
+    
+    return steps;
+  }
+
+  static createQFTSteps(numQubits) {
+    const qubits = Array.from({length: numQubits}, (_, i) => i);
+    const steps = [];
+    
+    for (let i = 0; i < numQubits; i++) {
+      // Hadamard on current qubit
+      steps.push({
+        type: 'gate',
+        gate: 'H',
+        qubits: [qubits[i]],
+        explanation: `Apply Hadamard to qubit ${i}`,
+        description: `QFT step ${i + 1}: Create superposition on qubit ${i}`,
+        math: `H on qubit ${i}`
+      });
+      
+      // Controlled rotations
+      for (let j = i + 1; j < numQubits; j++) {
+        const angle = Math.PI / Math.pow(2, j - i);
+        steps.push({
+          type: 'controlled-phase',
+          qubits: [qubits[j], qubits[i]],
+          angle: angle,
+          explanation: `Controlled-R${j - i + 1} gate`,
+          description: `Apply controlled phase rotation between qubits ${j} and ${i}`,
+          math: `CR${j - i + 1}: phase ${angle.toFixed(3)} if control is |1⟩`
+        });
+      }
+    }
+    
+    // Bit reversal (SWAP gates)
+    for (let i = 0; i < Math.floor(numQubits / 2); i++) {
+      steps.push({
+        type: 'gate',
+        gate: 'SWAP',
+        qubits: [qubits[i], qubits[numQubits - 1 - i]],
+        explanation: `Swap qubits ${i} and ${numQubits - 1 - i}`,
+        description: 'Reverse qubit order for standard QFT output',
+        math: `SWAP(${i}, ${numQubits - 1 - i})`
+      });
+    }
+    
+    steps.push({
+      type: 'measure',
+      qubits: qubits,
+      explanation: 'Measure frequency domain state',
+      description: 'Result reveals frequency components of input state',
+      math: 'Frequency amplitudes |ck|² = |⟨k|QFT|ψ⟩|²'
+    });
+    
+    return steps;
+  }
+
+  // Validation methods
+  static validateAlgorithmDefinition(algorithmDef) {
+    const required = ['name', 'description', 'category', 'qubits', 'difficulty', 'concepts', 'steps'];
+    const missing = required.filter(field => !algorithmDef.hasOwnProperty(field));
+    
+    if (missing.length > 0) {
+      throw new Error(`Algorithm definition missing required fields: ${missing.join(', ')}`);
+    }
+    
+    if (!Array.isArray(algorithmDef.steps) || algorithmDef.steps.length === 0) {
+      throw new Error('Algorithm must have at least one step');
+    }
+    
+    algorithmDef.steps.forEach((step, index) => {
+      if (!step.type || !step.qubits || !step.explanation) {
+        throw new Error(`Step ${index} missing required fields: type, qubits, explanation`);
+      }
+      
+      if (!Array.isArray(step.qubits)) {
+        throw new Error(`Step ${index}: qubits must be an array`);
+      }
+      
+      if (step.qubits.some(q => q < 0 || q >= algorithmDef.qubits)) {
+        throw new Error(`Step ${index}: qubit indices out of range`);
+      }
+    });
+    
+    return true;
+  }
+
+  static getStepTypes() {
+    return [
+      'gate',
+      'measure', 
+      'grover-oracle',
+      'deutsch-oracle',
+      'diffusion',
+      'controlled-phase',
+      'conditional-gate',
+      'qft',
+      'qft-inverse'
+    ];
+  }
+}
