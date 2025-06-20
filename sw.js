@@ -1,7 +1,7 @@
 // Service Worker for Jack Kinney Portfolio
 // Provides basic caching and offline functionality
 
-const CACHE_NAME = 'jtk-portfolio-v1.2.0'; // <-- Updated version for quantum visualizer
+const CACHE_NAME = 'jtk-portfolio-v1.2.1'; // <-- Updated version for quantum visualizer
 const urlsToCache = [
   '/',
   '/index.html',
